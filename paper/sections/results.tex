@@ -138,19 +138,16 @@ variants with 3-s and 4-s context on each side were worse
 (Table~\ref{tab:ablation}), and 756~s of reference motion did not establish a
 long-range motion prior.
 
-The shrinkage is not an artefact of the training loss. In additional
-fixed-split experiments after the models were frozen (two seeds each, scored on
-validation only), a near-quadratic loss ($\beta=5$~cm), the Gaussian NLL as the
-main term, and a time-varying gyroscope bias interpolated between pauses left
-the per-axis slopes at 0.42--0.48, 0.47--0.56 and 0.19--0.29 and the error at
-29.5--31.0~mm. Scaling the predictions up by $\alpha>1$ increased both the error
-and the trajectory error (for the gated model, 126 to 152~mm ATE at
-$\alpha=1.5$), so the trajectory error is driven by the variance of the window
-errors rather than by their bias. Averaging gated and non-gated models lowered
-the leave-one-session-out error from 24.95 to 24.63~mm and kept the validation
-trajectory error close to that of the non-gated model, but on the held-out
-recording it did not improve on IMUNet (43.89 versus 42.93~mm). These results
-are what a conditional-mean estimator with missing information would show.
+The shrinkage is not an artefact of the training loss. In post-freeze
+fixed-split experiments (two seeds, validation only), a near-quadratic loss
+($\beta=5$~cm), the Gaussian NLL as main term, and a gyroscope bias
+interpolated between pauses left the per-axis slopes at 0.42--0.48,
+0.47--0.56 and 0.19--0.29 and the error at 29.5--31.0~mm, and scaling the
+predictions up increased both error and ATE (gated model: 126 to 152~mm at
+$\alpha=1.5$). Averaging gated and non-gated models lowered the CV error from
+24.95 to 24.63~mm but not the held-out error below IMUNet (43.89 versus
+42.93~mm). This is the behaviour of a conditional-mean estimator with missing
+information.
 
 \begin{figure}[tb]
 \centering
@@ -251,7 +248,12 @@ reduces the error of the best public architecture, IMUNet, by 24\%
 (16.69 versus 21.89~mm, $R^2$ 0.864 versus 0.812) and by 8\% on the
 out-of-distribution split, with one seventh of the parameters (0.42~M versus
 2.83~M); all networks run in 0.13--0.16~ms per window, so latency does not
-distinguish them.
+distinguish them. The synthetic advantage is concentrated in periodic motion:
+on the circle, depth, lateral and mixed families PhysNet removes 79--87\% of the
+zero-motion error, but on the random-spline family, whose velocity is not
+predictable from the context, only 41\% ($-16$\% on its OOD sequence), close to
+the 30\% observed on real data. Synthetic accuracy therefore overstates what
+a window can resolve during unpredictable handheld motion.
 All architectures trained only on the legacy twin fail on real data; among
 those that do not collapse to a zero output PhysNet degrades least (90.2~mm),
 and with the gravity-corrected, replay-augmented
@@ -317,24 +319,26 @@ Learned displacement helps only on the four large-motion recordings ($R^2$
 Data curation had effects of the same order as architecture: adding the
 rigidity recordings moved the IMUNet CV error from 27.17 to 26.38~mm
 (single-model means), and excluding the two that fail the mount test moved the
-PhysNet validation error from 31.89 to 30.68~mm.
+PhysNet validation error from 31.89 to 30.68~mm. In a post-freeze
+cross-validation, also removing the two trajectory recordings with the poorest
+camera--IMU rotation consistency (11.6 and 7.8$^\circ$ residual of 1-s rotation
+increments) from the training pool lowered the error on the remaining six
+recordings from 27.35 to 26.72~mm and on the held-out recording from 43.55 to
+43.38~mm, a difference whose interval contains zero.
 
 \subsection{Estimator Performance, Uncertainty, and Physical Consistency}
-The heteroscedastic head costs no accuracy (Table~\ref{tab:ablation}); it is
-evaluated on the two-seed fixed-split ensemble trained with the NLL term, since
-the selected CV models use $w_\eta=0$. The raw predicted-plus-ensemble variance
-is under-dispersed, covering 32.5\% and 54.5\% of the residuals at one and two
-standard deviations, because it is fitted on the dense stream whose
-short-horizon errors are much smaller than the 3-s end point. The scale
-$\kappa=4.56$ fitted on validation gives 81.4\% and 94.5\% coverage on the same
-data (Fig.~\ref{fig:zupt}(b)), against the Gaussian nominal 68.3\% and 95.4\%.
-Fitted on one validation recording and scored on the other, it gives 81.0\% and
-94.2\%, so the calibration transfers between these recordings. On the held-out
-test, whose motion is larger, coverage falls to 63.2\% and 85.2\% (RMS
-standardized residual 1.55), so the interval is too narrow outside the
-validation distribution. It still discriminates: the most and least confident
-deciles have 6.9 and 29.7~mm error on validation and 1.7 and 51.5~mm on the
-test.
+The heteroscedastic head, evaluated on the two-seed fixed-split ensemble
+trained with the NLL term (the selected CV models use $w_\eta=0$), costs no
+accuracy (Table~\ref{tab:ablation}). Its raw predicted-plus-ensemble variance
+is under-dispersed (32.5\% and 54.5\% coverage at one and two standard
+deviations) because it is fitted on the dense stream. The scale $\kappa=4.56$
+fitted on validation gives 81.4\% and 94.5\% on the same data
+(Fig.~\ref{fig:zupt}(b)) and 81.0\% and 94.2\% when fitted on one validation
+recording and scored on the other, but only 63.2\% and 85.2\% on the held-out
+test, whose motion is larger; stratified, magnitude-scaled and split-conformal
+recalibrations on validation did not remove this shortfall. The uncertainty
+still discriminates: the most and least confident deciles have 6.9 and
+29.7~mm error on validation and 1.7 and 51.5~mm on the test.
 
 The sixteen non-gated fold models also estimate the camera--IMU lever arm as
 $(-22.6\pm3.8,\,-5.2\pm1.9,\,-29.7\pm7.0)$~mm in camera axes (mean $\pm$

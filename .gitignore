@@ -49,3 +49,7 @@ datasets/interim_eval.json
 datasets/physnet_v3/*
 !datasets/physnet_v3/*.json
 
+!datasets/physnet_v3cv/
+datasets/physnet_v3cv/*
+!datasets/physnet_v3cv/*.json
+

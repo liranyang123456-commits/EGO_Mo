@@ -128,7 +128,7 @@ def results():
         close(f"latency {name}", lat[name]["ms_per_window"], ms, 0.006)
     # Post-freeze v3 analyses (validation / existing fold predictions only).
     v3 = load(DATA / "physnet_v3" / "results.json")
-    slopes = np.array([v3[k]["slope"] for k in v3])
+    slopes = np.array([v3[k]["slope"] for k in ("base", "bias_local", "beta5", "nll_main", "nogate_beta5", "nogate")])
     close("v3 slope x min", slopes[:, 0].min(), 0.42, 0.006)
     close("v3 slope x max", slopes[:, 0].max(), 0.48, 0.006)
     close("v3 slope z min", slopes[:, 2].min(), 0.19, 0.006)
@@ -144,6 +144,16 @@ def results():
     close("sim PSF 250 mm max |scale| %", max(abs(v) for v in psf["nominal"]["scale_error_percent"].values()), 1.37, 0.006)
     close("sim PSF 250 mm max cross-axis", max(psf["nominal"]["cross_axis_rmse_mm"].values()), 0.64, 0.006)
     close("sim PSF 250 mm MC median RMSE", psf["monte_carlo"]["heldout_rmse_mm_p50_p95"][0], 0.86, 0.006)
+    fam = load(DATA / "synthetic_by_family.json")
+    periodic = [fam["synthetic_test"][f]["reduction_percent"] for f in ("circle", "depth", "lateral", "mixed")]
+    close("synthetic periodic reduction min %", min(periodic), 79, 0.5)
+    close("synthetic periodic reduction max %", max(periodic), 87, 0.5)
+    close("synthetic random-spline reduction %", fam["synthetic_test"]["random_spline"]["reduction_percent"], 41, 0.5)
+    close("synthetic random-spline OOD reduction %", fam["synthetic_ood"]["random_spline"]["reduction_percent"], -16, 0.5)
+    cvc = load(DATA / "physnet_v3cv" / "cv_clean.json")
+    close("clean-pool CV error", cvc["cv_mm"]["clean"], 26.72, 0.006)
+    close("frozen CV error on same six", cvc["cv_mm"]["frozen"], 27.35, 0.006)
+    close("clean-pool test error", cvc["test"]["clean"]["err_mm"], 43.38)
     close("uncertainty validation scale", unc["validation_scale"], 4.559)
     close("uncertainty 1-sigma coverage",
           unc["val"]["total_rescaled"]["coverage_1sigma"], 0.814)

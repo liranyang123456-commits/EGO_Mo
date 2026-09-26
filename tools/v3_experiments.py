@@ -36,6 +36,8 @@ CONFIGS = {
     "nll_main": BASE + ["--nll-weight", "1.0", "--end-weight", "0.3", "--dense-weight", "0.3"],
     "nogate_beta5": ["--weight-decay", "0.1", "--beta", "5.0"],
     "nogate": ["--weight-decay", "0.1"],
+    "base_clean": BASE + ["--split-file", "trajectory_split_clean.json"],
+    "base_0924": BASE + ["--split-file", "trajectory_split_0924only.json"],
 }
 
 
@@ -43,8 +45,9 @@ def train(name, seed, extra):
     ck = DATA / OUT / f"physnet_{name}_s{seed}.pt"
     if ck.is_file():
         return
+    split = [] if "--split-file" in extra else ["--split-file", SPLIT]
     cmd = [sys.executable, "-u", str(ROOT / "tools" / "train_physnet_v3.py"), "train",
-           "--split-file", SPLIT, "--out", OUT, "--tag", name, "--seed", str(seed), *extra]
+           *split, "--out", OUT, "--tag", name, "--seed", str(seed), *extra]
     log = DATA / OUT / f"log_{name}_s{seed}.txt"
     log.parent.mkdir(exist_ok=True)
     with log.open("w", encoding="utf-8") as f:

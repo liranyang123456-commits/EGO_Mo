@@ -27,7 +27,9 @@ ground truth.
 \emph{Estimator and twin (RQ4).} Anchor-frame pre-integration and an
 integrated velocity stream give the lowest synthetic and OOD errors and match
 the larger public architectures on real data with one seventh of the
-parameters. On the held-out recording the difference from IMUNet is not
+parameters. The synthetic margin comes mainly from periodic motion families,
+in which the context reveals the velocity; on random-spline motion the
+synthetic error reduction falls to the level seen on real data. On the held-out recording the difference from IMUNet is not
 significant; with about 38 independent 3-s blocks, the test cannot resolve
 differences below roughly 3~mm. Correcting the twin's board-to-gravity
 attitude and replaying real motion enabled useful direct transfer but did not
