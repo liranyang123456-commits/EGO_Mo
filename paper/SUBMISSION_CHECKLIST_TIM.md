@@ -59,7 +59,7 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 - [x] LaTeX source and embedded figures.
 - [x] Optional cover-letter template.
 - [x] Software/result release ZIP with SHA-256 manifest.
-- [x] Repository URL: https://github.com/liranyang123456-commits/EGO_Mo (private until the visibility decision).
+- [x] Repository URL: https://github.com/liranyang123456-commits/EGO_Mo (public).
 - [ ] Zenodo DOI.
 - [ ] Separate raw-data archive and DOI, or a justified controlled-access statement.
 - [x] `CITATION.cff` repository URL set; DOI pending.
