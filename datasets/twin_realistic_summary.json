@@ -1,0 +1,352 @@
+{
+  "real_val_3seed": {
+    "physnet_real_only": {
+      "err_mm": 29.43,
+      "r2": 0.493,
+      "ate_mm_mean": 117.765
+    },
+    "physnet_pre_periodic_twin": {
+      "err_mm": 29.52,
+      "r2": 0.476,
+      "ate_mm_mean": 91.005
+    },
+    "physnet_pre_realistic": {
+      "err_mm": 29.56,
+      "r2": 0.489,
+      "ate_mm_mean": 96.13
+    },
+    "physnet_pre_realistic_bal": {
+      "err_mm": 29.29,
+      "r2": 0.493,
+      "ate_mm_mean": 90.405
+    },
+    "physnet_bias_none": {
+      "err_mm": 29.44,
+      "r2": 0.49,
+      "ate_mm_mean": 124.855
+    },
+    "physnet_bias_strict": {
+      "err_mm": 29.56,
+      "r2": 0.49,
+      "ate_mm_mean": 99.76499999999999
+    },
+    "imunet_real_only": {
+      "err_mm": 30.63
+    },
+    "imunet_pre_realistic": {
+      "err_mm": 31.41
+    },
+    "zero_mm": 42.23
+  },
+  "zero_shot_real_val": {
+    "physnet_pre_periodic_twin": {
+      "err_mm": [
+        39.09,
+        37.9,
+        38.64
+      ],
+      "r2": [
+        0.139,
+        0.193,
+        0.16
+      ]
+    },
+    "physnet_pre_realistic": {
+      "err_mm": [
+        37.79,
+        38.5,
+        38.77
+      ],
+      "r2": [
+        0.203,
+        0.174,
+        0.176
+      ]
+    },
+    "physnet_pre_realistic_bal": {
+      "err_mm": [
+        37.74,
+        37.46,
+        37.89
+      ],
+      "r2": [
+        0.2,
+        0.223,
+        0.198
+      ]
+    },
+    "imunet_realistic": {
+      "err_mm": [
+        38.58,
+        37.93,
+        37.85
+      ],
+      "r2": [
+        0.166,
+        0.205,
+        0.199
+      ]
+    }
+  },
+  "protocol": {
+    "pause_4": {
+      "physnet_session_bias": {
+        "err_mm": 35.26,
+        "r2": 0.588,
+        "slope": 0.514
+      },
+      "zero_mm": 56.76,
+      "stop_position_share": {
+        "free": 0.055,
+        "context": 0.224,
+        "window": 0.721
+      },
+      "physnet_raw_gyro": {
+        "err_mm": 34.65,
+        "r2": 0.602,
+        "slope": 0.538
+      },
+      "physnet_session_bias_8s_context": {
+        "err_mm": 36.86,
+        "r2": 0.553,
+        "slope": 0.507
+      },
+      "physnet_raw_gyro_switch": {
+        "err_mm": 30.04,
+        "physics_share": 0.438
+      },
+      "imunet": {
+        "err_mm": 57.54
+      },
+      "imunet_switch": {
+        "err_mm": 33.34,
+        "physics_share": 0.699
+      }
+    },
+    "pause_8": {
+      "physnet_session_bias": {
+        "err_mm": 42.15,
+        "r2": 0.407,
+        "slope": 0.413
+      },
+      "zero_mm": 55.43,
+      "stop_position_share": {
+        "free": 0.297,
+        "context": 0.206,
+        "window": 0.497
+      },
+      "physnet_raw_gyro": {
+        "err_mm": 39.73,
+        "r2": 0.473,
+        "slope": 0.443
+      },
+      "physnet_session_bias_8s_context": {
+        "err_mm": 41.72,
+        "r2": 0.416,
+        "slope": 0.407
+      },
+      "physnet_raw_gyro_switch": {
+        "err_mm": 36.71,
+        "physics_share": 0.237
+      }
+    },
+    "pause_12.5": {
+      "physnet_session_bias": {
+        "err_mm": 43.22,
+        "r2": 0.38,
+        "slope": 0.384
+      },
+      "zero_mm": 55.79,
+      "stop_position_share": {
+        "free": 0.42,
+        "context": 0.147,
+        "window": 0.433
+      },
+      "physnet_raw_gyro": {
+        "err_mm": 42.53,
+        "r2": 0.395,
+        "slope": 0.388
+      },
+      "physnet_session_bias_8s_context": {
+        "err_mm": 44.63,
+        "r2": 0.344,
+        "slope": 0.354
+      },
+      "physnet_raw_gyro_switch": {
+        "err_mm": 40.25,
+        "physics_share": 0.179
+      },
+      "imunet": {
+        "err_mm": 55.25
+      },
+      "imunet_switch": {
+        "err_mm": 46.47,
+        "physics_share": 0.315
+      }
+    },
+    "pause_20": {
+      "physnet_session_bias": {
+        "err_mm": 46.52,
+        "r2": 0.32,
+        "slope": 0.312
+      },
+      "zero_mm": 56.41,
+      "stop_position_share": {
+        "free": 0.574,
+        "context": 0.117,
+        "window": 0.309
+      },
+      "physnet_raw_gyro": {
+        "err_mm": 44.54,
+        "r2": 0.375,
+        "slope": 0.311
+      },
+      "physnet_session_bias_8s_context": {
+        "err_mm": 46.12,
+        "r2": 0.326,
+        "slope": 0.273
+      },
+      "physnet_raw_gyro_switch": {
+        "err_mm": 41.8,
+        "physics_share": 0.127
+      }
+    },
+    "pause_inf": {
+      "physnet_session_bias": {
+        "err_mm": 48.62,
+        "r2": 0.289,
+        "slope": 0.291
+      },
+      "zero_mm": 57.36,
+      "stop_position_share": {
+        "free": 0.798,
+        "context": 0.055,
+        "window": 0.147
+      },
+      "physnet_raw_gyro": {
+        "err_mm": 44.16,
+        "r2": 0.409,
+        "slope": 0.381
+      },
+      "physnet_session_bias_8s_context": {
+        "err_mm": 49.07,
+        "r2": 0.278,
+        "slope": 0.263
+      },
+      "physnet_raw_gyro_switch": {
+        "err_mm": 44.14,
+        "physics_share": 0.015
+      },
+      "imunet": {
+        "err_mm": 55.46
+      },
+      "imunet_switch": {
+        "err_mm": 55.26,
+        "physics_share": 0.024
+      }
+    },
+    "switch_max_span_s": {
+      "physnet": 2.0,
+      "imunet": 3.0
+    },
+    "ideal_imu": {
+      "pause_4": {
+        "session_bias": 35.1,
+        "raw": 33.88
+      },
+      "pause_inf": {
+        "session_bias": 46.8,
+        "raw": 43.01
+      }
+    },
+    "reference_fps": {
+      "10": 43.82,
+      "30": 42.73,
+      "15": 43.22
+    }
+  },
+  "real_windows": {
+    "by_stop_position": {
+      "free": {
+        "share": 0.65,
+        "zero_mm": 50.79,
+        "physnet": 36.5,
+        "imunet": 37.27
+      },
+      "context": {
+        "share": 0.079,
+        "zero_mm": 42.33,
+        "physnet": 25.34,
+        "imunet": 28.36
+      },
+      "window": {
+        "share": 0.272,
+        "zero_mm": 21.7,
+        "physnet": 13.7,
+        "imunet": 15.41
+      }
+    },
+    "switch": {
+      "n": 1436,
+      "max_span_s": 2.0,
+      "physics_share": 0.085,
+      "all": {
+        "zero": 42.23,
+        "learned": 29.63,
+        "hybrid": 29.52,
+        "learned_on_switched": 2.85,
+        "physics_on_switched": 1.49
+      },
+      "free": {
+        "n": 933,
+        "switched": 0,
+        "zero": 50.79,
+        "learned": 36.63,
+        "hybrid": 36.63,
+        "detected": 0,
+        "physics_on_detected": null,
+        "learned_on_detected": null
+      },
+      "context": {
+        "n": 113,
+        "switched": 0,
+        "zero": 42.33,
+        "learned": 26.09,
+        "hybrid": 26.09,
+        "detected": 4,
+        "physics_on_detected": 331.29,
+        "learned_on_detected": 20.33
+      },
+      "window": {
+        "n": 390,
+        "switched": 122,
+        "zero": 21.7,
+        "learned": 13.91,
+        "hybrid": 13.49,
+        "detected": 147,
+        "physics_on_detected": 10.28,
+        "learned_on_detected": 6.85
+      }
+    }
+  },
+  "zupt_real": {
+    "ref": {
+      "0.8-2s": 0.7,
+      "2-4s": 53.9,
+      "4-8s": 2740.7,
+      "8-30s": 10446.5
+    },
+    "gyro": {
+      "0.8-2s": 1.2,
+      "2-4s": 104.1,
+      "4-8s": 752.4,
+      "8-30s": 4700.1
+    },
+    "gyro_raw": {
+      "0.8-2s": 1.8,
+      "2-4s": 78.1,
+      "4-8s": 526.2,
+      "8-30s": 2042.7
+    }
+  }
+}

@@ -76,13 +76,9 @@ it on the same pairs and on the other validation recording. The
 zero-velocity bound detects still phases in the reference (speed below
 3~mm/s for at least 0.4~s), integrates the gravity-compensated acceleration
 between consecutive phases with the velocity pinned at both ends, and
-compares the result with the reference displacement. The two boundary
-conditions identify one constant board-frame acceleration offset per interval,
-which is equivalent to demeaning the rotated specific force over the interval.
-The attitude is taken either from the reference (best available attitude) or
-from the integrated gyroscope (operational case).
-Both are reported per interval length so that the crossover between
-model-based and learned estimation is visible.
+compares the result with the reference displacement per interval length. The
+attitude is taken from the reference (best available) or from the integrated
+gyroscope (operational case), with or without session-level bias removal.
 
 \paragraph{Metrics.}
 Local displacement error is

@@ -87,6 +87,10 @@ class SimConfig:
     replay_offset_s: float = 0.0
     replay_speed: float = 1.0
     replay_amp: float = 1.0
+    # motion == "handheld_pause": mean spacing and length of the full stops;
+    # each is jittered by +-20 % / +-33 % per pause.
+    pause_interval_s: float = 12.5
+    pause_duration_s: float = 1.5
 
 
 @dataclass
@@ -151,6 +155,33 @@ def _smooth_random(
     values[0] = 0.0
     values[-1] = 0.0
     return CubicSpline(knots, values, axis=0, bc_type="clamped")(t)
+
+
+def _handheld_progress(t: np.ndarray, rng: np.random.Generator, pauses: bool,
+                       interval: float = 12.5, duration: float = 1.5) -> np.ndarray:
+    """Monotone motion 'progress' u(t) with a random, non-periodic speed.
+
+    With pauses, the speed ramps to zero for about `duration` s every about
+    `interval` s (default 1--2 s every 10--15 s, the prospective acquisition
+    protocol), so the whole rig is truly at rest; without pauses it only slows
+    down occasionally, as in continuous recordings.
+    """
+    dt = np.diff(t, prepend=t[0])
+    speed = np.exp(_smooth_random(t, rng, 1, np.array([0.45]), knot_s=2.0)[:, 0])
+    gate = np.ones_like(t)
+    ramp = 0.25
+    if pauses:
+        start = float(rng.uniform(0.25, 0.65) * interval)
+        while start < t[-1]:
+            dur = float(rng.uniform(0.67, 1.33) * duration)
+            x = t - start
+            plateau = np.clip(np.minimum(x / ramp, (dur - x) / ramp), 0.0, 1.0)
+            gate *= 1.0 - (0.5 - 0.5 * np.cos(np.pi * plateau))
+            start += dur + float(rng.uniform(0.8, 1.2) * interval)
+    else:
+        for c in rng.uniform(0.0, t[-1], size=max(1, int(t[-1] / 12))):
+            gate *= 1.0 - 0.7 * np.exp(-0.5 * ((t - c) / 0.6) ** 2)
+    return np.cumsum(speed * gate * dt)
 
 
 def _gyro_orientation(session: str):
@@ -318,6 +349,19 @@ def generate_poses(config: SimConfig, timestamps: np.ndarray | None = None) -> P
             ) ** 2,
             depth + 0.35 * dz * held,
         ))
+    elif config.motion in ("handheld_pause", "handheld_free"):
+        # Non-periodic handheld motion driven by a random-speed progress
+        # variable; rotation follows the same progress, so pauses stop both.
+        u = _handheld_progress(t, rng, pauses=config.motion == "handheld_pause",
+                               interval=config.pause_interval_s,
+                               duration=config.pause_duration_s)
+        knot = float(rng.uniform(0.8, 1.8))
+        offset = _smooth_random(u, rng, 3, np.array([a, 0.8 * a, 0.6 * max(dz, 0.3 * a)]),
+                                knot_s=knot)
+        xyz = offset + np.array([0.0, 0.0, depth])
+        xyz[:, 2] = np.clip(xyz[:, 2], 0.12, 0.45)
+        handheld_rot = _smooth_random(u, rng, 3, np.full(3, np.radians(config.rotation_deg)),
+                                      knot_s=knot)
     elif config.motion == "spiral":
         u = np.clip(t / max(t[-1], 1e-6), 0.0, 1.0)
         radius = a * (0.2 + 0.8 * u)
@@ -367,6 +411,8 @@ def generate_poses(config: SimConfig, timestamps: np.ndarray | None = None) -> P
         independent += _smooth_random(t, rng, 3, np.full(3, amp * 0.35))
     elif config.motion == "aggressive_6dof":
         independent = _smooth_random(t, rng, 3, np.full(3, amp), knot_s=0.4)
+    elif config.motion in ("handheld_pause", "handheld_free"):
+        independent = handheld_rot
     elif config.motion == "pure_rotation":
         independent = np.column_stack((
             amp * np.sin(0.83 * w * t),

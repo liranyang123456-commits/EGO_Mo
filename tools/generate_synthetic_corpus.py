@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Generate a split, domain-randomized synthetic corpus for IMU pretraining."""
 
@@ -23,6 +23,7 @@ MOTIONS = (
     "lateral", "depth", "circle", "mixed", "random_spline",
     "slow_far", "aggressive_6dof", "pure_rotation",
     "translation_xyz", "pitch_sweep", "stop_go", "spiral",
+    "handheld_pause", "handheld_free",
 )
 # Measured on the real rig from chessboard poses + accelerometer (board frame).
 GRAVITY_REAL = (0.0, 0.87, 0.49)
@@ -117,6 +118,15 @@ def _config(seed: int, motion: str, duration: float, render: bool, backend: str,
     elif motion == "stop_go":
         config.translation_mm = float(rng.uniform(40, 130))
         config.speed = float(rng.uniform(0.5, 1.8))
+    elif motion in ("handheld_pause", "handheld_free"):
+        # Ranges of the real recordings: 10--20 cm travel, 15--40 cm distance,
+        # mixed rotation of a few tens of degrees, measured IMU noise level.
+        config.translation_mm = float(rng.uniform(12, 40))
+        config.depth_mm = float(rng.uniform(150, 350))
+        config.depth_change_mm = float(rng.uniform(20, 70))
+        config.rotation_deg = float(rng.uniform(1.5, 6))
+        config.tracking_gain = float(rng.uniform(0.05, 0.3))
+        config.noise_scale = float(rng.uniform(0.8, 1.4))
     elif motion == "spiral":
         config.translation_mm = float(rng.uniform(40, 140))
         config.depth_change_mm = float(rng.uniform(30, 150))
@@ -142,19 +152,37 @@ def main() -> None:
     ap.add_argument("--replay-per-session", type=int, default=0,
                     help="replays of each real *training* trajectory at random speed/amplitude")
     ap.add_argument("--replay-val-per-session", type=int, default=0)
-    ap.add_argument("--split-file", default="trajectory_split_20260924.json")
+    ap.add_argument("--split-file", default="trajectory_split_paper.json")
+    ap.add_argument("--camera-fps", type=float, default=15.0,
+                    help="reference (label) frame rate of the IMU-only sequences")
+    ap.add_argument("--pause-interval", type=float, default=12.5,
+                    help="handheld_pause: mean seconds between full stops")
+    ap.add_argument("--pause-duration", type=float, default=1.5,
+                    help="handheld_pause: mean length of one stop in seconds")
     args = ap.parse_args()
 
-    motions = tuple(m.strip() for m in args.motions.split(",") if m.strip())
+    motions = tuple(m.strip() for m in args.motions.split(",")
+                    if m.strip() and m.strip() != "none")
     unknown = set(motions) - set(MOTIONS)
     if unknown:
         raise ValueError(f"unknown motions: {sorted(unknown)}")
     gravity = GRAVITY_REAL if args.gravity == "real" else None
+
+    def imu_config(config: SimConfig) -> SimConfig:
+        config.camera_fps = args.camera_fps
+        config.pause_interval_s = args.pause_interval
+        config.pause_duration_s = args.pause_duration
+        return config
+
     corpus = args.output / f"corpus_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     manifest = {
         "version": 2,
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "motions": list(motions),
+        "camera_fps": args.camera_fps,
+        "pause_interval_s": args.pause_interval,
+        "pause_duration_s": args.pause_duration,
+        "split_file": args.split_file,
         "gravity_board": list(gravity) if gravity else None,
         "imu": {"train": [], "val": [], "test": [], "ood": []},
         "visual": {"train": [], "val": [], "test": [], "ood": []},
@@ -171,7 +199,8 @@ def main() -> None:
             for _ in range(count):
                 seed = args.seed + serial
                 serial += 1
-                config = _config(seed, motion, args.duration, False, "opencv", False, gravity)
+                config = imu_config(_config(seed, motion, args.duration, False, "opencv", False,
+                                            gravity))
                 path = export_sequence(build_sequence(config), corpus / "imu")
                 manifest["imu"][split].append({
                     "name": path.name,
@@ -197,6 +226,7 @@ def main() -> None:
                     if config is None:
                         print(f"REPLAY {split} {session}: no gap-free span", flush=True)
                         break
+                    config = imu_config(config)
                     path = export_sequence(build_sequence(config), corpus / "imu")
                     manifest["imu"][split].append({
                         "name": path.name, "path": str(path.relative_to(corpus)),
@@ -209,7 +239,7 @@ def main() -> None:
     for motion in motions:
         seed = args.seed + serial
         serial += 1
-        config = _config(seed, motion, args.duration, False, "opencv", True, gravity)
+        config = imu_config(_config(seed, motion, args.duration, False, "opencv", True, gravity))
         path = export_sequence(build_sequence(config), corpus / "imu")
         manifest["imu"]["ood"].append({
             "name": path.name, "path": str(path.relative_to(corpus)),

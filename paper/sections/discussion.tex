@@ -3,57 +3,54 @@
 \subsection{Findings and Measurement Implications}
 \emph{Observability and acquisition (RQ1, RQ3).} The decomposition in
 (\ref{eq:decomp}) is consistent with the shared plateau and with the shrinkage
-of every estimator: the initial velocity is not determined by the samples
-inside the window, and neither longer context nor session-level fusion
-supplied it. How much of the residual it causes, however, cannot be measured
-with a 10-fps reference, whose differentiated velocity is dominated by PnP
-noise; a higher-rate or independent velocity reference is needed. A
-confirmed pause does supply it, but only over short spans; beyond about 2~s the
-boundary condition is outweighed by time-varying attitude error and
-nonconstant bias, since a constant tilt is largely absorbed by the fitted
-bias. More frequent pauses are therefore a hypothesis about how to lower the
-floor, not a measured effect, and the frozen prospective protocol is designed
-to test it. Attitude accuracy is the second factor, because it limits how long
-a zero-velocity interval remains useful.
+of every estimator: the initial velocity is not determined inside the window,
+and neither longer context nor session-level fusion supplied it. Measuring its
+share needs a higher-rate or independent velocity reference, because the
+differentiated 10-fps reference is dominated by PnP noise. A confirmed pause
+supplies it only over short spans; beyond about 2~s time-varying attitude
+error and nonconstant bias dominate. In the twin, one firm stop every 4~s lowers the error by 32\% relative
+to pause-free motion, against 9\% for the frozen 10--15-s spacing, whereas an
+ideal IMU, a longer look-back or a 30-fps label rate change it by at most
+2~mm; the present recordings contain too few stops to show this. Attitude
+accuracy is the second factor, because it limits how long a zero-velocity
+interval remains useful.
 
 \emph{Reference (RQ2).} The board is highly repeatable when static, but its
-dynamic quality depends on frame rate and axis, and a small reprojection
-residual does not exclude a translation error caused by tilt. The simulated
-known-displacement test shows a systematic scale error of 1.4--2.5\% on the
-lateral axes, depending on the modelled optical blur. The reference is therefore suitable for comparing estimators
-whose errors are tens of millimetres, but it is not an externally traceable
-ground truth.
+dynamic quality depends on frame rate and axis, a small reprojection residual
+does not exclude a tilt-induced translation error, and the simulated
+known-displacement test shows a 1.4--2.5\% lateral scale error depending on
+the modelled blur. The reference suits comparisons of estimators whose errors
+are tens of millimetres, but it is not externally traceable.
 
 \emph{Estimator and twin (RQ4).} Anchor-frame pre-integration and an
 integrated velocity stream give the lowest synthetic and OOD errors and match
 the larger public architectures on real data with one seventh of the
 parameters. The synthetic margin comes mainly from periodic motion families,
 in which the context reveals the velocity; on random-spline motion the
-synthetic error reduction falls to the level seen on real data. On the held-out recording the difference from IMUNet is not
-significant; with about 38 independent 3-s blocks, the test cannot resolve
-differences below roughly 3~mm. Correcting the twin's board-to-gravity
+synthetic error reduction falls to the level seen on real data. The held-out
+difference from IMUNet is below the roughly 3-mm resolution of 38 independent
+blocks. Correcting the twin's board-to-gravity
 attitude and replaying real motion enabled useful direct transfer but did not
-improve the fine-tuned model; the remaining domain gap may arise from
+improve the fine-tuned model, nor did a non-periodic handheld twin with
+motion-class-balanced pretraining. The remaining domain gap may arise from
 unmodelled latency, vibration, scale and misalignment, and temperature.
 
 \paragraph{Implications.}
 Mount rigidity must be tested over increments long enough to exceed PnP noise,
 and the input sensor must not be used to correct its own labels. Local and
 trajectory metrics can disagree: the stillness gate improved every local
-statistic while worsening trajectory error through shrinkage, so both are
-needed to select an operating point.
+statistic while worsening trajectory error, so both are needed to select an
+operating point.
 
 \subsection{Limitations and Next Measurements}
 Board flatness, rolling shutter and the true intrinsic error are not part of a
 full GUM budget, and the reference has not been compared with an independent
 tracker or a physical displacement standard. The real dataset has eight
-trajectory recordings for training and validation, one held-out test recording,
-which was also used for exploratory diagnostics after model selection, and four
-rigidity recordings. The frozen
-prospective protocol therefore requires at least four new sealed test
+trajectory recordings for training and validation, one held-out test recording
+also used for post-selection diagnostics, and four rigidity recordings. The
+frozen prospective protocol therefore requires at least four new sealed test
 recordings on different days and with different operators or grips,
 three-minute 10-fps sessions with 10--20~cm travel and a 1--2-s pause every
-10--15~s, and a daily rotation/still recording that doubles as mount test. The
-translation-only trajectory comparison uses the reference orientation; the
-pure-inertial relative pose instead uses integrated-gyroscope attitude, and a
+10--15~s, and a daily rotation/still recording that doubles as mount test; a
+follow-up protocol should add a firm stop of at least 0.5~s every 4~s. A
 complete inertial pose stream must also propagate its covariance.

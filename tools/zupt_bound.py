@@ -71,6 +71,26 @@ def integrate(ses, t_nodes, R_nodes, ta, tb):
     return d, float(np.linalg.norm(bias) / G0 * 1000)
 
 
+def _raw_gyro_orientation(name, t_nodes, R_first):
+    """As fuse_trajectory._gyro_orientation, without the still-sample bias removal.
+
+    The session mean of all samples below 3 deg/s includes slow rotation and
+    removes 0.04--0.19 deg/s of false bias; the sensor's own static bias is
+    about 0.003 deg/s, so the raw rate is the better attitude input.
+    """
+    import torch
+    import tools.train_physnet_v3 as v3
+    v3.BIAS_MODE = "none"
+    ses = v3.Session(name)
+    q = v3._orientation_at(ses.t, ses.gyro, ses.Q, np.clip(t_nodes, ses.t[0], ses.t[-1]))
+    q0 = v3._orientation_at(ses.t, ses.gyro, ses.Q, t_nodes[:1])
+    rel = v3._qmul(v3._qconj(np.repeat(q0, len(q), 0)), q)
+    q_ci = np.repeat(ses.q_ci[None], len(q), 0)
+    rel = v3._qmul(v3._qmul(q_ci, rel), v3._qconj(q_ci))
+    Rrel = v3.quat_to_mat(torch.from_numpy(rel)).numpy()
+    return np.einsum("ij,njk->nik", R_first, Rrel)
+
+
 def session_rows(name, thr, min_len, attitude):
     t, Rg, pg, usable = phys._load_gt(name)
     vg, vok = phys.gt_velocity(t, pg, usable)
@@ -81,6 +101,8 @@ def session_rows(name, thr, min_len, attitude):
     if attitude == "gyro":
         from tools.fuse_trajectory import _gyro_orientation
         R_nodes = _gyro_orientation(name, t_nodes, Rg[usable[0]])
+    elif attitude == "gyro_raw":
+        R_nodes = _raw_gyro_orientation(name, t_nodes, Rg[usable[0]])
     else:
         R_nodes = Rg[usable]
     rows = []
@@ -109,14 +131,15 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--thr", type=float, default=3.0, help="stillness threshold, mm/s")
     ap.add_argument("--min-len", type=float, default=0.4, help="minimum still duration, s")
-    ap.add_argument("--split-file", default="trajectory_split_20260924.json")
+    ap.add_argument("--split-file", default="trajectory_split_paper.json")
+    ap.add_argument("--attitudes", nargs="+", default=["ref", "gyro", "gyro_raw"])
     ap.add_argument("--output", type=Path, default=DATA / "zupt_bound.json")
     args = ap.parse_args()
     split = json.loads((DATA / args.split_file).read_text(encoding="utf-8"))
     groups = {"train": split["train"], "val": split["val"],
               "extra_train (rigid)": split.get("extra_train", []), "test": split["test"]}
     report = {"config": {"thr_mm_s": args.thr, "min_still_s": args.min_len}, "sessions": {}}
-    for attitude in ("ref", "gyro"):
+    for attitude in args.attitudes:
         pooled = {}
         for group, names in groups.items():
             rows, segs, seconds = [], 0, 0.0

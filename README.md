@@ -23,6 +23,7 @@ evaluation.
 | `tools/reference_stage_validation.py`, `tools/sim_reference_validation.py` | Known-displacement validation of the reference (stage, caliper or simulated) |
 | `tools/estimate_lever_arm.py`, `tools/register_lever_arm_measurement.py` | Physics-based and mechanical camera-IMU lever arm |
 | `tools/final_prospective_evaluation.py`, `tools/check_prospective_acceptance.py` | Frozen-model manifest and one-shot prospective evaluation |
+| `tools/twin_protocol_sweep.py`, `tools/stop_anchor_check.py`, `tools/twin_motion_class_eval.py`, `tools/twin_realistic_summary.py` | Realistic handheld twin, acquisition-protocol study (stop interval, label rate, ideal IMU), stop-anchored switching, error by motion class |
 | `tools/make_paper_figures.py`, `tools/verify_manuscript.py`, `tools/recheck_metrics.py` | Figures, manuscript-to-artefact regression check, independent metric recomputation |
 | `paper/` | LaTeX sources of the manuscript |
 | `docs/` | Collection, simulation and submission protocols |

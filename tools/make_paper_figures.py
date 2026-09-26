@@ -1129,7 +1129,12 @@ def zupt_and_uncertainty(bound_json="zupt_bound.json", unc_json="uncertainty_val
 
     ax = axes[0]
     centres = {"0.8-2s": 1.4, "2-4s": 3.0, "4-8s": 6.0, "8-30s": 15.0}
-    for attitude, colour, marker in (("ref", "#2369a2", "o"), ("gyro", "#d24b40", "s")):
+    labels = {"ref": "Reference attitude", "gyro": "Gyroscope, session bias removed",
+              "gyro_raw": "Gyroscope, raw rate"}
+    for attitude, colour, marker in (("ref", "#2369a2", "o"), ("gyro", "#d24b40", "s"),
+                                     ("gyro_raw", "#e39b2d", "^")):
+        if attitude not in bound:
+            continue
         # Pool the train, validation and rigidity recordings per span bin.
         pool = {}
         for group in ("train", "val", "extra_train (rigid)"):
@@ -1142,7 +1147,7 @@ def zupt_and_uncertainty(bound_json="zupt_bound.json", unc_json="uncertainty_val
         y = [pool[k][0] / pool[k][1] for k in keys]
         n = [pool[k][1] for k in keys]
         ax.plot(x, y, marker=marker, linestyle="-", color=colour, markersize=4,
-                label=f"{'Reference' if attitude == 'ref' else 'Gyroscope'} attitude")
+                label=labels[attitude])
         if attitude == "ref":
             for xi, yi, ni in zip(x, y, n):
                 ax.annotate(f"n={ni}", (xi, yi), textcoords="offset points", xytext=(3, -9),
@@ -1150,7 +1155,7 @@ def zupt_and_uncertainty(bound_json="zupt_bound.json", unc_json="uncertainty_val
     ax.axhline(43.6, color="#45a86b", linestyle="--", linewidth=0.9,
                label="learned 3-s window, 43.6 mm")
     ax.axvspan(2.6, 3.4, color="#999999", alpha=0.18)
-    ax.text(3.0, 2.0, "3-s\nprotocol", ha="center", fontsize=5.6, color="#555555")
+    ax.text(3.0, 2500.0, "3-s\nprotocol", ha="center", fontsize=5.6, color="#555555")
     ax.set_yscale("log")
     ax.set_xscale("log")
     ax.set_xticks([1.4, 3, 6, 15], ["1.4", "3", "6", "15"])
@@ -1158,7 +1163,7 @@ def zupt_and_uncertainty(bound_json="zupt_bound.json", unc_json="uncertainty_val
     ax.set_ylabel("Displacement error (mm)")
     ax.set_title("(a) Zero-velocity-aided bound", fontsize=6.6)
     ax.grid(alpha=0.25, which="both")
-    ax.legend(fontsize=4.8, loc="upper left", borderpad=0.2, handlelength=1.2, labelspacing=0.2, framealpha=0.85)
+    ax.legend(fontsize=4.6, loc="lower right", borderpad=0.2, handlelength=1.2, labelspacing=0.2, framealpha=0.85)
     ax.tick_params(labelsize=5.4)
 
     ax = axes[1]

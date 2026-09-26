@@ -64,9 +64,10 @@ These gaps lead to four research questions:
   \item We build a digital twin with measured sensor parameters and a
   protocol-matched evaluation spanning synthetic test and OOD, direct
   sim-to-real transfer, session-wise cross-validation, a held-out real test
-  and trajectory error. Pretraining on the twin did not lower the real-data
-  error; the data instead identify pause rate and attitude accuracy as the
-  acquisition factors most likely to lower the floor.
+  and trajectory error. Pretraining on the twin, including a realistic
+  non-periodic handheld variant, did not lower the real-data error; a protocol
+  study in the twin instead identifies the stop rate as the acquisition factor
+  that lowers the floor, with sensor noise, look-back and label rate secondary.
 \end{itemize}
 
 Fig.~\ref{fig:framework} summarizes the information flow and the separation

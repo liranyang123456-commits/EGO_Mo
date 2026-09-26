@@ -1,10 +1,6 @@
 ﻿\section{Results}
 \label{sec:results}
 
-Results follow the measurement chain: reference and twin audits, the
-observable horizon and error floor, the pause experiment, and finally the
-estimators.
-
 \subsection{Measurement-Chain Audits}
 Static position repeatability is 0.04--0.06~mm per axis and rotation
 repeatability is 0.008--0.035$^\circ$. At 0.25-px corner noise, Monte Carlo
@@ -122,32 +118,28 @@ component of the target is not determined by the inputs.
 Attributing a quantified share of the residual to ${\bf v}(t_a)$ requires an
 independent velocity measurement, which the 10-fps reference cannot supply
 (Fig.~\ref{fig:limit}(c)). An affine correction by the mean reference velocity
-over the 7-s window removes 14.1\% of the error when fitted and scored on the
-same pairs, but only 4.3\% when fitted on the other validation recording, and
-this proxy contains the target displacement itself, so part of its effect is
-the shrinkage above. A proxy built from the two context segments alone removes
-1.8\% in-sample and increases the error by 6.5\% across recordings, and
-${\bf v}(t_a)$ differentiated from the reference over $\pm0.3$~s is dominated by
-PnP noise (mean $\|{\bf v}(t_a)\Delta t_{ab}\|=75.8$~mm against a mean displacement
-of 35.6~mm). The decomposition therefore identifies the initial velocity as a
-component the window cannot determine, but the present data do not measure how
-much of the 30-mm residual it causes; residual bias and gravity leakage after
-rotation compensation, reference noise at 10~fps and the anisotropic training
-motion are the other candidates. Longer context did not help either: the
-variants with 3-s and 4-s context on each side were worse
-(Table~\ref{tab:ablation}), and 756~s of reference motion did not establish a
-long-range motion prior.
+over the 7-s window removes 14.1\% of the error in-sample but only 4.3\% when
+fitted on the other validation recording, and this proxy contains the target
+displacement itself. A proxy from the two context segments alone removes
+1.8\% in-sample and adds 6.5\% across recordings, and ${\bf v}(t_a)$
+differentiated from the reference over $\pm0.3$~s is dominated by PnP noise
+(mean $\|{\bf v}(t_a)\Delta t_{ab}\|=75.8$~mm against a mean displacement of
+35.6~mm). The real data therefore do not measure how much of the 30-mm residual
+the initial velocity causes. The other candidates are residual bias and
+gravity leakage, which an ideal IMU in the twin shows to be minor
+(Section~\ref{sec:protocol}), reference noise at 10~fps and the anisotropic
+training motion. Longer context did not help either: 3-s and 4-s context were
+worse (Table~\ref{tab:ablation}), and 756~s of reference motion did not
+establish a long-range motion prior.
 
-The shrinkage is not an artefact of the training loss. In post-freeze
-fixed-split experiments (two seeds, validation only), a near-quadratic loss
-($\beta=5$~cm), the Gaussian NLL as main term, and a gyroscope bias
-interpolated between pauses left the per-axis slopes at 0.42--0.48,
-0.47--0.56 and 0.19--0.29 and the error at 29.5--31.0~mm, and scaling the
-predictions up increased both error and ATE (gated model: 126 to 152~mm at
+The shrinkage is not an artefact of the training loss: in post-freeze
+fixed-split experiments (two seeds), a near-quadratic loss ($\beta=5$~cm), the
+Gaussian NLL as main term and a pause-interpolated gyroscope bias left the
+per-axis slopes at 0.42--0.48, 0.47--0.56 and 0.19--0.29 (29.5--31.0~mm), and
+scaling the predictions up raised error and ATE (gated: 126 to 152~mm at
 $\alpha=1.5$). Averaging gated and non-gated models lowered the CV error from
 24.95 to 24.63~mm but not the held-out error below IMUNet (43.89 versus
-42.93~mm). This is the behaviour of a conditional-mean estimator with missing
-information.
+42.93~mm), as expected of a conditional-mean estimator with missing information.
 
 \begin{figure}[tb]
 \centering
@@ -162,52 +154,48 @@ window mean includes the target interval, the context proxy excludes it.}
 \label{fig:limit}
 \end{figure}
 
-Session-level fusion did not reduce this error. One sparse
-least-squares problem over all node positions with displacement,
-neighbour-velocity and zero-velocity edges leaves the re-read validation error
-at 29.7--29.9~mm against 29.67~mm for independent windows, and the ATE within
-2~mm, for every weight combination tried; weighting edges by the predicted
-variance changes ATE by less than 1.5~mm. The tens of thousands of
-displacement edges dominate the few hundred neighbour constraints, and the
-velocity stream is constrained only through its integral at the reference
-frame times, so velocity edges add little independent information.
-Absolute velocity must therefore be supplied by the acquisition, for example
-by pauses.
+Session-level fusion did not reduce this error. One sparse least-squares
+problem over all node positions with displacement, neighbour-velocity and
+zero-velocity edges leaves the validation error at 29.7--29.9~mm against
+29.67~mm for independent windows, and the ATE within 2~mm, for every weight
+combination tried (variance weighting: below 1.5~mm). The tens of thousands of
+displacement edges dominate the few hundred neighbour constraints, so absolute
+velocity must be supplied by the acquisition, for example by pauses.
 
 \subsection{Stationary-Boundary Experiment and Acquisition Requirement}
 \label{sec:pause}
 An epoch correctly identified as stationary supplies the boundary condition
-${\bf v}={\bf0}$ and reduces the initial-velocity ambiguity. Detecting it is
-reliable: on the validation recordings the stillness
-head recovers 94.4--100\% of the frames that the reference confirms slower
-than 3~mm/s, with a false-alarm rate of 0--2.3\% on frames faster than
-8~mm/s.
+${\bf v}={\bf0}$. Detecting it is reliable: on validation the stillness head
+recovers 94.4--100\% of the frames that the reference confirms slower than
+3~mm/s, with 0--2.3\% false alarms on frames faster than 8~mm/s.
 
-Fig.~\ref{fig:zupt}(a) measures what such a boundary condition makes available,
-using inertial acceleration with either reference or integrated-gyroscope
-attitude and no learned model. Between two detected pauses the velocity is
-pinned at both ends; after an attitude trajectory is supplied, the
-specific-force samples determine the displacement, and the two boundary
-conditions identify one constant board-frame acceleration offset per interval
-(solved values 2.9--6.1~mg, dominated by the specific-force magnitude error
-along gravity). The only available interval below
-2~s gives 0.7~mm with reference attitude and 1.2~mm with gyroscope attitude
-($n=1$); this point is illustrative rather than a population estimate. Pooled
-2--4-s errors rise to 53.9 and 104.1~mm, and longer intervals produce
-hundreds to thousands of millimetres of error. A constant tilt component is
-largely absorbed by the fitted constant bias; the remaining divergence
-therefore indicates time-varying attitude error, nonconstant bias and sensor
-noise. For scale, an uncompensated constant one-degree tilt would leak
-0.17~m/s$^2$ of gravity and produce $g_0\,\delta\theta\,t^2/2=0.77$~m of
-open-loop position error over 3~s, whereas a tilt growing with a gyroscope
-bias $b_g$ gives $g_0 b_g t^3/6$ and is not absorbed by a constant offset.
+Fig.~\ref{fig:zupt}(a) measures what such a boundary condition makes available
+without a learned model. Between two detected pauses the velocity is pinned at
+both ends; given an attitude trajectory, the specific force determines the
+displacement, and the two boundary conditions identify one constant
+board-frame acceleration offset per interval (2.9--6.1~mg, dominated by the
+specific-force magnitude error along gravity). The only interval below 2~s
+gives 0.7~mm with reference attitude and 1.2~mm with gyroscope attitude
+($n=1$, illustrative only). Pooled 2--4-s errors rise to 53.9 and 104.1~mm, and
+longer intervals produce hundreds to thousands of millimetres. A constant tilt
+is largely absorbed by the fitted offset, so the divergence indicates
+time-varying attitude error, nonconstant bias and noise: a tilt growing with a
+gyroscope bias $b_g$ gives $g_0 b_g t^3/6$, whereas a constant one-degree tilt
+alone would give $g_0\,\delta\theta\,t^2/2=0.77$~m over 3~s. Part of this growth
+comes from the session-level gyroscope bias used throughout: the mean of all
+samples below 3~$^\circ$/s also averages slow rotation and removes
+0.04--0.19~$^\circ$/s of false bias, whereas strictly still samples give at
+most 0.017~$^\circ$/s. With the raw rate the pooled 2--4-s and 8--30-s errors
+fall from 104.1~mm and 4.7~m to 78.1~mm and 2.0~m; retrained on the raw rate,
+the learned model is unchanged (29.44 against 29.43~mm).
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{zupt_uncertainty.pdf}
 \caption{(a) Displacement error of zero-velocity-aided strapdown integration
-between detected pauses, using inertial acceleration with reference or
-gyroscope attitude and pooled over the training, validation and rigidity
+between detected pauses, using inertial acceleration with reference attitude,
+gyroscope attitude after session-level bias removal, or the raw gyroscope
+rate, pooled over the training, validation and rigidity
 recordings ($n$ = intervals available). The sub-2-s point contains one
 interval; error grows sharply with span under the present attitude solution.
 The horizontal line marks the 43.6-mm held-out-test error of the gated learned
@@ -218,49 +206,91 @@ data.}
 \end{figure}
 
 The benefit that actually materializes is bounded by how often the instrument
-stops. The present recordings contain 0.5--2.3 still segments per minute
-(training 2.3, validation 1.38, rigidity 1.75, held-out test 0.52), the held-out
-test recording contains a single one, and only 16.5\% of validation windows
+stops: 0.5--2.3 still segments per minute (training 2.3, validation 1.38,
+rigidity 1.75, held-out test 0.52), and only 16.5\% of validation windows
 contain any still frame. Consistently, using the detection as the structural
 update (\ref{eq:gate}) improves the mean single-model validation error by
-0.26~mm, which is inside the 1.6~mm seed range of the reference
-configuration, although it narrows that range to 1.0~mm and improves every
-local held-out-test statistic while worsening trajectory error
-(Table~\ref{tab:ablation} and Section~\ref{sec:estimators}). Supervising the stillness classifier
-without using it in the kinematics does not help, and the two-pass
-re-anchoring does not combine with the gate.
+0.26~mm, inside the 1.6~mm seed range of the reference configuration,
+although it narrows that range to 1.0~mm and improves every local
+held-out-test statistic while worsening trajectory error
+(Table~\ref{tab:ablation} and Section~\ref{sec:estimators}). Supervising the
+stillness classifier without using it in the kinematics does not help, and the
+two-pass re-anchoring does not combine with the gate. Below 10~mm/s for at
+least 0.3~s, 65\% of the validation windows have no stop in
+$[t_a-2\,\mathrm{s},t_b]$ (36.5 against 50.8~mm for zero motion), 8\% one
+only in the context and 27\% one inside the interval (13.7 against 21.7~mm).
 
-A confirmed stationary boundary is thus valuable only over a short span, and
-such pauses occur only 0.5--2.3 times per minute in the present recordings. We
-therefore hypothesize that raising the rate to 4--6 per minute, a 1--2-s pause
-every 10--15~s, would place a pause inside most 7-s windows instead of one
-sixth of them and let the stillness gate act more often; the frozen
-prospective protocol adopts this rate so that the hypothesis can be tested.
+\subsection{Acquisition Protocol in the Twin}
+\label{sec:protocol}
+To estimate what the frozen protocol's 1--2-s pause every 10--15~s and denser
+spacings deliver, synthetic-only models (two seeds) were trained on five
+handheld corpora that differ only in the mean stop interval (60/10/20
+sequences of 40~s). On this non-periodic
+motion PhysNet removes 15--38\% of the zero-motion error
+(Table~\ref{tab:protocol}), the range seen on real data, mainly on windows with
+a stop inside the interval. An ideal IMU without noise, bias or quantization
+(35.1 and 46.8~mm at 4~s and without stops), an 8-s look-back (36.9~mm at
+4~s) and a 10- or 30-fps label rate (43.8 and 42.7~mm at 12.5~s) change the
+error by at most 2~mm.
+
+\begin{table}[tb]
+\centering
+\caption{Synthetic-test error (mm) on handheld motion with 1--2-s stops (zero
+motion 55.4--57.4~mm). In win.: windows with a stop in $(t_a,t_b]$; PhysNet
+with session-level bias removal or the raw gyroscope rate (Raw); +sw.:
+stop-anchored switching.}
+\label{tab:protocol}
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Interval & In win. & PhysNet & Raw & Raw+sw. & IMUNet & IMUNet+sw. \\
+\midrule
+4~s    & 72\% & 35.3 & 34.7 & \textbf{30.0} & 57.5 & 33.3 \\
+8~s    & 50\% & 42.2 & 39.7 & \textbf{36.7} & --   & --   \\
+12.5~s & 43\% & 43.2 & 42.5 & \textbf{40.3} & 55.3 & 46.5 \\
+20~s   & 31\% & 46.5 & 44.5 & \textbf{41.8} & --   & --   \\
+None   & 15\% & 48.6 & 44.2 & \textbf{44.1} & 55.5 & 55.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The learned models leave most of the information in a stop unused:
+stop-anchored strapdown integration (gravity from the still samples, velocity
+drift removed linearly between them) reaches 4.4~mm with the ideal IMU and the
+true stops on windows with a stop inside the interval. With the measured noise
+and stops detected from the IMU alone ($\|\boldsymbol\omega\|<1^\circ$/s,
+$|\|{\bf f}\|-g_0|<0.01g_0$ for 0.5~s) it is accurate only over short spans,
+so a window is switched to it only if no stretch longer than $S$ lacks a
+bracketing stop ($S$ selected on synthetic validation: 2~s for PhysNet, 3~s for
+IMUNet). Switching gives 30.0~mm at 4~s and lets IMUNet, which alone stays
+within 2~mm of zero motion, reach 33.3~mm; on real validation it affects 8.5\%
+of the windows, almost all static (29.63 to 29.52~mm). With the same estimator
+the twin predicts 9\% lower error than pause-free motion (44.1~mm) at the
+frozen 10--15-s spacing and 32\% for one firm stop every 4~s.
 
 \subsection{Estimators at the Error Floor}
 \label{sec:estimators}
-Table~\ref{tab:summary} compares every method under one protocol along
-twelve evaluation columns, and
-Fig.~\ref{fig:benchmark} shows the direct-run, held-out-test and per-session
-views. On synthetic data, where the sensor model is exact and the
+Table~\ref{tab:summary} and Fig.~\ref{fig:benchmark} compare every method
+under one protocol. On synthetic data, where the sensor model is exact and the
 motion and sensor distributions are controlled by the twin, PhysNet
 reduces the error of the best public architecture, IMUNet, by 24\%
 (16.69 versus 21.89~mm, $R^2$ 0.864 versus 0.812) and by 8\% on the
 out-of-distribution split, with one seventh of the parameters (0.42~M versus
 2.83~M); all networks run in 0.13--0.16~ms per window, so latency does not
 distinguish them. The synthetic advantage is concentrated in periodic motion:
-on the circle, depth, lateral and mixed families PhysNet removes 79--87\% of the
-zero-motion error, but on the random-spline family, whose velocity is not
-predictable from the context, only 41\% ($-16$\% on its OOD sequence), close to
-the 30\% observed on real data. Synthetic accuracy therefore overstates what
-a window can resolve during unpredictable handheld motion.
-All architectures trained only on the legacy twin fail on real data; among
-those that do not collapse to a zero output PhysNet degrades least (90.2~mm),
-and with the gravity-corrected, replay-augmented
-twin its synthetic-only model is the only evaluated direct-transfer model to
-beat zero motion on real
-validation (39.6 versus 42.2~mm, $R^2$ up to 0.17), although fine-tuning from
-it brings no further gain.
+PhysNet removes 79--87\% of the zero-motion error on the circle, depth, lateral
+and mixed families but only 41\% on random-spline motion ($-16$\% on its OOD
+sequence), close to the 30\% on real data, so periodic synthetic accuracy
+overstates what a window resolves during handheld motion.
+Models trained only on the legacy twin fail on real data (PhysNet degrades
+least, 90.2~mm). With the gravity-corrected, replay-augmented twin PhysNet
+transfers directly (39.6 versus 42.2~mm for zero motion, $R^2$ up to 0.17),
+and with a realistic twin (handheld, random-spline and 170 replayed segments)
+IMUNet does as well (37.9--38.6~mm; PhysNet 37.5--38.8~mm). Fine-tuning from
+either twin, also with motion-class-balanced sampling, brings no gain
+(three-seed ensembles: PhysNet 29.29--29.56 against 29.43~mm, IMUNet 31.41
+against 30.63~mm).
 
 \input{sections/summary_table}
 
@@ -273,9 +303,7 @@ trajectory projections, with ATE in the legend of (a); (d),(e) two temporal
 components, which expose correlated drift; (f) the empirical position-error
 CDF. The comparison includes Ridge, adapted IMUNet, PhysNet and their blend.
 PhysNet and the blend use the non-gated trajectory operating point selected
-by ATE, not the gated local-displacement operating point.
-On one synthetic test sequence the earlier synthetic-only Conv--BiGRU reaches
-26.7~mm ATE against 37.6~mm for zero motion.}
+by ATE, not the gated local-displacement operating point.}
 \label{fig:trajectories}
 \end{figure}
 
@@ -306,25 +334,22 @@ Fig.~\ref{fig:benchmark}(c)). On the held-out test the PhysNet$-$IMUNet error
 difference is 0.62~mm with a 95\% interval of $[-1.8,\,+3.2]$~mm; averaging the
 two families gives the lowest mean error (equal blend, 42.21~mm) and the
 calibrated blend ($w=0.65$, $\alpha=1.05$) the highest $R^2$ (0.279), but its
-improvement over IMUNet, $[-1.2,\,+2.5]$~mm, also contains zero. With about 38
+improvement over IMUNet, $[-1.2,\,+2.5]$~mm, also contains zero; with about 38
 independent 3-s blocks the recording cannot resolve differences below roughly
 3~mm. IMUNet, gated PhysNet and the blends beat zero motion by 6.1--7.5~mm with
-intervals that exclude zero (Fig.~\ref{fig:benchmark}(b)), whereas Ridge,
-the Conv--BiGRU and the fixed-split RoNIN and TLIO models gain at most 4.9~mm.
-The proposed representation is therefore distinguished by efficiency---one
-seventh of the IMUNet parameters, the lowest synthetic and OOD errors and
-useful direct transfer---at real-data accuracy that matches the larger models.
-Learned displacement helps only on the four large-motion recordings ($R^2$
-0.17--0.62); on the three near-static ones no model improves on zero motion.
+intervals that exclude zero (Fig.~\ref{fig:benchmark}(b)); Ridge, the
+Conv--BiGRU and the fixed-split RoNIN and TLIO models gain at most 4.9~mm.
+PhysNet is thus distinguished by efficiency, the lowest synthetic and OOD
+errors and direct transfer at real-data accuracy that matches the larger
+models. Learned displacement helps only on the four large-motion recordings
+($R^2$ 0.17--0.62), not on the three near-static ones.
 Data curation had effects of the same order as architecture: adding the
-rigidity recordings moved the IMUNet CV error from 27.17 to 26.38~mm
-(single-model means), and excluding the two that fail the mount test moved the
-PhysNet validation error from 31.89 to 30.68~mm. In a post-freeze
-cross-validation, also removing the two trajectory recordings with the poorest
-camera--IMU rotation consistency (11.6 and 7.8$^\circ$ residual of 1-s rotation
-increments) from the training pool lowered the error on the remaining six
-recordings from 27.35 to 26.72~mm and on the held-out recording from 43.55 to
-43.38~mm, a difference whose interval contains zero.
+rigidity recordings moved the IMUNet CV error from 27.17 to 26.38~mm, and
+excluding the two that fail the mount test moved the PhysNet validation error
+from 31.89 to 30.68~mm. Removing, post freeze, the two trajectory recordings
+with the poorest camera--IMU rotation consistency (11.6 and 7.8$^\circ$) moved
+the CV error on the remaining six from 27.35 to 26.72~mm and the held-out error
+from 43.55 to 43.38~mm, inside its interval.
 
 \subsection{Estimator Performance, Uncertainty, and Physical Consistency}
 The heteroscedastic head, evaluated on the two-seed fixed-split ensemble
@@ -332,22 +357,18 @@ trained with the NLL term (the selected CV models use $w_\eta=0$), costs no
 accuracy (Table~\ref{tab:ablation}). Its raw predicted-plus-ensemble variance
 is under-dispersed (32.5\% and 54.5\% coverage at one and two standard
 deviations) because it is fitted on the dense stream. The scale $\kappa=4.56$
-fitted on validation gives 81.4\% and 94.5\% on the same data
-(Fig.~\ref{fig:zupt}(b)) and 81.0\% and 94.2\% when fitted on one validation
-recording and scored on the other, but only 63.2\% and 85.2\% on the held-out
-test, whose motion is larger; stratified, magnitude-scaled and split-conformal
-recalibrations on validation did not remove this shortfall. The uncertainty
-still discriminates: the most and least confident deciles have 6.9 and
-29.7~mm error on validation and 1.7 and 51.5~mm on the test.
+fitted on validation gives 81.4\% and 94.5\% (Fig.~\ref{fig:zupt}(b)), 81.0\%
+and 94.2\% across validation recordings, but only 63.2\% and 85.2\% on the
+larger-motion test; stratified, magnitude-scaled and split-conformal
+recalibrations did not remove this shortfall. The most and least confident
+deciles have 6.9 and 29.7~mm error on validation and 1.7 and 51.5~mm on test.
 
-The sixteen non-gated fold models also estimate the camera--IMU lever arm as
+The sixteen non-gated fold models estimate the camera--IMU lever arm as
 $(-22.6\pm3.8,\,-5.2\pm1.9,\,-29.7\pm7.0)$~mm in camera axes (mean $\pm$
-standard deviation across models), a 38-mm offset from the IMU to the left
-optical centre, whereas the gated models give $(-20.9,\,-4.1,\,-17.8)$~mm.
-Removing the term costs 0.25~mm of validation error at equal weight decay
-(32.81 versus 32.56~mm). The estimate is therefore variant-dependent and weakly
-constrained by the loss; it is a value to be checked against a mechanical
-measurement of the rig, not a calibration.
+standard deviation), a 38-mm offset, whereas the gated models give
+$(-20.9,\,-4.1,\,-17.8)$~mm, and removing the term costs only 0.25~mm (32.81
+versus 32.56~mm). The estimate is variant-dependent and weakly constrained; it
+must be checked against a mechanical measurement, not used as a calibration.
 
 \paragraph{Trajectory error and the operating point.}
 The last column of Table~\ref{tab:summary} and Fig.~\ref{fig:trajectories}
@@ -364,23 +385,19 @@ reference frame in its displacement stream replaces the end-point edges
 
 The stillness gate separates the two metrics: it improves every local
 statistic in Table~\ref{tab:summary} while degrading ATE from 87.8 to 109.8~mm.
-Both ensembles are strongly shrunk (median predicted magnitude 15.8 and
-16.4~mm against a reference median of 42~mm), so the ATE difference is not a
-simple shrinkage effect; the mean local error and the accumulated error weight
-the gate's errors differently, and we did not isolate the mechanism. We therefore
-report the gated ensemble as the displacement pseudo-measurement and the
-non-gated ensemble as the trajectory estimator, rather than selecting one
-operating point on a single metric.
+Both ensembles are equally shrunk (median predicted magnitude 15.8 and 16.4~mm
+against 42~mm), so this is not a simple shrinkage effect, and we did not
+isolate the mechanism. We report the gated ensemble as the displacement
+pseudo-measurement and the non-gated one as the trajectory estimator.
 
 \paragraph{Initially anchored relative pose.}
 Replacing the reference orientation in the trajectory solve by bias-corrected
 gyroscope integration gives a 4.51$^\circ$ orientation RMSE over the 115-s
 held-out recording and a 3-s relative-rotation RMSE of 3.48$^\circ$. With the
-non-gated calibrated translation blend, the resulting relative-pose stream has
-80.59-mm translation ATE and 50.92-mm 3-s translation RPE, against 119.2~mm and
-about 60~mm (RMS of the 3-s reference displacement) for zero motion. Attitude
-is taken from the reference only at the first node, whereas positions use the
-same 31 component anchors as above; the result is therefore a relative pose
-stream with periodic position anchoring, not a learned or absolute 6-DoF pose.
+non-gated calibrated blend, the relative-pose stream has 80.59-mm translation
+ATE and 50.92-mm 3-s RPE, against 119.2~mm and about 60~mm for zero motion.
+Attitude is taken from the reference only at the first node and positions use
+the same 31 anchors, so this is a relative pose stream with periodic position
+anchoring, not a learned or absolute 6-DoF pose.
 
 

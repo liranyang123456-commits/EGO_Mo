@@ -101,7 +101,28 @@ def _orientation_at(usb_t, gyro, Q, times):
 # --------------------------------------------------------------------------
 # window construction
 # --------------------------------------------------------------------------
-BIAS_MODE = "global"   # "global": one still-sample mean; "local": pause-interpolated
+# Gyro bias removed before orientation integration.
+#   global: mean of all samples below 3 deg/s (slow motion included)
+#   local:  pause-interpolated
+#   strict: mean over samples that are still in both gyro and accelerometer
+#   none:   no removal (the sensor's own calibration; static bias ~0.003 deg/s)
+BIAS_MODE = "global"
+
+
+def _strict_gyro_bias(t, gyro_dps, acc_g, win_s=0.5, rate_max=1.0, acc_std_max=0.004,
+                      min_s=0.5):
+    """Constant gyro bias (rad/s) from strictly still samples, or None if too few."""
+    from scipy.ndimage import uniform_filter1d, maximum_filter1d
+    hz = 1.0 / max(np.median(np.diff(t)), 1e-4)
+    w = max(3, int(round(win_s * hz)))
+    rate = np.linalg.norm(gyro_dps, axis=1)
+    mag = np.linalg.norm(acc_g, axis=1)
+    mean = uniform_filter1d(mag, w, mode="nearest")
+    std = np.sqrt(np.maximum(uniform_filter1d(mag ** 2, w, mode="nearest") - mean ** 2, 0.0))
+    still = (maximum_filter1d(rate, w, mode="nearest") < rate_max) & (std < acc_std_max)
+    if still.sum() < min_s * hz:
+        return None
+    return np.radians(gyro_dps[still]).mean(0)
 
 
 def _local_gyro_bias(t, gyro_dps, acc_g, win_s=0.5, rate_max=2.0, acc_std_max=0.02):
@@ -141,12 +162,17 @@ class Session:
         self.t = usb_t
         self.acc = usb[:, 0:3] * G0
         gyro = np.radians(usb[:, 3:6])
-        local = _local_gyro_bias(usb_t, usb[:, 3:6], usb[:, 0:3]) if BIAS_MODE == "local" else None
-        still = np.linalg.norm(usb[:, 3:6], axis=1) < 3.0
-        if local is not None:
-            gyro = gyro - local
-        elif int(still.sum()) >= 50:
-            gyro = gyro - gyro[still].mean(0)
+        if BIAS_MODE == "strict":
+            bias = _strict_gyro_bias(usb_t, usb[:, 3:6], usb[:, 0:3])
+            if bias is not None:
+                gyro = gyro - bias
+        elif BIAS_MODE != "none":
+            local = _local_gyro_bias(usb_t, usb[:, 3:6], usb[:, 0:3]) if BIAS_MODE == "local" else None
+            still = np.linalg.norm(usb[:, 3:6], axis=1) < 3.0
+            if local is not None:
+                gyro = gyro - local
+            elif int(still.sum()) >= 50:
+                gyro = gyro - gyro[still].mean(0)
         self.gyro = gyro
         self.Q = _session_orientation(usb_t, gyro)
         self.R_ci = (api.R_CAMERA_IMU_NEW if R_ci is None else R_ci).astype(np.float64)
@@ -917,9 +943,18 @@ def cmd_train(args) -> None:
             syn[group] = build_group(paths, args.context, args.horizon, length, coarse=args.coarse,
                                      cap=args.synthetic_cap, rng=rng)
             print(json.dumps({"synthetic": group, "pairs": int(len(syn[group]["y"]))}), flush=True)
+        syn_weight = None
+        if args.pretrain_balance == "class":
+            cls_of = {str(_corpus_path(args.pretrain_corpus, e["path"])):
+                      e.get("motion_class", e["motion"]) for e in manifest["imu"]["train"]}
+            cls = np.array([cls_of[str(s)] for s in syn["train"]["session"]])
+            syn_weight = np.zeros(len(cls))
+            for c in np.unique(cls):
+                syn_weight[cls == c] = 1.0 / (cls == c).sum()
+            syn_weight /= syn_weight.sum()
         syn_train_t, syn_val_t = to_device(syn["train"], device), to_device(syn["val"], device)
         pre_epoch, pre_err, pre_hist = run_phase(
-            model, syn_train_t, syn_val_t, syn["val"]["y"], None, aug, dense_weight, args,
+            model, syn_train_t, syn_val_t, syn["val"]["y"], syn_weight, aug, dense_weight, args,
             rng, epochs=args.pretrain_epochs, lr=args.lr, patience=10, label="synthetic")
         history += pre_hist
         pretrain_report = {"synthetic_train_pairs": int(len(syn["train"]["y"])),
@@ -1147,7 +1182,7 @@ def main() -> None:
                     help="weight of the heteroscedastic Gaussian NLL term (adds a log-variance head)")
     ap.add_argument("--beta", type=float, default=0.5,
                     help="smooth-L1 transition in cm; large values approach squared error")
-    ap.add_argument("--bias-mode", choices=("global", "local"), default="global",
+    ap.add_argument("--bias-mode", choices=("global", "local", "strict", "none"), default="global",
                     help="gyro bias: one still-sample mean, or interpolated between pauses")
     ap.add_argument("--balance", action="store_true", help="equal sampling weight per second")
     ap.add_argument("--reverse", action="store_true", help="time-reversal augmentation")
@@ -1167,6 +1202,8 @@ def main() -> None:
     ap.add_argument("--synthetic-corpus", default="",
                     help="eval: also score the corpus test/ood splits (160 pairs per session)")
     ap.add_argument("--synthetic-cap", type=int, default=120, help="pairs per synthetic session")
+    ap.add_argument("--pretrain-balance", choices=("none", "class"), default="none",
+                    help="class: equal sampling weight per motion class during pretraining")
     ap.add_argument("--finetune-lr", type=float, default=5e-4)
     ap.add_argument("--no-dense", action="store_true")
     ap.add_argument("--no-phys", action="store_true")

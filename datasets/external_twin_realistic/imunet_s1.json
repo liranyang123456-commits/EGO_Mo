@@ -1,0 +1,34 @@
+{
+  "architecture": "imunet",
+  "seed": 1,
+  "protocol": "adapted 6-axis to 3-D 3-s displacement",
+  "synthetic_zero_shot_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 37.93,
+    "fast_mm": 64.79,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 12.44,
+    "r2": 0.205
+  },
+  "fine_tuned_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 32.38,
+    "fast_mm": 51.11,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 19.99,
+    "r2": 0.416
+  },
+  "real_only_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 31.33,
+    "fast_mm": 49.08,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 20.38,
+    "r2": 0.449
+  },
+  "parameters": 2826179,
+  "inference_ms_per_window": 0.2266990625003018
+}

@@ -39,6 +39,13 @@ CONFIGS = {
     "base_clean": BASE + ["--split-file", "trajectory_split_clean.json"],
     "base_0924": BASE + ["--split-file", "trajectory_split_0924only.json"],
 }
+TWIN = DATA / "synthetic_realistic"
+for _mix in ("realistic", "handheld", "replay", "periodic_twin"):
+    CONFIGS[f"pre_{_mix}"] = BASE + ["--pretrain-corpus", str(TWIN / f"mix_{_mix}")]
+CONFIGS["pre_realistic_bal"] = CONFIGS["pre_realistic"] + ["--pretrain-balance", "class"]
+CONFIGS["bias_none"] = BASE + ["--bias-mode", "none"]
+CONFIGS["bias_strict"] = BASE + ["--bias-mode", "strict"]
+CONFIGS["bias_none_pre_bal"] = CONFIGS["pre_realistic_bal"] + ["--bias-mode", "none"]
 
 
 def train(name, seed, extra):

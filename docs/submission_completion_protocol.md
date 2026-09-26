@@ -242,3 +242,46 @@ python tools/v3_uncertainty.py
 不确定度：单一 κ、按 σ 分层、分裂保形、按幅值缩放四种校准都修不好测试集的覆盖不足（保形在跨验证录像上命中名义值 68.7%/95.3%，测试集 1σ 仅 49.9%），需要更多样的校准数据。
 
 结论：收缩是信息不足下条件均值的表现，换损失或事后放大都无法消除；下一步只能从采集端补充信息（高停顿率、30 fps 参考、K–O 数据）。
+
+## 9. 真实感孪生与采集协议仿真（v3 研究线；不改冻结模型与前瞻协议）
+
+孪生新增两种手持运动：`handheld_pause`（非周期随机样条，速度随机，按设定平均间隔插入 1–2 s 完全静止）和 `handheld_free`（同样的运动，不停）。幅度按真实录像校准：3 s 位移 53–58 mm，角速度中位数 5.6–6.3°/s（真实 4.3°/s）。
+
+```powershell
+# 真实感预训练语料（手持两类 + 随机样条 + 论文划分训练集轨迹回放）
+python tools/generate_synthetic_corpus.py --motions handheld_pause,handheld_free,random_spline --train-per-motion 40 --val-per-motion 8 --test-per-motion 10 --duration 40 --skip-visual --skip-blender --replay-per-session 8 --replay-val-per-session 2 --seed 50000 --output datasets/synthetic_realistic
+python tools/generate_synthetic_corpus.py --motions none --duration 12 --skip-visual --skip-blender --replay-per-session 24 --replay-val-per-session 4 --seed 60000 --output datasets/synthetic_realistic
+python tools/twin_realistic_mix.py --corpora <上面两个语料目录> --name realistic
+python tools/v3_experiments.py --configs pre_realistic pre_realistic_bal pre_periodic_twin bias_none bias_strict --seeds 0 1 2
+python tools/train_external_architectures.py --arch imunet --corpus datasets/synthetic_realistic/mix_realistic --seed 0 --out external_twin_realistic --extra-train rigid_20260924_123958 rigid_20260924_124243 rigid_20260924_140510 rigid_20260924_142902
+python tools/twin_motion_class_eval.py --seeds 0 1 2 --physnet base pre_realistic --external imunet_real:external_twin_realistic/imunet_real imunet_fine:external_twin_realistic/imunet_fine
+# 采集协议扫描（停顿间隔 4/8/12.5/20/无；参考帧率 10/30 fps；理想 IMU 对照）
+python tools/generate_synthetic_corpus.py --motions handheld_pause --pause-interval 4 --train-per-motion 60 --val-per-motion 10 --test-per-motion 20 --duration 40 --skip-visual --skip-blender --seed 70000 --output datasets/synthetic_protocol/pause_4
+python tools/twin_ideal_copy.py pause_4 pause_inf
+python tools/twin_protocol_sweep.py train; python tools/twin_protocol_sweep.py eval
+python tools/stop_anchor_check.py --target pause_4 pause_8 pause_12.5 pause_20 pause_inf --model pause_4_nb pause_8_nb pause_12.5_nb pause_20_nb pause_inf_nb --real --physnet bias_none
+python tools/twin_imunet_synthetic.py train; python tools/twin_imunet_synthetic.py eval
+python tools/zupt_bound.py; python tools/twin_realistic_summary.py
+```
+
+**孪生预训练（真实验证集，3 种子集成）**：纯真实 PhysNet 29.43 mm；旧周期孪生预训练 29.52；真实感孪生 29.56；按运动类别均衡采样 29.29；IMUNet 纯真实 30.63、真实感孪生微调 31.41。真实感孪生的纯合成模型可以直接迁移（IMUNet 37.9–38.6 mm、PhysNet 37.5–38.8 mm，零运动 42.2 mm；旧孪生 IMUNet 为 101.8 mm），但微调后不再有增益。
+
+**采集协议扫描（合成测试，零运动 55–57 mm）**：
+
+| 停顿间隔 | 窗口内含停顿 | PhysNet | 原始陀螺 | 原始陀螺+切换 | IMUNet | IMUNet+切换 |
+|---|---|---|---|---|---|---|
+| 4 s | 72% | 35.3 | 34.7 | **30.0** | 57.5 | 33.3 |
+| 8 s | 50% | 42.2 | 39.7 | **36.7** | — | — |
+| 12.5 s | 43% | 43.2 | 42.5 | **40.3** | 55.3 | 46.5 |
+| 20 s | 31% | 46.5 | 44.5 | **41.8** | — | — |
+| 无 | 15% | 48.6 | 44.2 | **44.1** | 55.5 | 55.3 |
+
+- 理想 IMU（无噪声、零偏、量化）只降低 0.2–1.8 mm；8 s 长回看不改善；标签帧率 10/15/30 fps 为 43.8/43.2/42.7 mm。瓶颈是运动不可预测（初速度），不是传感器。
+- 真值停顿 + 理想 IMU 时，停顿锚定捷联积分在"停顿落在窗口内"的窗口上为 4.4 mm；学习模型没有用上这部分信息。
+- "切换"= 按运动分类选择估计器：IMU 检测到严格静止（|ω|<1°/s，||f|−g|<0.01 g，持续 0.5 s），且窗口内无停顿夹住的最长积分段 ≤ S（合成验证集选定：PhysNet 2 s，IMUNet 3 s）时，用停顿锚定积分，否则用网络。
+- 同一估计器下，冻结协议的 10–15 s 间隔比不停顿降低 9%，每 4 s 停一次降低 32%。
+- 真实验证集：65% 的窗口在 [t_a−2 s, t_b] 内没有停顿；严格静止只出现在 8.5% 的窗口，且几乎静止，切换后 29.63 → 29.52 mm。
+
+**陀螺零偏缺陷**：`Session` 的会话零偏（所有 <3°/s 样本的均值）把慢速转动当成零偏，扣掉了 0.04–0.19°/s 的虚假零偏；严格静止样本给出 ≤0.017°/s，与传感器标定值（约 0.003°/s）一致。改用原始角速度后，真实录像上停顿间 ZUPT 积分 2–4 s 误差 104.1 → 78.1 mm、8–30 s 误差 4.7 → 2.0 m；学习模型本身不变（29.44 mm）。冻结文件（`tools/train_physnet.py` 等）未改；新模式是 v3 的 `--bias-mode none|strict`。
+
+**后续采集建议（不影响已冻结的 T2–T4 协议）**：每约 4 s 做一次 ≥0.5 s 的"硬停"（贴住支撑或握紧不动，使陀螺 <1°/s、比力波动 <0.01 g），采集时保持非周期运动；提高参考帧率主要改善速度参考与评估，对估计器本身帮助有限。

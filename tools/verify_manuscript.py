@@ -177,6 +177,9 @@ def results():
         return num / den
     close("ZUPT reference pooled 2--4 s", pooled("ref", "2-4s"), 53.86)
     close("ZUPT gyro pooled 2--4 s", pooled("gyro", "2-4s"), 104.08)
+    close("ZUPT raw gyro pooled 2--4 s", pooled("gyro_raw", "2-4s"), 78.1, 0.06)
+    close("ZUPT gyro pooled 8--30 s (m)", pooled("gyro", "8-30s") / 1000, 4.7, 0.05)
+    close("ZUPT raw gyro pooled 8--30 s (m)", pooled("gyro_raw", "8-30s") / 1000, 2.0, 0.05)
 
     # Trajectory table/figure.
     close("zero-motion ATE", traj["zero"]["ate_rmse_mm"], 119.24)
@@ -194,6 +197,62 @@ def results():
           pose["translation"]["ate_rmse_mm"], 80.59)
     close("pure-IMU calibrated-blend 3-s translation RPE",
           pose["relative_pose_error"]["3s"]["translation_rmse_mm"], 50.92)
+
+
+def twin_protocol():
+    """Realistic-twin pretraining and the acquisition-protocol study."""
+    s = load(DATA / "twin_realistic_summary.json")
+    rv = s["real_val_3seed"]
+    close("real-only PhysNet 3-seed val", rv["physnet_real_only"]["err_mm"], 29.43)
+    close("raw-gyro PhysNet 3-seed val", rv["physnet_bias_none"]["err_mm"], 29.44)
+    close("realistic-twin pretrain val", rv["physnet_pre_realistic"]["err_mm"], 29.56)
+    close("class-balanced pretrain val", rv["physnet_pre_realistic_bal"]["err_mm"], 29.29)
+    close("IMUNet real-only 3-seed val", rv["imunet_real_only"]["err_mm"], 30.63)
+    close("IMUNet realistic-twin fine-tuned", rv["imunet_pre_realistic"]["err_mm"], 31.41)
+    zs = s["zero_shot_real_val"]
+    close("IMUNet direct transfer min", min(zs["imunet_realistic"]["err_mm"]), 37.9, 0.06)
+    close("IMUNet direct transfer max", max(zs["imunet_realistic"]["err_mm"]), 38.6, 0.06)
+    phys = zs["physnet_pre_realistic"]["err_mm"] + zs["physnet_pre_realistic_bal"]["err_mm"]
+    close("PhysNet direct transfer min", min(phys), 37.5, 0.06)
+    close("PhysNet direct transfer max", max(phys), 38.8, 0.06)
+    table = {"pause_4": (72, 35.3, 34.7, 30.0, 57.5, 33.3), "pause_8": (50, 42.2, 39.7, 36.7),
+             "pause_12.5": (43, 43.2, 42.5, 40.3, 55.3, 46.5), "pause_20": (31, 46.5, 44.5, 41.8),
+             "pause_inf": (15, 48.6, 44.2, 44.1, 55.5, 55.3)}
+    p = s["protocol"]
+    for c, row in table.items():
+        e = p[c]
+        close(f"{c} stop-in-window share", 100 * e["stop_position_share"]["window"], row[0], 0.51)
+        close(f"{c} PhysNet session bias", e["physnet_session_bias"]["err_mm"], row[1], 0.051)
+        close(f"{c} PhysNet raw gyro", e["physnet_raw_gyro"]["err_mm"], row[2], 0.051)
+        close(f"{c} PhysNet raw + switch", e["physnet_raw_gyro_switch"]["err_mm"], row[3], 0.051)
+        if len(row) > 4:
+            close(f"{c} IMUNet", e["imunet"]["err_mm"], row[4], 0.051)
+            close(f"{c} IMUNet + switch", e["imunet_switch"]["err_mm"], row[5], 0.051)
+    close("protocol gain 12.5 s vs none (%)",
+          100 * (1 - p["pause_12.5"]["physnet_raw_gyro_switch"]["err_mm"]
+                 / p["pause_inf"]["physnet_raw_gyro_switch"]["err_mm"]), 9, 0.51)
+    close("protocol gain 4 s vs none (%)",
+          100 * (1 - p["pause_4"]["physnet_raw_gyro_switch"]["err_mm"]
+                 / p["pause_inf"]["physnet_raw_gyro_switch"]["err_mm"]), 32, 0.51)
+    close("ideal IMU 4 s", p["ideal_imu"]["pause_4"]["session_bias"], 35.1, 0.051)
+    close("ideal IMU no stops", p["ideal_imu"]["pause_inf"]["session_bias"], 46.8, 0.051)
+    close("8-s look-back 4 s", p["pause_4"]["physnet_session_bias_8s_context"]["err_mm"], 36.9, 0.051)
+    close("label rate 10 fps", p["reference_fps"]["10"], 43.8, 0.051)
+    close("label rate 30 fps", p["reference_fps"]["30"], 42.7, 0.051)
+    close("switch threshold PhysNet (s)", p["switch_max_span_s"]["physnet"], 2.0)
+    close("switch threshold IMUNet (s)", p["switch_max_span_s"]["imunet"], 3.0)
+    sw = s["real_windows"]["switch"]
+    close("real switched share (%)", 100 * sw["physics_share"], 8.5, 0.051)
+    close("real val learned before switch", sw["all"]["learned"], 29.63)
+    close("real val after switch", sw["all"]["hybrid"], 29.52)
+    cls = s["real_windows"]["by_stop_position"]
+    close("real free-window share (%)", 100 * cls["free"]["share"], 65, 0.51)
+    close("real context-window share (%)", 100 * cls["context"]["share"], 8, 0.51)
+    close("real in-window share (%)", 100 * cls["window"]["share"], 27, 0.51)
+    close("real free-window PhysNet", cls["free"]["physnet"], 36.5, 0.051)
+    close("real in-window PhysNet", cls["window"]["physnet"], 13.7, 0.051)
+    oracle = load(DATA / "stop_anchor_oracle_ideal.json")["synthetic"]["ideal_pause_4"]
+    close("ideal stop-anchored, stop in window", oracle["window"]["physics_on_detected"], 4.4, 0.051)
 
 
 def text_claims():
@@ -239,6 +298,7 @@ def latex_integrity():
 
 if __name__ == "__main__":
     results()
+    twin_protocol()
     text_claims()
     latex_integrity()
     print("Manuscript regression checks passed.")

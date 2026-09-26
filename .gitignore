@@ -52,4 +52,7 @@ datasets/physnet_v3/*
 !datasets/physnet_v3cv/
 datasets/physnet_v3cv/*
 !datasets/physnet_v3cv/*.json
+!datasets/external_twin_realistic/
+datasets/external_twin_realistic/*
+!datasets/external_twin_realistic/*.json
 
