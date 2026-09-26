@@ -17,7 +17,8 @@ authors:
 version: 1.0.0
 date-released: 2026-09-26
 license: MIT
-repository-code: "TO_BE_ASSIGNED"
+repository-code: "https://github.com/liranyang123456-commits/EGO_Mo"
+# doi: TO_BE_ASSIGNED (Zenodo reserved DOI)
 abstract: >-
   Acquisition, calibration, digital-twin, physics-structured learning, and
   evaluation tools for estimating camera displacement and relative trajectory
