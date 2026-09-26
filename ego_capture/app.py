@@ -610,7 +610,7 @@ class CaptureApp(tk.Tk):
                 self._log(f"已打开 {mode}。驱动回报 {got:.0f} fps。等 1–2 秒看 IMU 频率。")
                 self._log(describe_plan())
                 if got and got < 20:
-                    self._log("驱动回报低于 20 fps。轨迹采集若实测也低于 20 fps，改用 640×480（约 30 fps）。")
+                    self._log("驱动回报低于 20 fps。1280×720 下实际约 10 fps 属正常；v2 轨迹和 T 段不要改用 640×480。")
                 self.after(1600, self._log_imu_distinct)
 
             self.after(0, _done)
@@ -632,6 +632,14 @@ class CaptureApp(tk.Tk):
             return
         kind = session_prefix(self.step)
         if self.step not in RECORD_STEPS:
+            return
+        if (self.step == "traj" and self._current_theme()[0] == "T"
+                and (self.grabber.width, self.grabber.height) != (1280, 720)):
+            messagebox.showerror(
+                "分辨率不符合冻结协议",
+                f"相机当前是 {self.grabber.width}×{self.grabber.height}。T 段必须用 1280×720"
+                "（实际约 10 fps 属正常）。请在上方分辨率选 1280x720，"
+                "再点「打开相机+双IMU」重新打开后再录。")
             return
         if disk_free_gb(DATA_ROOT) < 2.0:
             messagebox.showerror("磁盘空间不足", "数据盘剩余 < 2 GB，先清出空间再录。")
