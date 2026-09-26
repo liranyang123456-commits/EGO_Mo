@@ -6,8 +6,8 @@
 \includegraphics[width=\columnwidth]{framework.pdf}
 \caption{Audited measurement framework, read top to bottom. The optical path
 supplies the reference ${\bf T}_{BC}$, the inertial path supplies the
-gravity-free acceleration $\ell_k$ and hence the second term of
-(\ref{eq:decomp}), and the twin supplies distribution-matched synthetic
+window-demeaned specific force $\ell_k$ (Section~\ref{sec:learning}), whose
+double pre-integral approximates the second term of (\ref{eq:decomp}), and the twin supplies distribution-matched synthetic
 streams. The first term of (\ref{eq:decomp}) is an initial condition that
 neither path observes inside a window, which is what makes the acquisition
 protocol part of the measurement. In the twin block,
@@ -35,8 +35,9 @@ measurand is the time-varying camera pose
  \in SE(3),
 \end{equation}
 where ${\bf p}_{BC}$ is the camera-center position expressed in $B$. For two
-times $t_a<t_b$, the learning target is the translation increment expressed
-in the start camera frame,
+times $t_a<t_b$ with $\Delta t_{ab}=t_b-t_a$ between $0.6h$ and $1.5h$ around
+the nominal horizon $h=3$~s, the learning target is the translation increment
+expressed in the start camera frame,
 \begin{equation}
  \Delta{\bf p}_{ab}={\bf R}_{BC}^{\top}(t_a)
  [ {\bf p}_{BC}(t_b)-{\bf p}_{BC}(t_a) ] . \label{eq:target}
@@ -59,38 +60,45 @@ Writing the measurand as a double integral of acceleration separates it into
 two parts with different information status,
 \begin{equation}
  \Delta{\bf p}_{ab}=
- \underbrace{{\bf v}(t_a)\,\Delta t}_{\text{initial condition}}
- +\underbrace{\int_{t_a}^{t_b}\!\!\int_{t_a}^{s}{\bf a}(\tau)\,
- {\rm d}\tau\,{\rm d}s}_{\text{measured by the IMU}},\qquad
- \Delta t=t_b-t_a, \label{eq:decomp}
+ \underbrace{{\bf v}(t_a)\,\Delta t_{ab}}_{\text{initial condition}}
+ +\underbrace{\int_{t_a}^{t_b}\!\!\int_{t_a}^{\tau'}{\bf a}(\tau)\,
+ {\rm d}\tau\,{\rm d}\tau'}_{\text{inertially measured}},
+ \label{eq:decomp}
 \end{equation}
 where ${\bf v}(t_a)$ and ${\bf a}(\tau)$ are respectively the camera-center
-velocity at $t_a$ and its gravity-compensated acceleration, both resolved in
-the fixed start frame $C_a$. The second term is determined by the inertial measurement up to bias,
-scale, and the gravity that an attitude error leaks into the integrand. The
-first term is an \emph{initial condition}: no accelerometer sample inside the
-context window $[t_a-c,\,t_b+c]$, where $c>0$ is the context duration on each
-side of the target interval, determines it. A windowed estimator can therefore only
-replace ${\bf v}(t_a)$ by a prior learned from the training motion, and the
-best zero-knowledge prior is the training mean, which is close to zero for a
-handheld instrument that reverses direction. The residual of any such
-estimator consequently tracks the deviation of the actual low-frequency
-velocity from zero, and Section~\ref{sec:limit} measures that this is indeed
-where most of the residual sits.
+velocity at $t_a$ and its acceleration, both resolved in the fixed start frame
+$C_a$. The IMU measures the specific force at its own sensing point, so
+${\bf a}$ follows from ${\bf R}_{CI}\tilde{\bf f}_I$ after rotation into
+$C_a$, addition of gravity, and the lever-arm term of
+Section~\ref{sec:learning}; the second term is therefore determined by the
+inertial measurement up to bias, scale, and the gravity that an attitude error
+leaks into the integrand. The first term is an \emph{initial condition}. Adding
+a constant velocity ${\bf v}_0$ to a trajectory,
+${\bf p}(t)\mapsto{\bf p}(t)+{\bf v}_0t$, leaves $\ddot{\bf p}$ and ${\bf R}$,
+and hence every specific-force and angular-rate sample, unchanged. Therefore
+${\bf v}(t_a)$ is not a function of the inertial record on the context window
+$[t_a-c,\,t_b+c]$, where $c>0$ is the context duration on each side of the
+target interval, unless a velocity boundary condition is available inside it.
+A windowed estimator can only replace ${\bf v}(t_a)$ by a prior learned from
+the training motion; under squared-error loss the optimal data-independent
+prior is the training mean, which is close to zero for a handheld instrument
+that reverses direction. Its predictions should then be shrunk toward zero,
+and Section~\ref{sec:limit} tests this prediction.
 
 Two acquisition properties can reduce this ambiguity. A longer context does
 not make ${\bf v}(t_a)$ observable; it only supplies more motion history from
 which a learned prior may infer low-frequency velocity. A correctly
 identified stationary epoch $t_0$ instead supplies the boundary condition
 ${\bf v}(t_0)={\bf0}$, so that
-${\bf v}(t_a)=-\int_{t_a}^{t_0}{\bf a}\,{\rm d}\tau$ can be estimated from
-the inertial stream. That estimate remains limited by attitude, bias and
+$\hat{\bf v}(t_a)=-\int_{t_a}^{t_0}\hat{\bf a}\,{\rm d}\tau$ can be estimated
+from the inertial stream, with $\hat{\bf a}$ computed from the estimated
+attitude. That estimate remains limited by attitude, bias and
 integration errors, and its usable interval is limited by the same gravity
 leakage that affects the second term of (\ref{eq:decomp}). Sections
-\ref{sec:limit} and \ref{sec:pause} measure both effects for this instrument
-and use them to define the acquisition protocol.
+\ref{sec:limit} and \ref{sec:pause} examine both effects for this
+instrument.
 
-\subsection{Information Governance and Outputs}
+\subsection{Data Partitioning and Outputs}
 The framework separates four information classes: \emph{calibration} (camera
 intrinsics, time delay, ${\bf R}_{CI}$, board scale, IMU noise parameters);
 \emph{reference} (cleaned planar-PnP pose while the board is visible and
@@ -106,12 +114,12 @@ PnP labels that are then predicted from the same gyroscope biases the reported
 inertial accuracy upward, as Section~\ref{sec:imu} quantifies.
 
 \paragraph{Outputs.}
-The system produces: 1) an audited but explicitly bounded camera-pose
-reference; 2) paired ideal/noisy synthetic sensor streams with exact pose;
+The system produces: 1) a characterized camera-pose reference with stated
+limits; 2) paired ideal/noisy synthetic sensor streams with exact pose;
 3) a displacement stream anchored at the pair start, with empirical
 uncertainty from a model ensemble, whose end point is the local
 pseudo-measurement; 4) overlapping displacement edges---one per window, or
 one per reference frame from the stream---that can be fused into a
-trajectory; and 5) a quantitative bound on how much of the remaining error is
-physically unobservable under the chosen window. The learned trajectory is
+trajectory; and 5) tests of whether the residual behaves as the unobserved
+initial velocity predicts under the chosen window. The learned trajectory is
 an estimator output, not a new ground-truth source.

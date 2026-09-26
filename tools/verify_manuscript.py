@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Regression checks for the numbers, labels and references in the manuscript.
 
@@ -37,7 +37,6 @@ def results():
     ood = load(DATA / "external_benchmark" / "zero_shot_synthetic_ood.json")
     unc = load(DATA / "uncertainty_val.json")
     zupt = load(DATA / "zupt_bound.json")
-    info = load(PAPER / "figures" / "information_limit.json")
     traj = load(DATA / "trajectory_comparison" / "summary.json")["real_test"]["metrics"]
     pose = load(DATA / "pure_imu_pose_benchmark.json")["sessions"][
         "traj_20260923_023422"]["cv_calibrated_blend"]
@@ -56,8 +55,8 @@ def results():
 
     # Real-data comparison (Table V and abstract).
     close("zero-motion test error", cv["test"]["zero_motion"]["err_mm"], 49.67)
-    close("IMUNet CV error", cv["cv_mean_over_pairs"]["imunet"], 26.38)
-    close("PhysNet+gate CV error", cv["cv_mean_over_pairs"]["physnet"], 25.56)
+    close("IMUNet CV single-model mean", cv["cv_mean_over_pairs"]["imunet"], 26.38)
+    close("PhysNet+gate CV single-model mean", cv["cv_mean_over_pairs"]["physnet"], 25.56)
     close("IMUNet sealed-test error",
           cv["test"]["imunet_cv_ensemble"]["err_mm"], 42.93)
     close("PhysNet+gate sealed-test error",
@@ -74,14 +73,21 @@ def results():
           cv["test"]["cv_calibrated_blend"]["r2"], 0.279)
     close("calibrated-blend fast-third error",
           cv["test"]["cv_calibrated_blend"]["fast_mm"], 72.10)
-    close("PhysNet-IMUNet CI low",
-          cv["test"]["physnet_minus_imunet_mm_95ci_blocks"][0], -3.18)
-    close("PhysNet-IMUNet CI high",
-          cv["test"]["physnet_minus_imunet_mm_95ci_blocks"][1], 1.84)
-    close("PhysNet-zero CI low",
+    # eval_session_cv stores mean(err_b - err_a) under the key "a_minus_b":
+    # "physnet_minus_imunet" is IMUNet - PhysNet. The paper reports the
+    # PhysNet - IMUNet interval, i.e. the negated, swapped bounds.
+    stored = cv["test"]["physnet_minus_imunet_mm_95ci_blocks"]
+    close("PhysNet-IMUNet error-difference CI low", -stored[1], -1.84)
+    close("PhysNet-IMUNet error-difference CI high", -stored[0], 3.18)
+    close("PhysNet improvement over zero CI low",
           cv["test"]["physnet_minus_zero_mm_95ci_blocks"][0], 2.16)
-    close("PhysNet-zero CI high",
+    close("PhysNet improvement over zero CI high",
           cv["test"]["physnet_minus_zero_mm_95ci_blocks"][1], 10.80)
+    # CV column of Table V: two-seed fold-ensemble errors.
+    close("PhysNet+gate CV fold-ensemble error", cv["cv_calibration"]["cv_err_mm_physnet"], 24.95)
+    close("IMUNet CV fold-ensemble error", cv["cv_calibration"]["cv_err_mm_imunet"], 25.77)
+    cv_ng = load(DATA / "session_cv_benchmark.json")
+    close("PhysNet CV fold-ensemble error", cv_ng["cv_calibration"]["cv_err_mm_physnet"], 25.17)
     physnet_wins = sum(
         fold["physnet"]["err_mm"] < fold["imunet"]["err_mm"]
         for fold in cv["folds"].values()
@@ -90,9 +96,36 @@ def results():
         raise AssertionError(f"PhysNet fold wins: source={physnet_wins}, manuscript=6")
     print(f"OK {'PhysNet fold wins':46s} {physnet_wins:8d}")
 
-    # Information limit and calibrated uncertainty.
-    close("information-limit error before", info["err_mm_before"], 31.4245)
-    close("information-limit error after", info["err_mm_after"], 26.3070)
+    # Velocity-proxy tests and shrinkage (Section VIII-B, Fig. 5).
+    vp = load(DATA / "velocity_proxy_check.json")["variants"]
+    close("window-mean proxy, in-sample %", vp["full"]["in_sample_reduction_percent"], 14.1, 0.06)
+    close("window-mean proxy, cross-session %", vp["full"]["cross_session_reduction_percent"], 4.3, 0.06)
+    close("context proxy, in-sample %", vp["context"]["in_sample_reduction_percent"], 1.8, 0.06)
+    close("context proxy, cross-session %", vp["context"]["cross_session_reduction_percent"], -6.5, 0.06)
+    close("oracle |v(ta) dt| mean", vp["oracle_initial"]["mean_proxy_magnitude_mm"], 75.8, 0.06)
+    ev = np.load(DATA / "physnet_v1" / "eval_wd1.npz", allow_pickle=True)
+    pv, yv = ev["val_pred"] * 1000, ev["val_y"] * 1000
+    for k, s in enumerate((0.37, 0.48, 0.20)):
+        close(f"prediction slope axis {k}", np.polyfit(yv[:, k], pv[:, k], 1)[0], s, 0.006)
+    for k, r in enumerate((-0.88, -0.78, -0.92)):
+        close(f"residual-displacement corr axis {k}",
+              np.corrcoef(yv[:, k], (pv - yv)[:, k])[0, 1], r, 0.006)
+    close("median |pred| / median |ref|", np.median(np.linalg.norm(pv, axis=1)) /
+          np.median(np.linalg.norm(yv, axis=1)), 0.44, 0.006)
+
+    # Uncertainty (fixed-split NLL ensemble).
+    oos = load(DATA / "uncertainty_oos.json")
+    close("uncertainty cross-session 1-sigma", oos["cross_session"]["pooled_coverage_1sigma"], 0.810)
+    close("uncertainty cross-session 2-sigma", oos["cross_session"]["pooled_coverage_2sigma"], 0.942)
+    close("uncertainty test 1-sigma", oos["test"]["total_rescaled"]["coverage_1sigma"], 0.632)
+    close("uncertainty test 2-sigma", oos["test"]["total_rescaled"]["coverage_2sigma"], 0.852)
+    close("uncertainty test RMS z", oos["test"]["total_rescaled"]["rms_z"], 1.55, 0.006)
+
+    # Latency (Table IV), same batch and procedure for every model.
+    lat = load(DATA / "latency_benchmark.json")["models"]
+    for name, ms in (("physnet", 0.16), ("imunet", 0.14), ("tlio_resnet", 0.14),
+                     ("ronin_resnet", 0.13), ("ronin_lstm", 0.15)):
+        close(f"latency {name}", lat[name]["ms_per_window"], ms, 0.006)
     close("uncertainty validation scale", unc["validation_scale"], 4.559)
     close("uncertainty 1-sigma coverage",
           unc["val"]["total_rescaled"]["coverage_1sigma"], 0.814)
@@ -135,6 +168,25 @@ def results():
           pose["relative_pose_error"]["3s"]["translation_rmse_mm"], 50.92)
 
 
+def text_claims():
+    """Numbers whose wording in the manuscript was corrected must stay present,
+    and retired claims must not reappear."""
+    text = "\n".join(p.read_text(encoding="utf-8")
+                     for p in [PAPER / "main.tex", *sorted((PAPER / "sections").glob("*.tex"))])
+    required = ["$[-1.8,\\,+3.2]$", "24.95", "25.77", "25.17", "31 connected",
+                "14.1\\%", "4.3\\%", "0.37/0.48/0.20", "81.0\\%", "63.2\\%",
+                "0.13--0.16~ms", "(-20.9,\\,-4.1,\\,-17.8)", "10--19\\%"]
+    retired = ["26.3~mm", "lower inference latency", "reaches that limit",
+               "information-limit measurement", "More than\nmore than"]
+    for s in required:
+        if s not in text:
+            raise AssertionError(f"manuscript no longer contains verified value {s!r}")
+    for s in retired:
+        if s in text:
+            raise AssertionError(f"retired claim reappeared: {s!r}")
+    print(f"OK text claims: {len(required)} present, {len(retired)} retired absent")
+
+
 def latex_integrity():
     tex_paths = [PAPER / "main.tex", *sorted((PAPER / "sections").glob("*.tex"))]
     text = "\n".join(p.read_text(encoding="utf-8") for p in tex_paths)
@@ -159,5 +211,6 @@ def latex_integrity():
 
 if __name__ == "__main__":
     results()
+    text_claims()
     latex_integrity()
     print("Manuscript regression checks passed.")

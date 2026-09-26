@@ -1,0 +1,14 @@
+{
+  "architecture": "imunet",
+  "seed": 3,
+  "protocol": "adapted 6-axis to 3-D 3-s displacement",
+  "real_only_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 33.42,
+    "fast_mm": 53.34,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 21.03,
+    "r2": 0.384
+  }
+}

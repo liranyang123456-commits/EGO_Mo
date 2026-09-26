@@ -1,0 +1,157 @@
+{
+  "brossard2020aiimu": {
+    "kind": "doi",
+    "id": "10.1109/TIV.2020.2980758",
+    "verified": true
+  },
+  "brossard2020denoising": {
+    "kind": "doi",
+    "id": "10.1109/LRA.2020.3003256",
+    "verified": true
+  },
+  "burri2016euroc": {
+    "kind": "doi",
+    "id": "10.1177/0278364915620033",
+    "verified": true
+  },
+  "chen2018ionet": {
+    "kind": "doi",
+    "id": "10.1609/AAAI.V32I1.12102",
+    "verified": true
+  },
+  "criminisi1999plane": {
+    "kind": "doi",
+    "id": "10.1016/S0262-8856(98)00183-8",
+    "verified": true
+  },
+  "elsheimy2008allan": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2007.908635",
+    "verified": true
+  },
+  "eskfzupt2024": {
+    "kind": "doi",
+    "id": "10.1109/JSEN.2024.3365979",
+    "verified": true
+  },
+  "evans2025pattern": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2025.3587365",
+    "verified": true
+  },
+  "forster2017preintegration": {
+    "kind": "doi",
+    "id": "10.1109/TRO.2016.2597321",
+    "verified": true
+  },
+  "foxlin2005pedestrian": {
+    "kind": "doi",
+    "id": "10.1109/MCG.2005.140",
+    "verified": true
+  },
+  "fu2023hybrid": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2023.3328086",
+    "verified": true
+  },
+  "furgale2013unified": {
+    "kind": "doi",
+    "id": "10.1109/IROS.2013.6696514",
+    "verified": true
+  },
+  "gum2008": {
+    "kind": "doi",
+    "id": "10.59161/JCGM100-2008E",
+    "verified": true
+  },
+  "hartwig2022constrained": {
+    "kind": "doi",
+    "id": "10.1109/ICRA46639.2022.9812105",
+    "verified": true
+  },
+  "hayoz2023pose": {
+    "kind": "doi",
+    "id": "10.1007/s11548-023-02919-w",
+    "verified": true
+  },
+  "kendall2017uncertainties": {
+    "kind": "manual",
+    "id": "NeurIPS 30:5574-5584",
+    "verified": true
+  },
+  "kok2017using": {
+    "kind": "doi",
+    "id": "10.1561/2000000094",
+    "verified": true
+  },
+  "kunsch1989jackknife": {
+    "kind": "doi",
+    "id": "10.1214/AOS/1176347265",
+    "verified": true
+  },
+  "lakshminarayanan2017simple": {
+    "kind": "manual",
+    "id": "NeurIPS 30:6402-6413",
+    "verified": true
+  },
+  "liu2020tlio": {
+    "kind": "doi",
+    "id": "10.1109/LRA.2020.3007421",
+    "verified": true
+  },
+  "liu2023duet": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2023.3306833",
+    "verified": true
+  },
+  "ozyoruk2021endoslam": {
+    "kind": "doi",
+    "id": "10.1016/j.media.2021.102058",
+    "verified": true
+  },
+  "schweighofer2006robust": {
+    "kind": "doi",
+    "id": "10.1109/TPAMI.2006.252",
+    "verified": true
+  },
+  "skog2010zerovelocity": {
+    "kind": "doi",
+    "id": "10.1109/TBME.2010.2060723",
+    "verified": true
+  },
+  "titterton2004strapdown": {
+    "kind": "doi",
+    "id": "10.1049/PBRA017E",
+    "verified": true
+  },
+  "wright2024dt": {
+    "kind": "doi",
+    "id": "10.1088/1361-6501/ad2050",
+    "verified": true
+  },
+  "yan2018ridi": {
+    "kind": "doi",
+    "id": "10.1007/978-3-030-01261-8_38",
+    "verified": true
+  },
+  "yan2020ronin": {
+    "kind": "doi",
+    "id": "10.1109/ICRA40945.2020.9196860",
+    "verified": true
+  },
+  "zeinali2024imunet": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2024.3381717",
+    "verified": true
+  },
+  "zhang2000flexible": {
+    "kind": "doi",
+    "id": "10.1109/34.888718",
+    "verified": true
+  },
+  "zimmer2025digital": {
+    "kind": "doi",
+    "id": "10.1109/TIM.2025.3527590",
+    "verified": true
+  }
+}

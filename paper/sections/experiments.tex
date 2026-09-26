@@ -13,7 +13,9 @@ exploratory rather than a strict one-shot confirmatory test. In the
 leave-one-session-out protocol, every one of the eight non-test recordings is
 held out in turn; the four rigidity recordings that passed the mount test
 (rotation-dominant motion with still phases, 2723 pairs) are training-only
-in every fold and never scored. Synthetic seeds are disjoint across train,
+in every fold and never scored. Each fold early-stops on its held-out
+recording, so the CV errors, and the blend weights fitted on them, are
+optimistic; the test recording is not used for either. Synthetic seeds are disjoint across train,
 validation, test, and OOD.
 
 \begin{table}[t]
@@ -33,10 +35,10 @@ Real extra-train (rigid) & 4 & 342~s & 2723 & Training only \\
 Real test & 1 & 115.2~s & 647 & held-out test \\
 Synthetic train & 60 & 1200~s & 7200$^\ast$ & Pretrain / direct \\
 Synthetic validation & 15 & 300~s & 1800$^\ast$ & Twin audit \\
-Synthetic test & 15 & 300~s & 2400 & Test \\
-Synthetic OOD & 5 & 100~s & 800 & Stress test \\
+Synthetic test & 15 & 300~s & 2400$^\ast$ & Test \\
+Synthetic OOD & 5 & 100~s & 800$^\ast$ & Stress test \\
 \bottomrule
-\multicolumn{5}{l}{$^\ast$Pairs capped per sequence to balance motion families.}
+\multicolumn{5}{l}{$^\ast$Pairs capped per sequence (120 train/validation, 160 test/OOD).}
 \end{tabular}
 \end{table}
 
@@ -58,23 +60,27 @@ direct, real-only, and synthetic-pretrained/real-fine-tuned. IMUNet, the
 strongest public architecture on this protocol, is additionally trained
 under the leave-one-session-out protocol with the same extra-train data as
 PhysNet (two seeds per fold, sixteen models each).
-Parameter counts include all trainable parameters. Latency is averaged per
-window after warm-up on an NVIDIA GeForce RTX 5090 Laptop GPU with batch size
-16 and CUDA synchronization; it is a relative architecture comparison, not an
-embedded-device measurement.
+Parameter counts include all trainable parameters. Latency is measured on the
+same 16 held-out windows for every model, with gradients disabled, after 20
+warm-up passes and averaged over 200 passes with CUDA synchronization on an
+NVIDIA GeForce RTX 5090 Laptop GPU; PhysNet includes its pre-integration
+features. It is a relative comparison, not an embedded-device measurement.
 
 \paragraph{Estimator-independent measurements.}
 Two experiments characterize the protocol rather than a model and use only
-reference data and the raw inertial stream. The information-limit measurement
-computes, for every pair, the mean camera velocity over the context from the
-reference positions, and compares $\bar{\bf v}\Delta t$ with the residual of
-the estimator and with its own magnitude as a function of context length. The
+reference data and the raw inertial stream. The velocity-proxy analysis
+computes, for every validation pair, a reference velocity $\bar{\bf v}$ either
+over the whole 7-s window or over the two 2-s context segments only, fits an
+affine map from $\bar{\bf v}\Delta t_{ab}$ to the estimator residual, and scores
+it on the same pairs and on the other validation recording. The
 zero-velocity bound detects still phases in the reference (speed below
 3~mm/s for at least 0.4~s), integrates the gravity-compensated acceleration
-between consecutive phases with the velocity pinned at both ends, solves the
-one constant bias per interval that this pinning identifies, and compares the
-result with the reference displacement; the attitude is taken either from the
-reference (upper bound) or from the integrated gyroscope (operational case).
+between consecutive phases with the velocity pinned at both ends, and
+compares the result with the reference displacement. The two boundary
+conditions identify one constant board-frame acceleration offset per interval,
+which is equivalent to demeaning the rotated specific force over the interval.
+The attitude is taken either from the reference (best available attitude) or
+from the integrated gyroscope (operational case).
 Both are reported per interval length so that the crossover between
 model-based and learned estimation is visible.
 
@@ -87,16 +93,20 @@ Local displacement error is
 where $N$ is the number of displacement pairs. We also report the
 multivariate coefficient of determination
 $R^2=1-\sum_n\|\widehat{\Delta{\bf p}}_n-\Delta{\bf p}_n\|_2^2/
-\sum_n\|\Delta{\bf p}_n-\bar{\Delta{\bf p}}\|_2^2$, where
-$\bar{\Delta{\bf p}}=N^{-1}\sum_n\Delta{\bf p}_n$; the error in the fastest
+\sum_n\|\Delta{\bf p}_n-\overline{\Delta{\bf p}}\|_2^2$, where
+$\overline{\Delta{\bf p}}=N^{-1}\sum_n\Delta{\bf p}_n$; the error in the fastest
 third, defined by the top third of reference displacement magnitudes; and the median
 predicted magnitude (a shrinkage indicator). Because overlapping windows are
 strongly correlated, confidence intervals on the held-out test use a block
-bootstrap over non-overlapping 3-s blocks (2000 resamples). Trajectory error
-uses anchor-only absolute trajectory error
-$\mathrm{ATE}=[M^{-1}\sum_{i=1}^{M}\|\hat{\bf p}_i-{\bf p}_i\|_2^2]^{1/2}$
-over the $M$ finite pose-graph nodes; no post-hoc rigid alignment is applied
-because each connected component already has one metric anchor. For
+bootstrap over non-overlapping 3-s blocks~\cite{carlstein1986use} (2000
+resamples); an interval reported for method A against method B is the
+interval of $e_p^{\rm B}-e_p^{\rm A}$, so a positive value favours A.
+Trajectory error is
+$\mathrm{ATE}=[M^{-1}\sum_{i=1}^{M}\|\hat{\bf p}_i-{\bf p}_{BC}(t_i)\|_2^2]^{1/2}$
+over the $M$ finite pose-graph nodes, where $\hat{\bf p}_i$ is the solved
+position of node $i$. Gaps in chessboard detection split the graph into
+connected components; each is anchored to the reference position of its first
+node, and no further rigid alignment is applied. For
 the digital twin, the audit reports ideal/noisy kinematic consistency,
 timestamp statistics, corner detection rate, corner-to-exact-projection RMSE,
 and split-seed overlap.

@@ -1,0 +1,141 @@
+{
+  "selection": "nonnegative weights summing to one, optimized on real validation only",
+  "weights": {
+    "ours_real": 0.171321,
+    "ours_hybrid": 0.70931,
+    "ronin_fine": 0.0,
+    "tlio_fine": 0.0,
+    "imunet_real_single": 0.11937,
+    "imunet_real_ensemble": 0.0
+  },
+  "validation": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 30.37,
+    "fast_mm": 48.07,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 19.55,
+    "r2": 0.48
+  },
+  "test": {
+    "n": 647,
+    "zero_mm": 49.67,
+    "err_mm": 45.1,
+    "fast_mm": 77.45,
+    "fast_zero_mm": 90.27,
+    "pred_med_mm": 15.66,
+    "r2": 0.181
+  },
+  "candidate_validation": {
+    "ours_real": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 32.59,
+      "fast_mm": 54.82,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 16.03,
+      "r2": 0.378
+    },
+    "ours_hybrid": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 30.58,
+      "fast_mm": 47.06,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 20.44,
+      "r2": 0.479
+    },
+    "ronin_fine": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 33.43,
+      "fast_mm": 50.75,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 23.11,
+      "r2": 0.392
+    },
+    "tlio_fine": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 33.9,
+      "fast_mm": 51.9,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 22.45,
+      "r2": 0.39
+    },
+    "imunet_real_single": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 33.39,
+      "fast_mm": 50.33,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 24.0,
+      "r2": 0.391
+    },
+    "imunet_real_ensemble": {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 31.9,
+      "fast_mm": 50.46,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 21.03,
+      "r2": 0.433
+    }
+  },
+  "candidate_test": {
+    "ours_real": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 46.34,
+      "fast_mm": 80.71,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 16.37,
+      "r2": 0.126
+    },
+    "ours_hybrid": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 46.27,
+      "fast_mm": 77.86,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 16.54,
+      "r2": 0.148
+    },
+    "ronin_fine": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 44.74,
+      "fast_mm": 74.14,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 19.46,
+      "r2": 0.21
+    },
+    "tlio_fine": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 46.15,
+      "fast_mm": 75.53,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 17.54,
+      "r2": 0.185
+    },
+    "imunet_real_single": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 44.63,
+      "fast_mm": 74.45,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 22.78,
+      "r2": 0.216
+    },
+    "imunet_real_ensemble": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 45.14,
+      "fast_mm": 76.94,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 19.01,
+      "r2": 0.179
+    }
+  }
+}

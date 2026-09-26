@@ -1,4 +1,4 @@
-# IEEE TIM submission checklist — EGO_Mo
+﻿# IEEE TIM submission checklist — EGO_Mo
 
 Status values: `[x]` complete, `[ ]` blocked or requires author action.
 
@@ -44,7 +44,7 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 ## Page charges (2026 policy)
 
 - [x] Regular-paper free limit: 8 published pages.
-- [x] Current review PDF: 14 pages (the production length can change).
+- [x] Current review PDF: 15 pages (the production length can change).
 - [ ] Identify the author/institution with financial authority.
 - [ ] Accept/upload the mandatory overlength agreement in PeerTrack.
 - [ ] Budget, before tax:
@@ -59,10 +59,10 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 - [x] LaTeX source and embedded figures.
 - [x] Optional cover-letter template.
 - [x] Software/result release ZIP with SHA-256 manifest.
-- [ ] Public repository URL.
+- [x] Repository URL: https://github.com/liranyang123456-commits/EGO_Mo (private until the visibility decision).
 - [ ] Zenodo DOI.
 - [ ] Separate raw-data archive and DOI, or a justified controlled-access statement.
-- [ ] Update `CITATION.cff` (`repository-code: TO_BE_ASSIGNED`).
+- [x] `CITATION.cff` repository URL set; DOI pending.
 - [ ] Update the cover letter’s repository/DOI placeholder.
 
 ## Current TIM instructions checked

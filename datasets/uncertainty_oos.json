@@ -1,0 +1,131 @@
+{
+  "models": [
+    "datasets/physnet_a/physnet_nll_s0.pt",
+    "datasets/physnet_a/physnet_nll_s1.pt"
+  ],
+  "val": {
+    "aleatoric": {
+      "n": 1436,
+      "err_mm": 29.47,
+      "sigma_mm_median": 4.24,
+      "coverage_1sigma": 0.274,
+      "coverage_2sigma": 0.464,
+      "rms_z": 5.998,
+      "scale_to_calibrate": 5.998,
+      "spearman_sigma_error": 0.26,
+      "err_mm_most_confident_decile": 6.55,
+      "err_mm_least_confident_decile": 27.17,
+      "label": "predicted variance"
+    },
+    "ensemble": {
+      "n": 1436,
+      "err_mm": 29.47,
+      "sigma_mm_median": 2.09,
+      "coverage_1sigma": 0.137,
+      "coverage_2sigma": 0.268,
+      "rms_z": 254.045,
+      "scale_to_calibrate": 254.045,
+      "spearman_sigma_error": 0.226,
+      "err_mm_most_confident_decile": 9.74,
+      "err_mm_least_confident_decile": 36.36,
+      "label": "ensemble spread"
+    },
+    "total": {
+      "n": 1436,
+      "err_mm": 29.47,
+      "sigma_mm_median": 5.43,
+      "coverage_1sigma": 0.325,
+      "coverage_2sigma": 0.545,
+      "rms_z": 4.559,
+      "scale_to_calibrate": 4.559,
+      "spearman_sigma_error": 0.253,
+      "err_mm_most_confident_decile": 6.86,
+      "err_mm_least_confident_decile": 29.72,
+      "label": "predicted + ensemble"
+    },
+    "total_rescaled": {
+      "n": 1436,
+      "err_mm": 29.47,
+      "sigma_mm_median": 24.77,
+      "coverage_1sigma": 0.814,
+      "coverage_2sigma": 0.945,
+      "rms_z": 1.0,
+      "scale_to_calibrate": 1.0,
+      "spearman_sigma_error": 0.253,
+      "err_mm_most_confident_decile": 6.86,
+      "err_mm_least_confident_decile": 29.72,
+      "label": "rescaled by 4.559 (fitted on validation)"
+    }
+  },
+  "test": {
+    "aleatoric": {
+      "n": 647,
+      "err_mm": 44.76,
+      "sigma_mm_median": 3.59,
+      "coverage_1sigma": 0.213,
+      "coverage_2sigma": 0.329,
+      "rms_z": 9.438,
+      "scale_to_calibrate": 9.438,
+      "spearman_sigma_error": 0.452,
+      "err_mm_most_confident_decile": 2.0,
+      "err_mm_least_confident_decile": 55.91,
+      "label": "predicted variance"
+    },
+    "ensemble": {
+      "n": 647,
+      "err_mm": 44.76,
+      "sigma_mm_median": 2.23,
+      "coverage_1sigma": 0.093,
+      "coverage_2sigma": 0.18,
+      "rms_z": 769.901,
+      "scale_to_calibrate": 769.901,
+      "spearman_sigma_error": 0.297,
+      "err_mm_most_confident_decile": 2.13,
+      "err_mm_least_confident_decile": 49.82,
+      "label": "ensemble spread"
+    },
+    "total": {
+      "n": 647,
+      "err_mm": 44.76,
+      "sigma_mm_median": 4.74,
+      "coverage_1sigma": 0.247,
+      "coverage_2sigma": 0.389,
+      "rms_z": 7.071,
+      "scale_to_calibrate": 7.071,
+      "spearman_sigma_error": 0.407,
+      "err_mm_most_confident_decile": 1.65,
+      "err_mm_least_confident_decile": 51.51,
+      "label": "predicted + ensemble"
+    },
+    "total_rescaled": {
+      "n": 647,
+      "err_mm": 44.76,
+      "sigma_mm_median": 21.62,
+      "coverage_1sigma": 0.632,
+      "coverage_2sigma": 0.852,
+      "rms_z": 1.551,
+      "scale_to_calibrate": 1.551,
+      "spearman_sigma_error": 0.407,
+      "err_mm_most_confident_decile": 1.65,
+      "err_mm_least_confident_decile": 51.51,
+      "label": "rescaled by 4.559 (fitted on validation)"
+    }
+  },
+  "validation_scale": 4.559,
+  "cross_session": {
+    "per_session": {
+      "traj_20260923_023241": {
+        "scale_from_other": 4.585,
+        "coverage_1sigma": 0.783,
+        "coverage_2sigma": 0.945
+      },
+      "traj_20260924_144019": {
+        "scale_from_other": 4.472,
+        "coverage_1sigma": 0.818,
+        "coverage_2sigma": 0.941
+      }
+    },
+    "pooled_coverage_1sigma": 0.81,
+    "pooled_coverage_2sigma": 0.942
+  }
+}

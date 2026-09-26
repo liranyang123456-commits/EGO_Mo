@@ -1,0 +1,197 @@
+{
+  "round": "network + data optimisation round 2, 2026-09-25",
+  "code": {
+    "tools/train_physnet.py": "GT velocity labels, --vel-weight velocity-stream loss, --warp/--amp-min/--amp-max trajectory-level augmentation, --extra-train, --synthetic-only, eval --synthetic-corpus, predict_dense",
+    "tools/eval_session_cv.py": "--cv-tag, trajectory ATE (single-edge and dense pose graph), CV-fitted blend/shrink calibration",
+    "ego_sim/core.py": "gravity_board (measured rig tilt), motion=replay (real trajectory through the digital twin, gyro-based rotation)",
+    "tools/generate_synthetic_corpus.py": "--gravity real|legacy, --replay-per-session, --replay-val-per-session",
+    "tools/export_gt_raw.py": "also exports rigid_* chessboard poses",
+    "tools/train_external_architectures.py": "--extra-train, --stem"
+  },
+  "validation_ablations_err_mm_mean_of_2_seeds": {
+    "wd0.1 reference": 31.97,
+    "velocity loss w=1": 33.24,
+    "velocity loss w=3": 32.58,
+    "time warp 1.4": 31.98,
+    "amplitude 0.4-1.5": 32.49,
+    "warp+amp": 32.36,
+    "warp+amp+vel (80 ep)": 32.54,
+    "warp+amp+vel (120 ep)": 32.14,
+    "pretrain new corpus (real gravity + replays)": 32.61,
+    "+6 rigid sessions as extra training data": 31.9,
+    "IMUNet +6 rigid sessions (single seed mean)": 31.62,
+    "IMUNet without rigid (single seed)": 33.39
+  },
+  "sim_to_real_zero_shot_real_validation_err_mm": {
+    "legacy corpus (flat board gravity)": {
+      "physnet": 44.3,
+      "note": "2 seeds 44.33/48.69; all public baselines 108-128 on real test"
+    },
+    "new corpus (measured gravity + real-trajectory replays)": {
+      "physnet": 39.6,
+      "r2": "0.05-0.17",
+      "zero_motion": 42.23
+    }
+  },
+  "synthetic_zero_shot_same_corpus_as_baselines (corpus_20260924_181622)": {
+    "synthetic_test_err_mm": {
+      "physnet": 16.69,
+      "imunet": 21.89,
+      "ronin_resnet": 25.04,
+      "tlio_resnet": 27.4,
+      "conv_bigru_old": 26.16
+    },
+    "synthetic_test_r2": {
+      "physnet": 0.864,
+      "imunet": 0.812,
+      "ronin_resnet": 0.769,
+      "tlio_resnet": 0.726
+    },
+    "synthetic_ood_err_mm": {
+      "physnet": 34.27,
+      "imunet": 37.2,
+      "ronin_resnet": 42.36,
+      "tlio_resnet": 43.44,
+      "conv_bigru_old": 43.72
+    },
+    "synthetic_ood_r2": {
+      "physnet": 0.583,
+      "imunet": 0.603,
+      "ronin_resnet": 0.512,
+      "tlio_resnet": 0.475
+    }
+  },
+  "leave_one_session_out_cv_with_rigid_extra_data": {
+    "source": "datasets/session_cv_rigid_benchmark.json",
+    "cv_err_mm_pairs": {
+      "zero_motion": 30.42,
+      "imunet": 26.55,
+      "physnet": 26.37,
+      "equal_blend": 24.95,
+      "calibrated_blend": 24.91
+    },
+    "sessions_won": {
+      "physnet": 4,
+      "imunet": 4
+    },
+    "calibration": {
+      "blend_weight_physnet": 0.55,
+      "shrink": 1.075
+    },
+    "real_test": {
+      "zero_motion": {
+        "err_mm": 49.67,
+        "fast_mm": 90.27,
+        "r2": -0.016,
+        "ate_rmse_mm": 119.24
+      },
+      "imunet_cv16": {
+        "err_mm": 43.59,
+        "fast_mm": 74.33,
+        "r2": 0.242,
+        "ate_rmse_mm": 94.13
+      },
+      "physnet_cv16": {
+        "err_mm": 43.6,
+        "fast_mm": 75.35,
+        "r2": 0.226,
+        "ate_rmse_mm": 102.97,
+        "ate_dense_graph_mm": 100.98
+      },
+      "equal_blend": {
+        "err_mm": 42.49,
+        "fast_mm": 74.52,
+        "r2": 0.26,
+        "ate_rmse_mm": 96.4
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 42.24,
+        "fast_mm": 73.67,
+        "r2": 0.268
+      }
+    },
+    "block_bootstrap_95ci_mm": {
+      "physnet_vs_imunet": [
+        -2.99,
+        3.35
+      ],
+      "calibrated_blend_vs_imunet": [
+        -0.42,
+        3.4
+      ],
+      "physnet_vs_zero": [
+        2.31,
+        10.47
+      ]
+    }
+  },
+  "conclusions": [
+    "Every architecture/loss/augmentation variant lands within +-0.6 mm of 32 mm on the fixed validation split: the 7 s window protocol is information-limited by the unobservable window-mean velocity.",
+    "PhysNet is clearly better than all adapted public architectures on synthetic data (-24 % vs IMUNet) and equal to IMUNet on real data once IMUNet is given the same extra rigid sessions; PhysNet needs less data to reach the floor.",
+    "Adding the six rigid_* sessions (rotation-rich, +4309 pairs) improved IMUNet by 1.8 mm on validation and 0.8 mm on the test but did not move PhysNet.",
+    "Measured-gravity + real-trajectory-replay digital twin gives the first useful zero-shot transfer (39.6 mm < zero motion 42.2 mm) but pretraining still adds nothing after fine-tuning.",
+    "Best sealed-test predictor: CV-calibrated PhysNet+IMUNet blend, 42.24 mm (-15 % vs zero motion, -5.4 % vs previous best 44.63 mm)."
+  ],
+  "final_protocol_cvx": {
+    "note": "supersedes leave_one_session_out_cv_with_rigid_extra_data: extra_train = the 4 rigid sessions that passed the mount test (2 non-rigid sessions excluded by tools/prepare_trajectory_data.py); 8 folds x 2 seeds",
+    "source": "datasets/session_cv_benchmark.json",
+    "cv_err_mm_pairs": {
+      "physnet": 25.84,
+      "imunet": 26.38,
+      "zero_motion": 30.42,
+      "equal_blend": 24.65,
+      "calibrated_blend": 24.62
+    },
+    "calibration": {
+      "blend_weight_physnet": 0.6,
+      "shrink": 1.05
+    },
+    "real_test": {
+      "zero_motion": {
+        "err_mm": 49.67,
+        "fast_mm": 90.27,
+        "r2": -0.016
+      },
+      "imunet_cv_ensemble": {
+        "err_mm": 42.93,
+        "fast_mm": 74.2,
+        "r2": 0.25
+      },
+      "physnet_cv_ensemble": {
+        "err_mm": 44.39,
+        "fast_mm": 75.15,
+        "r2": 0.215
+      },
+      "equal_blend_physnet_imunet": {
+        "err_mm": 42.6,
+        "fast_mm": 74.29,
+        "r2": 0.256
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 42.68,
+        "fast_mm": 73.8,
+        "r2": 0.257
+      }
+    },
+    "real_test_ate_mm": {
+      "imunet": 82.21,
+      "physnet_single_edge": 87.79,
+      "physnet_dense_graph": 81.08,
+      "equal_blend": 81.06
+    },
+    "ci_mm": {
+      "physnet_vs_imunet": [
+        -3.89,
+        0.95
+      ],
+      "blend_vs_imunet": [
+        -1.35,
+        1.87
+      ],
+      "physnet_vs_zero": [
+        1.3,
+        9.83
+      ]
+    }
+  }
+}

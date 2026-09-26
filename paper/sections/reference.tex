@@ -43,7 +43,7 @@ For a scalar pose component $q$ the reported standard uncertainty is
 \end{equation}
 where $u_{\rm corner}(q)$ is the square root of the corresponding diagonal
 entry of $\boldsymbol\Sigma_{\rm corner}$; the expanded value is
-$U_{\rm op}=2u_{\rm op}$. It is called
+$U_{\rm op}=k_{\rm c}u_{\rm op}$ with coverage factor $k_{\rm c}=2$. It is called
 \emph{operational} and not SI-traceable: board flatness, rolling shutter and
 an independent physical displacement standard are not yet available. Dynamic
 holdout residuals are reported separately and are not combined as independent
@@ -60,8 +60,10 @@ the held-out residual. With exact intrinsics the held-out RMSE is 0.73~mm at
 2.1\% and 2.5\%, and the cross-axis RMSE reaches 0.9 and 1.9~mm, while
 repeatability is about 0.01~mm; the error is therefore systematic and
 pose-dependent, not noise. Drawing the intrinsics from their calibration
-standard deviations raises the median held-out RMSE to 1.0 and 1.4~mm. At the
-mean 3-s test displacement of about 50~mm, a 2.5\% scale error is about
-1.2~mm, roughly 3\% of the 42--44-mm model errors in
+standard deviations raises the median held-out RMSE to 1.0 and 1.4~mm, and the
+95th-percentile lateral scale error to 10--19\%, so intrinsic uncertainty
+dominates the budget; no working distance passes the 1\%/0.5-mm acceptance
+limits. At the mean 3-s test displacement of about 50~mm, the 2.5\% nominal
+scale error is about 1.2~mm, roughly 3\% of the 42--44-mm model errors in
 Section~\ref{sec:results}; it does not change the method ranking but bounds
 claims below the millimetre level.

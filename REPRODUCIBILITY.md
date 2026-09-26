@@ -87,6 +87,7 @@ pdflatex -jobname=main_submission main.tex
 python tools/build_release_bundle.py
 ```
 
-Upload the generated ZIP to a public repository/Zenodo, then replace
-`TO_BE_ASSIGNED` in `CITATION.cff` and the manuscript data-availability
-statement with the immutable repository URL and DOI.
+The code repository is https://github.com/liranyang123456-commits/EGO_Mo.
+Attach the generated ZIP to a tagged GitHub release and archive it on Zenodo;
+then add the DOI to `CITATION.cff` and the manuscript's data-availability
+statement.

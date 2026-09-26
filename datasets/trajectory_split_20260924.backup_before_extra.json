@@ -1,0 +1,119 @@
+{
+  "train": [
+    "traj_20260923_015507",
+    "traj_20260923_015629",
+    "traj_20260923_015918",
+    "traj_20260923_020132",
+    "traj_20260923_020407",
+    "traj_20260924_143156"
+  ],
+  "val": [
+    "traj_20260923_023241",
+    "traj_20260924_144019"
+  ],
+  "test": [
+    "traj_20260923_023422"
+  ],
+  "excluded": [],
+  "quality": {
+    "traj_20260923_015507": {
+      "split": "train",
+      "theme": null,
+      "seconds": 60.7,
+      "fps": 29.54,
+      "usb_hz": 200.08,
+      "bt_hz": 187.44,
+      "raw_usable": 1478,
+      "usable_fraction": 0.824,
+      "reproj_p50_px": 1.178
+    },
+    "traj_20260923_015629": {
+      "split": "train",
+      "theme": null,
+      "seconds": 59.6,
+      "fps": 29.06,
+      "usb_hz": 200.08,
+      "bt_hz": 187.76,
+      "raw_usable": 1503,
+      "usable_fraction": 0.868,
+      "reproj_p50_px": 0.979
+    },
+    "traj_20260923_015918": {
+      "split": "train",
+      "theme": null,
+      "seconds": 40.8,
+      "fps": 9.78,
+      "usb_hz": 200.06,
+      "bt_hz": 188.0,
+      "raw_usable": 318,
+      "usable_fraction": 0.797,
+      "reproj_p50_px": 0.237
+    },
+    "traj_20260923_020132": {
+      "split": "train",
+      "theme": null,
+      "seconds": 63.7,
+      "fps": 24.49,
+      "usb_hz": 200.02,
+      "bt_hz": 187.47,
+      "raw_usable": 1244,
+      "usable_fraction": 0.797,
+      "reproj_p50_px": 0.24
+    },
+    "traj_20260923_020407": {
+      "split": "train",
+      "theme": null,
+      "seconds": 75.8,
+      "fps": 24.55,
+      "usb_hz": 200.02,
+      "bt_hz": 187.4,
+      "raw_usable": 1728,
+      "usable_fraction": 0.929,
+      "reproj_p50_px": 0.249
+    },
+    "traj_20260923_023241": {
+      "split": "val",
+      "theme": null,
+      "seconds": 86.8,
+      "fps": 9.76,
+      "usb_hz": 200.06,
+      "bt_hz": 187.2,
+      "raw_usable": 403,
+      "usable_fraction": 0.476,
+      "reproj_p50_px": 0.25
+    },
+    "traj_20260923_023422": {
+      "split": "test",
+      "theme": null,
+      "seconds": 115.2,
+      "fps": 9.77,
+      "usb_hz": 200.04,
+      "bt_hz": 187.02,
+      "raw_usable": 713,
+      "usable_fraction": 0.634,
+      "reproj_p50_px": 0.235
+    },
+    "traj_20260924_143156": {
+      "split": "train",
+      "theme": "A",
+      "seconds": 194.9,
+      "fps": 9.75,
+      "usb_hz": 200.07,
+      "bt_hz": 187.12,
+      "raw_usable": 1393,
+      "usable_fraction": 0.733,
+      "reproj_p50_px": 0.208
+    },
+    "traj_20260924_144019": {
+      "split": "val",
+      "theme": "A",
+      "seconds": 174.0,
+      "fps": 9.76,
+      "usb_hz": 200.05,
+      "bt_hz": 187.08,
+      "raw_usable": 1171,
+      "usable_fraction": 0.689,
+      "reproj_p50_px": 0.253
+    }
+  }
+}

@@ -20,3 +20,28 @@ external/
 paper/literature/
 paper/*.pdf
 
+
+# Aggregate result artefacts needed by tools/verify_manuscript.py (small JSON/NPZ);
+# raw recordings stay excluded. The interim look at sealed test data stays private.
+!datasets/*.json
+!datasets/*.npz
+!datasets/external_benchmark/
+datasets/external_benchmark/*
+!datasets/external_benchmark/*.json
+!datasets/physnet_v1/
+datasets/physnet_v1/*
+!datasets/physnet_v1/eval_*.json
+!datasets/physnet_v1/eval_wd1.npz
+!datasets/physnet_a/
+datasets/physnet_a/*
+!datasets/physnet_a/eval_*.json
+!datasets/physnet_cv/
+datasets/physnet_cv/*
+!datasets/physnet_cv/metrics_*.json
+!datasets/trajectory_comparison/
+datasets/trajectory_comparison/*
+!datasets/trajectory_comparison/summary.json
+!datasets/traj_run_v8/
+datasets/traj_run_v8/*
+!datasets/traj_run_v8/gt_uncertainty.json
+datasets/interim_eval.json

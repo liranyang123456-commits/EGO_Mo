@@ -1,4 +1,4 @@
-\documentclass[11pt]{letter}
+﻿\documentclass[11pt]{letter}
 \usepackage[margin=25mm]{geometry}
 \usepackage[hidelinks]{hyperref}
 \signature{Ranyang Li\\Corresponding Author\\
@@ -20,12 +20,16 @@ Instrumentation and Measurement}.
 The paper addresses an instrumentation question: which part of a camera
 displacement is observable from a continuous low-cost IMU stream, and which
 part requires an acquisition constraint. We provide a leakage-controlled
-reference and calibration chain, a parameter-provenance measurement digital
-twin, and a physics-structured IMU-only estimator. The experiments include
-protocol-matched reimplementations of public inertial architectures,
-session-wise cross-validation, uncertainty coverage, and translation
-trajectory error. Images are used for calibration, training supervision and
-evaluation only; deployment inference is based solely on the IMU stream.
+reference and calibration chain with a simulated known-displacement test, a
+digital twin with measured sensor parameters, and a compact physics-structured
+IMU-only estimator. The experiments include protocol-matched reimplementations
+of public inertial architectures, session-wise cross-validation, uncertainty
+coverage, and translation trajectory error. Images are used for calibration,
+training supervision and evaluation only; deployment inference is based solely
+on the IMU stream. We report the real-data comparison as it stands: all learned
+models beat zero motion, while the proposed network matches the larger public
+architectures with one seventh of their parameters rather than outperforming
+them significantly.
 
 We make the following limitation explicit. The historical real-test recording
 was excluded from gradient fitting and the initial fixed-split architecture
@@ -38,10 +42,12 @@ recordings are not yet available.
 
 The manuscript is original, is not under consideration elsewhere, contains no
 human-subject or clinical data, and has been approved by all authors. Software,
-configuration, split manifests and aggregate result artefacts will be archived
-at \textbf{[INSERT PUBLIC REPOSITORY URL AND ZENODO DOI BEFORE SUBMISSION]}.
+configuration, split manifests, the frozen study protocol and aggregate result
+artefacts are available at
+\url{https://github.com/liranyang123456-commits/EGO_Mo}; an archived release
+with a DOI will be referenced in the final version.
 
-The current IEEE two-column manuscript has 14 pages. We acknowledge the
+The current IEEE two-column manuscript has 15 pages. We acknowledge the
 mandatory overlength-page policy and will identify an author with financial
 authority in PeerTrack.
 

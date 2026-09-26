@@ -2,7 +2,7 @@
 \label{sec:twin}
 
 Following the measurement-oriented view of digital
-twins~\cite{zimmer2025digital,wright2024dt}, every twin parameter is either
+twins~\cite{wright2024dt}, every twin parameter is either
 measured, specified, or explicitly marked provisional. The twin generates
 stereo images, exact pose, an ideal IMU stream, and a noisy/quantized stream
 on the same timestamps.
@@ -51,9 +51,10 @@ bounds.
 
 \paragraph{Parameter provenance.}
 Camera matrices and distortion come from the physical calibration. The
-camera--IMU rotation comes from the independent rigidity recording. Noise,
-bias walk, quantization, and timing jitter are fitted to the first 5~s of a
-real static recording. Board geometry is generated directly from its metric
+camera--IMU rotation comes from the independent rigidity recording. White noise,
+quantization and timing jitter are fitted to the first 5~s of a real static
+recording; the bias random walk cannot be identified from so short a record
+and is provisional. Board geometry is generated directly from its metric
 specification, not reconstructed from images. The orientation of gravity in
 the board frame is measured from the reference poses and the accelerometer:
 the real board stands tilted, with the specific force along
@@ -67,22 +68,14 @@ IMU lever arm remain provisional; this status is serialized with every
 sequence.
 
 \subsection{Scene, Motion Domain and Audit}
-The OpenCV renderer provides fast pinhole-plus-distortion generation and
-Blender Eevee provides 720p--2K materials, shadows and lighting. Twelve motion
-families span lateral, depth, circular, random-spline, long-range slow,
-aggressive 6-DoF, pure-rotation, three-axis translation, pitch-sweep,
-stop--go, spiral and mixed motion, with lighting, blur, image noise, speed,
-bias and covariance scale randomized per sequence; board motion is an OOD
-condition because a camera-mounted IMU cannot observe it. The selected corpus
-contains 60 synthetic-training, 15 validation, 15 test and five OOD inertial
-sequences plus 25 rendered representatives. All pass the timestamp,
-finiteness, rotation-orthogonality and geometric audits, the median
-checkerboard detection rate is 100\%, the median and p90 detected-corner error
-against exact projection are 0.252 and 0.842~px, and recomputed ideal signals
-agree with the exported ones below $5\times10^{-5}$~g and $10^{-4}$~deg/s per
-axis. A separate 156-sequence stress corpus extends distance, rotation and
-acceleration; it is retained for OOD analysis but is not selected by the
-present validation split.
+An OpenCV renderer provides fast pinhole-plus-distortion images and Blender
+Eevee provides 720p--2K materials and lighting. Twelve motion families
+(translation, rotation, stop--go, spiral, replay and mixed motion, among
+others) are generated with lighting, blur, noise, speed, bias and covariance
+scale randomized per sequence; board motion is an OOD condition because a
+camera-mounted IMU cannot observe it. The selected corpus contains 60
+training, 15 validation, 15 test and five OOD inertial sequences plus 25
+rendered representatives; its audit is reported in Section~\ref{sec:results}.
 
 \begin{figure}[tb]
 \centering

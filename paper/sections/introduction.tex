@@ -13,59 +13,64 @@ ill-conditioned: gravity, bias, scale factor, axis misalignment, timing, and
 initial velocity all enter the position estimate. Data-driven inertial
 odometry~\cite{chen2018ionet,yan2020ronin,liu2020tlio,zeinali2024imunet} can
 learn motion priors, while online calibration such as
-DUET~\cite{liu2023duet} learns sensor corrections. Yet a learned output is a
-measurement only if its reference, calibration chain, uncertainty,
-out-of-distribution behavior, and distance from the physical information
-limit are reported.
+DUET~\cite{liu2023duet} learns sensor corrections. A learned output can be
+treated as a measurement only when its reference, calibration and uncertainty
+are characterized and when the part of its error that the sensor cannot
+observe is quantified.
 
-Four coupled gaps motivate this work. First, a planar board may reproject
-accurately while its tilt and translation remain strongly coupled. Second,
-using the same IMU to ``improve'' its training labels creates information
-leakage. Third, learned inertial odometry is normally reported as an accuracy
-ranking between architectures, which hides how much of the residual is
-physically unobservable at the chosen window and therefore common to every
-architecture; without that decomposition it is impossible to tell whether a
-better network or a better acquisition is required. Fourth, a simulated IMU
-can cover motion that is unsafe or tedious to capture, but a digital twin is
-useful only when its parameters have measured provenance and its domain gap is
-quantified. These issues lead to the following research questions:
+Three gaps motivate this work. First, learned inertial odometry is normally
+reported as an accuracy ranking between architectures. The ranking hides how
+much of the residual is unobservable at the chosen window and therefore common
+to every architecture, so it cannot tell whether a better network or a better
+acquisition is needed. Second, the measurement chain that produces the labels
+is rarely characterized: a planar board may reproject accurately while its tilt
+and translation remain coupled, and using the same IMU to ``improve'' its
+training labels leaks information into the test. Third, a simulated IMU can
+cover motion that is tedious to capture, but a digital twin is useful only when
+its parameters are fitted to measurements and its domain gap is quantified.
+These gaps lead to four research questions:
 \begin{itemize}
-  \item[RQ1)] How accurate and repeatable is a planar camera-pose reference
-  under the spatial and temporal conditions of the instrument?
-  \item[RQ2)] What protocol-dependent observability floor arises in windowed inertial
-  displacement measurement for this instrument, and how much of the residual
-  error is physically unobservable rather than unlearned?
-  \item[RQ3)] Which acquisition property changes that floor, and by how much?
-  \item[RQ4)] Which input/output representation approaches the observed floor, at what
-  data and complexity cost, and does an audited digital twin reduce that
-  cost?
+  \item[RQ1)] How much of the windowed displacement error is unobservable from
+  the IMU at the chosen horizon, rather than unlearned?
+  \item[RQ2)] How accurate and repeatable is the planar camera-pose reference
+  used for supervision and scoring?
+  \item[RQ3)] Which acquisition property could lower the error floor, and what
+  does the present data indicate about its size?
+  \item[RQ4)] How does a physics-structured representation compare with public
+  inertial architectures under one protocol, and does pretraining on the twin
+  help on real data?
 \end{itemize}
 
 \textbf{The contributions are:}
 \begin{itemize}
-  \item We establish a leakage-free camera--IMU measurement chain. We audit
-  the planar pose reference, quantify its tilt--translation coupling, test
-  camera--IMU rigidity on held-out increments, and show experimentally how
-  IMU-corrected labels inflate the reported accuracy.
-  \item We analyse the observability of windowed inertial displacement. The
-  decomposition identifies an unobservable initial velocity, and a measured
-  low-frequency velocity proxy explains the common empirical error floor of
-  more than forty estimator variants, none of whose conventional architecture or augmentation changes improved consistently beyond the seed variation. A boundary experiment then quantifies
-  the interval over which a confirmed pause improves inertial integration.
+  \item We decompose windowed inertial displacement into an IMU-observable
+  double integral and an unobserved initial velocity, and test its
+  consequences: more than forty estimator variants share one error plateau,
+  predictions are shrunk toward the conditional mean, and neither longer context
+  nor session fusion recovers the missing velocity. We also show which
+  velocity-proxy tests are and are not conclusive with a 10-fps reference. A
+  zero-velocity boundary experiment shows that a confirmed pause helps only over
+  intervals of about 2~s under the present attitude solution.
+  \item We characterize the camera--IMU measurement chain: the repeatability
+  and tilt--translation coupling of the planar reference, a simulated
+  known-displacement test of its scale, camera--IMU rigidity on held-out
+  increments, and the accuracy inflation caused by IMU-corrected labels.
   \item We propose PhysNet, which combines analytic anchor-frame
-  pre-integration with a densely supervised velocity-to-displacement network,
-  a stillness-conditioned velocity gate, a learned lever arm and calibrated
-  per-prediction uncertainty. It approaches the measured floor with one seventh
-  of the parameters of adapted IMUNet.
-  \item We build a parameter-provenance digital twin and a protocol-matched
-  evaluation spanning synthetic test and OOD, direct sim-to-real transfer,
-  session-wise cross-validation and a held-out real test. The study turns the
-  pause rate and attitude quality into actionable acquisition parameters
-  instead of attributing an empirical error floor to network architecture.
+  pre-integration with a densely supervised velocity stream, a stillness gate,
+  a learned lever arm and a rescaled per-prediction uncertainty. With one
+  seventh of the parameters of an adapted IMUNet it has the lowest synthetic
+  error and matches IMUNet on real data within the statistical resolution of
+  the available recordings.
+  \item We build a digital twin with measured sensor parameters and a
+  protocol-matched evaluation spanning synthetic test and OOD, direct
+  sim-to-real transfer, session-wise cross-validation, a held-out real test
+  and trajectory error. Pretraining on the twin did not lower the real-data
+  error; the data instead identify pause rate and attitude accuracy as the
+  acquisition factors most likely to lower the floor.
 \end{itemize}
 
 Fig.~\ref{fig:framework} summarizes the information flow and the separation
 between reference, calibration, learning and held-out evaluation. The analysis
 first determines which part of the measurand is observable from the sensor and
 which part requires an acquisition constraint; the network comparison is then
-interpreted relative to that limit.
+interpreted relative to that floor.

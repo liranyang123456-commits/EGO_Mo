@@ -1,0 +1,34 @@
+{
+  "architecture": "tlio_resnet",
+  "seed": 0,
+  "protocol": "adapted 6-axis to 3-D 3-s displacement",
+  "synthetic_zero_shot_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 82.5,
+    "fast_mm": 88.95,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 76.37,
+    "r2": -2.533
+  },
+  "fine_tuned_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 33.9,
+    "fast_mm": 51.9,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 22.45,
+    "r2": 0.39
+  },
+  "real_only_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 35.98,
+    "fast_mm": 55.93,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 17.17,
+    "r2": 0.293
+  },
+  "parameters": 3849222,
+  "inference_ms_per_window": 0.4674434375004921
+}

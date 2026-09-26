@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Evaluate a pure-IMU relative 6-DoF pose stream.
 
@@ -79,7 +79,7 @@ def evaluate(session: str, predictions: np.lib.npyio.NpzFile, method: str):
         }
     return {
         "session": session, "method": method,
-        "gauge": "reference position and attitude at first usable node only",
+        "gauge": "reference attitude at the first usable node; reference position at the first node of each connected pose-graph component",
         "inference_after_initialization": "IMU stream only",
         "nodes": len(usable), "edges": len(edges),
         "orientation": {

@@ -1,0 +1,210 @@
+{
+  "traj_20260923_023241": {
+    "monte_carlo": {
+      "0.10px": {
+        "raw_pos_mm_med": 0.315,
+        "raw_pos_mm_p90": 0.7,
+        "lock_pos_mm_med": 0.031,
+        "lock_pos_mm_p90": 0.043,
+        "raw_rot_deg_med": 0.092,
+        "raw_flip_rate": 0.0
+      },
+      "0.25px": {
+        "raw_pos_mm_med": 0.797,
+        "raw_pos_mm_p90": 1.716,
+        "lock_pos_mm_med": 0.078,
+        "lock_pos_mm_p90": 0.114,
+        "raw_rot_deg_med": 0.228,
+        "raw_flip_rate": 0.0
+      },
+      "0.50px": {
+        "raw_pos_mm_med": 1.574,
+        "raw_pos_mm_p90": 3.557,
+        "lock_pos_mm_med": 0.162,
+        "lock_pos_mm_p90": 0.224,
+        "raw_rot_deg_med": 0.462,
+        "raw_flip_rate": 0.0001
+      }
+    },
+    "rotation_sensitivity": {
+      "distance_mm_med": 197.0,
+      "mm_per_deg": [
+        3.391,
+        3.412,
+        0.319
+      ],
+      "px_per_deg": [
+        0.177,
+        0.131,
+        0.805
+      ]
+    },
+    "gyro_drift_optical_axis": {
+      "pairs": 53,
+      "span_s_med": 5.3,
+      "roll_diff_deg_med": 0.462,
+      "drift_deg_per_s_med": 0.0893,
+      "drift_deg_per_s_p90": 0.352
+    },
+    "delay_sweep": [
+      {
+        "shift_ms": -60,
+        "usable": 301,
+        "px_med": 0.559,
+        "pos_vs_nominal_mm_med": 9.308
+      },
+      {
+        "shift_ms": -40,
+        "usable": 300,
+        "px_med": 0.633,
+        "pos_vs_nominal_mm_med": 1.319
+      },
+      {
+        "shift_ms": -20,
+        "usable": 301,
+        "px_med": 0.654,
+        "pos_vs_nominal_mm_med": 0.516
+      },
+      {
+        "shift_ms": -10,
+        "usable": 302,
+        "px_med": 0.612,
+        "pos_vs_nominal_mm_med": 0.226
+      },
+      {
+        "shift_ms": 0,
+        "usable": 290,
+        "px_med": 0.666,
+        "pos_vs_nominal_mm_med": 0.0
+      },
+      {
+        "shift_ms": 10,
+        "usable": 285,
+        "px_med": 0.66,
+        "pos_vs_nominal_mm_med": 0.149
+      },
+      {
+        "shift_ms": 20,
+        "usable": 284,
+        "px_med": 0.678,
+        "pos_vs_nominal_mm_med": 0.484
+      },
+      {
+        "shift_ms": 40,
+        "usable": 309,
+        "px_med": 0.57,
+        "pos_vs_nominal_mm_med": 2.093
+      },
+      {
+        "shift_ms": 60,
+        "usable": 299,
+        "px_med": 0.617,
+        "pos_vs_nominal_mm_med": 10.441
+      }
+    ]
+  },
+  "traj_20260923_023422": {
+    "monte_carlo": {
+      "0.10px": {
+        "raw_pos_mm_med": 0.283,
+        "raw_pos_mm_p90": 0.478,
+        "lock_pos_mm_med": 0.032,
+        "lock_pos_mm_p90": 0.051,
+        "raw_rot_deg_med": 0.077,
+        "raw_flip_rate": 0.0
+      },
+      "0.25px": {
+        "raw_pos_mm_med": 0.715,
+        "raw_pos_mm_p90": 1.368,
+        "lock_pos_mm_med": 0.083,
+        "lock_pos_mm_p90": 0.125,
+        "raw_rot_deg_med": 0.191,
+        "raw_flip_rate": 0.0
+      },
+      "0.50px": {
+        "raw_pos_mm_med": 1.406,
+        "raw_pos_mm_p90": 2.878,
+        "lock_pos_mm_med": 0.162,
+        "lock_pos_mm_p90": 0.248,
+        "raw_rot_deg_med": 0.398,
+        "raw_flip_rate": 0.0
+      }
+    },
+    "rotation_sensitivity": {
+      "distance_mm_med": 209.0,
+      "mm_per_deg": [
+        3.673,
+        3.642,
+        0.436
+      ],
+      "px_per_deg": [
+        0.16,
+        0.177,
+        0.737
+      ]
+    },
+    "gyro_drift_optical_axis": {
+      "pairs": 111,
+      "span_s_med": 5.0,
+      "roll_diff_deg_med": 0.423,
+      "drift_deg_per_s_med": 0.0772,
+      "drift_deg_per_s_p90": 0.3142
+    },
+    "delay_sweep": [
+      {
+        "shift_ms": -60,
+        "usable": 557,
+        "px_med": 0.505,
+        "pos_vs_nominal_mm_med": 8.063
+      },
+      {
+        "shift_ms": -40,
+        "usable": 558,
+        "px_med": 0.513,
+        "pos_vs_nominal_mm_med": 6.068
+      },
+      {
+        "shift_ms": -20,
+        "usable": 595,
+        "px_med": 0.465,
+        "pos_vs_nominal_mm_med": 4.883
+      },
+      {
+        "shift_ms": -10,
+        "usable": 580,
+        "px_med": 0.465,
+        "pos_vs_nominal_mm_med": 4.636
+      },
+      {
+        "shift_ms": 0,
+        "usable": 599,
+        "px_med": 0.461,
+        "pos_vs_nominal_mm_med": 0.0
+      },
+      {
+        "shift_ms": 10,
+        "usable": 590,
+        "px_med": 0.472,
+        "pos_vs_nominal_mm_med": 0.321
+      },
+      {
+        "shift_ms": 20,
+        "usable": 577,
+        "px_med": 0.468,
+        "pos_vs_nominal_mm_med": 0.667
+      },
+      {
+        "shift_ms": 40,
+        "usable": 585,
+        "px_med": 0.456,
+        "pos_vs_nominal_mm_med": 2.243
+      },
+      {
+        "shift_ms": 60,
+        "usable": 593,
+        "px_med": 0.465,
+        "pos_vs_nominal_mm_med": 2.905
+      }
+    ]
+  }
+}

@@ -1,14 +1,15 @@
 \section{Related Work}
 
 \subsection{Reference Measurements for Camera Motion}
-A learned pose estimator is only as meaningful as the reference it is scored
-against, and that reference is produced differently in each domain. Robotic
+Learned pose estimators are scored against references that are produced
+differently in each domain. Robotic
 datasets read forward kinematics, as in StereoMIS, where a learned estimator
 reaches 2.04~mm ATE on short surgical
 scenarios~\cite{hayoz2023pose}. Laboratory benches add external optical
 tracking: Hartwig \emph{et al.} combine stereo laparoscopy, handle-mounted
-IMUs and infrared tracking, and observe that inertial integration alone does
-not recover the insertion direction~\cite{hartwig2022constrained}. Public
+IMUs and infrared tracking, and use the gyroscope, gravity and the
+remote-centre-of-motion constraint to leave only the insertion depth
+unknown~\cite{hartwig2022constrained}. Public
 endoscopic datasets often mix real and synthetic sequences, so metric depth
 or pose is available only for the subsets whose generation or registration
 process supplies it~\cite{ozyoruk2021endoslam}; visual-inertial benchmarks instead ship
@@ -16,12 +17,11 @@ the reference together with a continuous-time
 calibration~\cite{burri2016euroc,furgale2013unified}.
 
 None of these is available for a compact handheld camera used outside a
-robot, which leaves a planar target. Its weaknesses are documented but rarely
-audited in learning papers: the first-order uncertainty of measurements from a
+robot, which leaves a planar target. Its weaknesses are documented: the
+first-order uncertainty of measurements from a
 plane is classical~\cite{criminisi1999plane}, planar pose admits two nearby
 minima and is ill-conditioned in
-tilt~\cite{schweighofer2006robust}, an ambiguity that also affects the fusion
-of chessboard poses with inertial sensors. Intrinsics follow Zhang's
+tilt~\cite{schweighofer2006robust}. Intrinsics follow Zhang's
 method~\cite{zhang2000flexible}. We therefore treat the planar reference as an
 instrument with a budget expressed following the GUM~\cite{gum2008}, and add
 the measurement this literature implies but seldom reports: the translation
@@ -43,9 +43,8 @@ initial condition that no sample inside the window observes.
 Pedestrian navigation removes that initial condition by exploiting the gait,
 since the foot is periodically stationary and a zero-velocity update resets
 the velocity and bounds the drift~\cite{foxlin2005pedestrian}; the detector is
-a studied component~\cite{skog2010zerovelocity}, open implementations
-and modern filters refine how the update is
-applied~\cite{eskfzupt2024}. The window regressors reviewed below do not use a
+a studied component~\cite{skog2010zerovelocity}, and error-state filters
+refine how the update is applied~\cite{eskfzupt2024}. The window regressors reviewed below do not use a
 stationary boundary condition, which may be unavailable during continuous
 handheld motion. We instead detect the stationary epoch
 and then \emph{measure} what it is worth: the accuracy of
@@ -56,49 +55,45 @@ length, and how often the instrument actually stops.
 IONet~\cite{chen2018ionet} replaced open-loop integration by a learned
 regression from inertial windows, and
 RIDI~\cite{yan2018ridi}, RoNIN~\cite{yan2020ronin} and TLIO~\cite{liu2020tlio}
-developed this into pedestrian benchmarks, where a strong periodic gait prior makes displacement
-predictable. A parallel line learns sensor corrections instead of motion:
-gyroscope denoising for open-loop attitude~\cite{brossard2020denoising} and
-AI-IMU dead reckoning, where a learned covariance activates kinematic
-constraints~\cite{brossard2020aiimu}. Two TIM contributions are closest to our
-setting: IMUNet~\cite{zeinali2024imunet} reports model size and edge latency
-beside trajectory error, and DUET~\cite{liu2023duet} learns scale,
-misalignment, bias and noise corrections from externally measured pose
-increments while studying bias-domain shift and window length.
+developed this into pedestrian benchmarks, where a strong periodic gait prior
+makes displacement predictable; a recent survey reviews the
+field~\cite{chen2024survey}. RoNIN and TLIO rotate the IMU samples into a
+gravity-aligned frame using an external or filtered attitude, and AirIO shows
+that the choice of input frame changes what the network can
+observe~\cite{qiu2025airio}. A parallel line learns sensor corrections instead
+of motion: gyroscope denoising for open-loop
+attitude~\cite{brossard2020denoising} and AI-IMU dead reckoning, where a
+network adapts the noise covariance of kinematic pseudo-measurements~\cite{brossard2020aiimu}.
+Two TIM contributions are closest to our setting: IMUNet~\cite{zeinali2024imunet}
+targets efficient inertial odometry on edge devices, and
+DUET~\cite{liu2023duet} learns scale-factor, misalignment and bias corrections
+from externally measured pose increments.
 
-The common denominator is an accuracy ranking between architectures. What is
-missing, and what the handheld endoscopic case makes unavoidable, is a
-decomposition of the residual into the part the sensor determines and the part
-that is an unobservable initial condition shared by every architecture. Under
-our protocol more than forty variants---including protocol-matched reimplementations of the architectures above---show no consistent gain beyond the seed variation,
-so such a ranking measures the noise of a saturated system. We therefore
-report where the limit is, what moves it, and for the representation itself
-the cost of reaching it: parameters, latency, data requirement, and
-transferability from simulation.
+These works rank architectures by accuracy but do not separate the error that
+the sensor determines from the error caused by the unobserved initial
+velocity, which is shared by every architecture. When the second term
+dominates, differences between architectures can be smaller than the spread
+between training seeds. We therefore report the error floor and the
+acquisition factors that could lower it alongside the architecture
+comparison, together with parameters, latency and transfer from simulation.
 
 \subsection{Uncertainty and Digital Twins}
-Reporting a value without an uncertainty is not a measurement. The two
+A measurement result is complete only with its uncertainty~\cite{gum2008}. The two
 standard ingredients are a heteroscedastic likelihood for the input-dependent
 aleatoric term~\cite{kendall2017uncertainties} and an ensemble for the
-epistemic term~\cite{lakshminarayanan2017simple}, both known to be
-imperfect approximations that require empirical coverage assessment. We adopt
-this combination, fit one positive scale on validation only, and report coverage and
-discrimination. Because overlapping windows are strongly dependent,
-confidence intervals use a block bootstrap~\cite{kunsch1989jackknife}.
+epistemic term~\cite{lakshminarayanan2017simple}; both require empirical
+coverage assessment, and a single variance scale fitted on validation can
+recalibrate them~\cite{laves2020well}. Because overlapping windows are
+strongly dependent, confidence intervals use a block bootstrap over
+non-overlapping blocks~\cite{carlstein1986use,kunsch1989jackknife}.
 
 \paragraph{Digital twins and simulation.}
 Metrology-oriented twins require explicit links between models, measured
 parameters, uncertainty and decisions~\cite{wright2024dt}. Zimmer
-et~al.~\cite{zimmer2025digital} use a twin to produce pseudo-measurements
-where a physical sensor is absent, the role it plays here; model-driven
-spectroscopy shows that simulation and experiment can form a hybrid dataset
-once the physical model and the real noise are represented
-faithfully~\cite{fu2023hybrid}; and Evans et~al.~\cite{evans2025pattern}
-demonstrate that a deep measurement system still needs controlled studies of
-the physical excitation. Our twin follows this line: every parameter is
-measured, specified or marked provisional, the attitude of gravity in the
-reference frame is measured rather than assumed, real trajectories are
-replayed so that the motion statistics are inherited from the instrument, and
-synthetic accuracy is never substituted for real-test accuracy. The audit also
-reports the cost of getting this wrong: a twin whose angular-rate distribution
-was three times the real one produced no usable transfer at all.
+et~al.~\cite{zimmer2025digital} use a data-driven twin to produce
+pseudo-measurements where a physical sensor is absent; hybrid
+simulation--experiment datasets require faithful physical and noise
+models~\cite{fu2023hybrid}, and deep measurement systems still need controlled
+studies of the physical excitation~\cite{evans2025pattern}. Our twin measures
+its parameters, including the attitude of gravity in the board frame, replays
+real trajectories, and is never substituted for real-test accuracy.

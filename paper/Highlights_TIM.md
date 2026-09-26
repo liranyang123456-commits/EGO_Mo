@@ -1,10 +1,10 @@
 # Technical highlights for PeerTrack / cover-letter preparation
 
-- IMU-only inference estimates 3-D camera displacement from continuous 200-Hz streams.
-- PhysNet combines analytic pre-integration, dense supervision and a stillness gate.
-- The context-mean velocity proxy explains a 16% reduction in validation error.
-- PhysNet uses 0.42 M parameters and improves synthetic error by 24% over adapted IMUNet.
-- Session-wise CV favors PhysNet; one held-out recording shows no significant difference.
+- IMU-only inference estimates 3-D camera displacement from continuous 200-Hz streams; chessboard poses are used only for calibration, supervision and evaluation.
+- PhysNet combines analytic anchor-frame pre-integration, dense supervision, a stillness gate and a learned lever arm with 0.42 M parameters (1/7 of adapted IMUNet).
+- PhysNet lowers the synthetic-test error of adapted IMUNet by 24%; on real data all learned models beat zero motion, but PhysNet, IMUNet and their blends do not differ significantly.
+- Every estimator is shrunk toward zero (slope 0.2-0.5), consistent with an initial velocity the window cannot determine; a 10-fps reference cannot measure that term's share of the error.
+- A simulated known-displacement test bounds the chessboard reference at about 2.5% scale error, roughly 3% of the model error.
 
 These bullets are an internal submission aid. IEEE TIM does not request a
-separate “highlights” file in its current author instructions.
+separate highlights file in its current author instructions.

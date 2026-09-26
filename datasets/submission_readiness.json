@@ -1,0 +1,135 @@
+{
+  "ready": false,
+  "checks": [
+    {
+      "name": "frozen_protocol",
+      "passed": true,
+      "detail": "85393aba60ecdc40",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "four_prospective_tests",
+      "passed": false,
+      "detail": "1/4",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    },
+    {
+      "name": "independent_stage_validation",
+      "passed": false,
+      "detail": "simulated caliper test only (not SI-traceable); worst nominal axis scale error 2.5% vs 1% target, reported in Sec. V; physical caliper run optional",
+      "requires_physical_or_account_action": true,
+      "blocking": false
+    },
+    {
+      "name": "measured_stereo_extrinsic",
+      "passed": false,
+      "detail": "not passed: baseline 46.3 mm, fit 0.58 px, held-out rot 1.47 deg / trans 4.8 mm; right camera unused by reference and IMU results; static-pose session recommended",
+      "requires_physical_or_account_action": true,
+      "blocking": false
+    },
+    {
+      "name": "measured_lever_arm",
+      "passed": false,
+      "detail": "missing or failed",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    },
+    {
+      "name": "relative_6dof_evaluation",
+      "passed": true,
+      "detail": "available",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "frozen_final_models",
+      "passed": true,
+      "detail": "e50df3c997d46e7ad1c358b72265f7b1400c3f804901bb2543d36a7d994362af",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "one_shot_final_evaluation",
+      "passed": false,
+      "detail": "not run",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "software_release_bundle",
+      "passed": true,
+      "detail": "bcf1efa1a665da5a292dee70a1cdc7cd83059f4d0764c58efd838e59344024cf",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "public_repository_and_doi",
+      "passed": false,
+      "detail": "not assigned",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    },
+    {
+      "name": "submission_pdf",
+      "passed": true,
+      "detail": "1.20 MB",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "manuscript_regression",
+      "passed": true,
+      "detail": "passed",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    }
+  ],
+  "blockers": [
+    {
+      "name": "four_prospective_tests",
+      "passed": false,
+      "detail": "1/4",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    },
+    {
+      "name": "measured_lever_arm",
+      "passed": false,
+      "detail": "missing or failed",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    },
+    {
+      "name": "one_shot_final_evaluation",
+      "passed": false,
+      "detail": "not run",
+      "requires_physical_or_account_action": false,
+      "blocking": true
+    },
+    {
+      "name": "public_repository_and_doi",
+      "passed": false,
+      "detail": "not assigned",
+      "requires_physical_or_account_action": true,
+      "blocking": true
+    }
+  ],
+  "warnings": [
+    {
+      "name": "independent_stage_validation",
+      "passed": false,
+      "detail": "simulated caliper test only (not SI-traceable); worst nominal axis scale error 2.5% vs 1% target, reported in Sec. V; physical caliper run optional",
+      "requires_physical_or_account_action": true,
+      "blocking": false
+    },
+    {
+      "name": "measured_stereo_extrinsic",
+      "passed": false,
+      "detail": "not passed: baseline 46.3 mm, fit 0.58 px, held-out rot 1.47 deg / trans 4.8 mm; right camera unused by reference and IMU results; static-pose session recommended",
+      "requires_physical_or_account_action": true,
+      "blocking": false
+    }
+  ]
+}

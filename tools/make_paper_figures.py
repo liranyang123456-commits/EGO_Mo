@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Generate reproducible figures for the TIM manuscript."""
 
 from __future__ import annotations
@@ -460,7 +460,7 @@ def dataset(session="traj_20260924_143156", stream_session="traj_20260923_020132
 
     # ---- row 2 far right: measurand distribution --------------------------
     ax = fig.add_subplot(plot_gs[2])
-    split = _json.loads((DATA / "trajectory_split_20260924.json").read_text(encoding="utf-8"))
+    split = _json.loads((DATA / "trajectory_split_paper.json").read_text(encoding="utf-8"))
     bins = np.linspace(0, 160, 33)
     for names, label, colour in (
         (split["train"], "train", "#35689a"),
@@ -599,7 +599,7 @@ def _drift_statistics(eval_npz="physnet_v1/eval_wd1.npz"):
     before = float(np.linalg.norm(e, axis=1).mean())
     after = float(np.linalg.norm(resid, axis=1).mean())
 
-    split = json.loads((DATA / "trajectory_split_20260924.json").read_text(encoding="utf-8"))
+    split = json.loads((DATA / "trajectory_split_paper.json").read_text(encoding="utf-8"))
     lengths = np.array([7, 11, 15, 21, 31, 61])
     rms = []
     for T in lengths:
@@ -639,40 +639,48 @@ def observability():
     ax.grid(alpha=0.25)
     ax.legend(fontsize=5.0, borderpad=0.2, handletextpad=0.3, framealpha=0.85)
 
+    ev = np.load(DATA / "physnet_v1" / "eval_wd1.npz", allow_pickle=True)
+    pv, yv = ev["val_pred"] * 1000, ev["val_y"] * 1000
     ax = fig.add_subplot(gs[0, 1])
+    slopes = []
     for k, (name, colour) in enumerate((("x", "#2369a2"), ("y", "#45a86b"),
                                         ("z", "#d24b40"))):
-        ax.scatter(drift[:, k], e[:, k], s=1.6, alpha=0.26, color=colour, label=name)
-    lim = np.percentile(np.abs(drift), 99)
-    ax.plot([-lim, lim], [lim, -lim], color="#555555", linewidth=0.8, linestyle="--")
+        slope = np.polyfit(yv[:, k], pv[:, k], 1)[0]
+        slopes.append(float(slope))
+        ax.scatter(yv[:, k], pv[:, k], s=1.6, alpha=0.26, color=colour,
+                   label=f"{name}: slope {slope:.2f}")
+    lim = np.percentile(np.abs(yv), 99)
+    ax.plot([-lim, lim], [-lim, lim], color="#555555", linewidth=0.8, linestyle="--")
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim, lim)
-    ax.set_xlabel(r"$\bar v\,\Delta t$ (mm)", labelpad=1)
-    ax.set_ylabel("Residual (mm)")
-    ax.set_title(f"(b) {before:.1f} $\\rightarrow$ {after:.1f} mm if $\\bar v$ known",
-                 fontsize=6.6)
+    ax.set_xlabel(r"Reference $\Delta p$ (mm)", labelpad=1)
+    ax.set_ylabel("Prediction (mm)")
+    ax.set_title("(b) Predictions are shrunk", fontsize=6.6)
     ax.tick_params(labelsize=5.4)
     ax.grid(alpha=0.25)
-    ax.legend(fontsize=5.0, loc="upper right", borderpad=0.2, handletextpad=0.2,
+    ax.legend(fontsize=4.8, loc="upper left", borderpad=0.2, handletextpad=0.2,
               labelspacing=0.15, markerscale=3.0, framealpha=0.85)
 
+    check = json.loads((DATA / "velocity_proxy_check.json").read_text(encoding="utf-8"))
+    var = check["variants"]
     ax = fig.add_subplot(gs[1, :])
-    ax.plot(lengths, rms, "o-", markersize=3.0, linewidth=1.0, color="#2369a2",
-            label=r"$\|\bar v\,\Delta t\|$ RMS from the reference")
-    ax.axhline(before, color="#d24b40", linestyle="--", linewidth=0.9,
-               label=f"measured 7-s residual, {before:.0f} mm")
-    ax.axhline(after, color="#45a86b", linestyle=":", linewidth=0.9,
-               label=f"residual without the term, {after:.0f} mm")
-    ax.set_xscale("log")
-    ax.set_xticks(lengths, [str(v) for v in lengths], fontsize=5.4)
-    ax.set_xlabel("Context window length (s)", labelpad=1)
-    ax.set_ylabel("mm")
-    ax.set_title("(c) The unobservable term shrinks with context, but was not learned",
-                 fontsize=6.6)
+    labels = ["window mean\n(incl. target)", "context only\n(excl. target)"]
+    ins = [var["full"]["in_sample_reduction_percent"], var["context"]["in_sample_reduction_percent"]]
+    crs = [var["full"]["cross_session_reduction_percent"],
+           var["context"]["cross_session_reduction_percent"]]
+    xpos = np.arange(2)
+    b1 = ax.bar(xpos - 0.18, ins, 0.34, color="#9ab7d6", label="fitted and scored on the same pairs")
+    b2 = ax.bar(xpos + 0.18, crs, 0.34, color="#2369a2", label="fitted on the other recording")
+    ax.bar_label(b1, fmt="%.1f", fontsize=5.0, padding=1)
+    ax.bar_label(b2, fmt="%.1f", fontsize=5.0, padding=1)
+    ax.axhline(0, color="#333333", linewidth=0.6)
+    ax.set_xticks(xpos, labels, fontsize=5.4)
+    ax.set_ylabel("Error removed (%)")
+    ax.set_title("(c) Affine correction by a reference velocity proxy", fontsize=6.6)
     ax.tick_params(axis="y", labelsize=5.4)
-    ax.grid(alpha=0.25, which="both")
+    ax.grid(alpha=0.25, axis="y")
     ax.legend(fontsize=5.0, borderpad=0.2, handlelength=1.4, labelspacing=0.2,
-              framealpha=0.85)
+              framealpha=0.85, loc="upper right")
     fig.savefig(OUT / "observability.pdf")
     plt.close(fig)
     return {"corr": [float(np.corrcoef(drift[:, k], e[:, k])[0, 1]) for k in range(3)],
@@ -836,7 +844,7 @@ def information_limit(eval_npz="physnet_v1/eval_wd1.npz"):
     after = np.linalg.norm(resid, axis=1).mean()
 
     # Drift term as a function of the window length, from reference positions only.
-    split = json.loads((DATA / "trajectory_split_20260924.json").read_text(encoding="utf-8"))
+    split = json.loads((DATA / "trajectory_split_paper.json").read_text(encoding="utf-8"))
     lengths = np.array([7, 11, 15, 21, 31, 61])
     rms = []
     for T in lengths:
@@ -923,6 +931,119 @@ def session_cv(cv_json="session_cv_benchmark.json"):
               labelspacing=0.25, framealpha=0.9)
     fig.tight_layout(pad=0.35)
     fig.savefig(OUT / "session_cv.pdf")
+    plt.close(fig)
+
+
+def benchmark_summary(cv_json="session_cv_gate_benchmark.json"):
+    """(a) error reduction relative to zero motion for every method and column,
+    (b) paired held-out-test differences with block-bootstrap intervals,
+    (c) the per-session cross-validation view. Values come from
+    datasets/summary_table.json and datasets/recheck_metrics.json."""
+    rows = json.loads((DATA / "summary_table.json").read_text(encoding="utf-8"))
+    ci = json.loads((DATA / "recheck_metrics.json").read_text(encoding="utf-8"))
+    cv = json.loads((DATA / cv_json).read_text(encoding="utf-8"))
+    zero = next(r for r in rows if r["method"] == "Zero motion")["cells"]
+    cols = [("syn", "Synth.\ntest"), ("ood", "Synth.\nOOD"), ("direct", "Real\ndirect"),
+            ("val", "Val"), ("cv", "CV"), ("test", "Test"), ("fast", "Test\nfast"),
+            ("ate", "ATE")]
+    names = {"Ridge features": "Ridge", "Conv--BiGRU, body frame": "Conv-BiGRU",
+             "RoNIN-LSTM (adapted)": "RoNIN-LSTM", "RoNIN-ResNet (adapted)": "RoNIN-ResNet",
+             "TLIO-ResNet (adapted)": "TLIO-ResNet", "IMUNet (adapted)": "IMUNet",
+             "PhysNet (proposed)": "PhysNet", "PhysNet + stillness gate": "PhysNet+gate",
+             "Equal blend, no gate": "Equal blend", "Calibrated blend, no gate": "Calib. blend",
+             "Equal blend, gate": "Equal blend (gate)",
+             "Calibrated blend, gate": "Calib. blend (gate)"}
+    methods = [r for r in rows if r["method"] in names]
+    M = np.full((len(methods), len(cols)), np.nan)
+    for i, r in enumerate(methods):
+        for j, (k, _l) in enumerate(cols):
+            if k in r["cells"]:
+                M[i, j] = 100 * (1 - r["cells"][k]["value"] / zero[k]["value"])
+
+    fig = plt.figure(figsize=(7.1, 3.35))
+    gs = fig.add_gridspec(1, 3, width_ratios=(1.55, 1.0, 1.05), wspace=0.55,
+                          left=0.085, right=0.99, top=0.90, bottom=0.14)
+    ax = fig.add_subplot(gs[0, 0])
+    from matplotlib.colors import TwoSlopeNorm
+    norm = TwoSlopeNorm(vmin=-60, vcenter=0, vmax=75)
+    im = ax.imshow(np.clip(M, -60, 75), cmap="RdBu", norm=norm, aspect="auto")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            if np.isfinite(M[i, j]):
+                v = M[i, j]
+                txt = f"{v:.0f}" if v > -100 else "<-99"
+                ax.text(j, i, txt, ha="center", va="center", fontsize=4.9,
+                        color="white" if abs(np.clip(v, -60, 75)) > 42 else "#1a1a1a")
+            else:
+                ax.text(j, i, "·", ha="center", va="center", fontsize=6, color="#999999")
+    ax.set_xticks(range(len(cols)), [l for _k, l in cols], fontsize=5.0)
+    ax.set_yticks(range(len(methods)), [names[r["method"]] for r in methods], fontsize=5.2)
+    for y in (4.5, 7.5):
+        ax.axhline(y, color="white", linewidth=1.6)
+    ax.tick_params(length=0)
+    ax.set_title("(a) Error reduction vs. zero motion (%)", fontsize=6.6)
+    cb = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.02)
+    cb.ax.tick_params(labelsize=4.8)
+
+    ax = fig.add_subplot(gs[0, 1])
+    g, ng = ci["session_cv_gate_benchmark"], ci["session_cv_benchmark"]
+    def point(src, a, b):
+        m = src["metrics"]
+        return m[b]["err_mm"] - m[a]["err_mm"] if b != "zero" else \
+            m["zero_motion"]["err_mm"] - m[a]["err_mm"]
+    items = [
+        ("vs. zero motion", None, None, None),
+        ("IMUNet", g["ci_mm"]["imunet_vs_zero"], point(g, "imunet", "zero"), "#9b59b6"),
+        ("PhysNet", ng["ci_mm"]["physnet_vs_zero"], point(ng, "physnet", "zero"), "#e2694f"),
+        ("PhysNet+gate", g["ci_mm"]["physnet_vs_zero"], point(g, "physnet", "zero"), "#c0392b"),
+        ("Equal blend (gate)", g["ci_mm"]["equal_blend_vs_zero"], point(g, "equal_blend", "zero"), "#ef4770"),
+        ("Calib. blend (gate)", g["ci_mm"]["calibrated_blend_vs_zero"],
+         point(g, "cv_calibrated_blend", "zero"), "#b03060"),
+        ("vs. IMUNet", None, None, None),
+        ("PhysNet", ng["ci_mm"]["physnet_vs_imunet"], point(ng, "physnet", "imunet"), "#e2694f"),
+        ("PhysNet+gate", g["ci_mm"]["physnet_vs_imunet"], point(g, "physnet", "imunet"), "#c0392b"),
+        ("Equal blend (gate)", g["ci_mm"]["equal_blend_vs_imunet"], point(g, "equal_blend", "imunet"), "#ef4770"),
+        ("Calib. blend (gate)", g["ci_mm"]["calibrated_blend_vs_imunet"],
+         point(g, "cv_calibrated_blend", "imunet"), "#b03060"),
+    ]
+    ylab = []
+    for y, (lab, interval, pt, colour) in enumerate(items):
+        ylab.append(lab)
+        if interval is None:
+            continue
+        sig = interval[0] > 0 or interval[1] < 0
+        ax.plot(interval, [y, y], color=colour, linewidth=1.3)
+        ax.plot([pt], [y], "o", color=colour, markersize=3.4,
+                markerfacecolor=colour if sig else "white")
+    ax.axvline(0, color="#333333", linewidth=0.7, linestyle="--")
+    ax.set_yticks(range(len(items)), ylab, fontsize=5.2)
+    for tick, (lab, interval, _p, _c) in zip(ax.get_yticklabels(), items):
+        if interval is None:
+            tick.set_fontweight("bold")
+    ax.invert_yaxis()
+    ax.set_xlabel("Error reduction on held-out test (mm)", fontsize=5.6, labelpad=1)
+    ax.tick_params(axis="x", labelsize=5.0)
+    ax.grid(axis="x", alpha=0.25)
+    ax.set_title("(b) Paired differences, 95% CI", fontsize=6.6)
+
+    folds = cv["folds"]
+    order = sorted(folds, key=lambda n: folds[n]["physnet"]["zero_mm"])
+    y = np.arange(len(order))
+    ax = fig.add_subplot(gs[0, 2])
+    ax.barh(y + 0.26, [folds[n]["physnet"]["zero_mm"] for n in order], 0.25,
+            color="#b0b0b0", label="zero motion")
+    ax.barh(y, [folds[n]["imunet"]["err_mm"] for n in order], 0.25,
+            color="#9b59b6", label="IMUNet")
+    ax.barh(y - 0.26, [folds[n]["physnet"]["err_mm"] for n in order], 0.25,
+            color="#c0392b", label="PhysNet+gate")
+    ax.set_yticks(y, [f"S{k + 1}" for k in range(len(order))], fontsize=5.2)
+    ax.set_xlabel("Held-out 3-s error (mm)", fontsize=5.6, labelpad=1)
+    ax.tick_params(axis="x", labelsize=5.0)
+    ax.set_title("(c) Leave-one-session-out", fontsize=6.6)
+    ax.grid(axis="x", alpha=0.25)
+    ax.legend(fontsize=4.8, loc="lower right", borderpad=0.2, handlelength=1.0,
+              labelspacing=0.2, framealpha=0.9)
+    fig.savefig(OUT / "estimators.pdf")
     plt.close(fig)
 
 
@@ -1076,7 +1197,7 @@ def main():
     stats = observability()
     (OUT / "information_limit.json").write_text(json.dumps(stats, indent=2),
                                                 encoding="utf-8")
-    estimators()
+    benchmark_summary()
     domain_gap()
     trajectories()
     print(json.dumps(stats, indent=2))

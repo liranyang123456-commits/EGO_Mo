@@ -1,0 +1,114 @@
+{
+  "models": [
+    "datasets\\physnet_a\\physnet_gate_s0.pt",
+    "datasets\\physnet_a\\physnet_gate_s1.pt",
+    "datasets\\physnet_a\\physnet_gate_s2.pt",
+    "datasets\\physnet_a\\physnet_gate_s3.pt",
+    "datasets\\physnet_a\\physnet_gate_s4.pt"
+  ],
+  "seeds": 5,
+  "tta_shifts_s": [],
+  "lever_arm_mm": [
+    [
+      -21.97,
+      -3.33,
+      -17.93
+    ],
+    [
+      -22.15,
+      -3.48,
+      -21.56
+    ],
+    [
+      -17.9,
+      -3.73,
+      -11.32
+    ],
+    [
+      -20.95,
+      -5.14,
+      -17.52
+    ],
+    [
+      -20.99,
+      -3.53,
+      -14.93
+    ]
+  ],
+  "val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 29.67,
+    "fast_mm": 48.24,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 17.4,
+    "r2": 0.485
+  },
+  "val_single_seed": [
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 30.0,
+      "fast_mm": 47.55,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 20.85,
+      "r2": 0.474
+    },
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 29.86,
+      "fast_mm": 48.36,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 20.08,
+      "r2": 0.481
+    },
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 30.75,
+      "fast_mm": 50.33,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 17.05,
+      "r2": 0.456
+    },
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 30.65,
+      "fast_mm": 49.22,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 17.34,
+      "r2": 0.453
+    },
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 30.85,
+      "fast_mm": 49.05,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 18.15,
+      "r2": 0.456
+    }
+  ],
+  "val_by_session": {
+    "traj_20260923_023241": {
+      "n": 339,
+      "zero_mm": 45.1,
+      "err_mm": 34.55,
+      "fast_mm": 54.83,
+      "fast_zero_mm": 81.44,
+      "pred_med_mm": 19.12,
+      "r2": 0.42
+    },
+    "traj_20260924_144019": {
+      "n": 1097,
+      "zero_mm": 41.34,
+      "err_mm": 28.16,
+      "fast_mm": 45.25,
+      "fast_zero_mm": 72.8,
+      "pred_med_mm": 17.06,
+      "r2": 0.51
+    }
+  }
+}

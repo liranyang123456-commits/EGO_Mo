@@ -1,0 +1,1304 @@
+[
+  {
+    "name": "align_imu_dyn_20260922_115949",
+    "step": "imu_dyn",
+    "seconds": 79.2,
+    "frames": 773,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 773,
+    "jpg1": 424,
+    "times0": 773,
+    "times1": 425,
+    "drops": 0,
+    "usb": {
+      "n": 15840,
+      "hz": 199.99179802677048,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.37109375,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 14863,
+      "hz": 187.60414538232047,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.840917587280272,
+      "gaps_gt_20ms": 105,
+      "gaps_gt_50ms": 4
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_dyn_20260922_120122",
+    "step": "imu_dyn",
+    "seconds": 25.9,
+    "frames": 252,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 252,
+    "jpg1": 51,
+    "times0": 252,
+    "times1": 52,
+    "drops": 0,
+    "usb": {
+      "n": 5177,
+      "hz": 199.99187036747026,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.390167236328125,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 4865,
+      "hz": 188.01707306173532,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.842967987060545,
+      "gaps_gt_20ms": 32,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_dyn_20260922_120228",
+    "step": "imu_dyn",
+    "seconds": 86.8,
+    "frames": 846,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 846,
+    "jpg1": 846,
+    "times0": 846,
+    "times1": 847,
+    "drops": 0,
+    "usb": {
+      "n": 17360,
+      "hz": 200.02894606991774,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.362987518310547,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 16305,
+      "hz": 187.89872545440645,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.817123413085938,
+      "gaps_gt_20ms": 84,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_dyn_20260922_120404",
+    "step": "imu_dyn",
+    "seconds": 49.6,
+    "frames": 484,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 484,
+    "jpg1": 484,
+    "times0": 484,
+    "times1": 484,
+    "drops": 0,
+    "usb": {
+      "n": 9911,
+      "hz": 200.01735741649208,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.37651777267456,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 9306,
+      "hz": 187.73349152947833,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.804582595825194,
+      "gaps_gt_20ms": 53,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_static_20260922_115532",
+    "step": "imu_static",
+    "seconds": 63.6,
+    "frames": 620,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 620,
+    "jpg1": 412,
+    "times0": 620,
+    "times1": 413,
+    "drops": 0,
+    "usb": {
+      "n": 12712,
+      "hz": 199.9927786555843,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.356550216674805,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 11928,
+      "hz": 187.60532917951548,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.730482101440428,
+      "gaps_gt_20ms": 35,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_static_20260922_115758",
+    "step": "imu_static",
+    "seconds": 83.5,
+    "frames": 815,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 815,
+    "jpg1": 525,
+    "times0": 815,
+    "times1": 526,
+    "drops": 0,
+    "usb": {
+      "n": 16695,
+      "hz": 200.00320365208614,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.348920822143555,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 15653,
+      "hz": 187.5503247951827,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.782505035400389,
+      "gaps_gt_20ms": 46,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_static_20260926_143022",
+    "step": "imu_static",
+    "seconds": 17.6,
+    "frames": 171,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 171,
+    "jpg1": 171,
+    "times0": 171,
+    "times1": 171,
+    "drops": 0,
+    "usb": {
+      "n": 3511,
+      "hz": 200.09003422038106,
+      "dt_p50_ms": 4.764318466186523,
+      "dt_p95_ms": 6.249904632568359,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 3286,
+      "hz": 187.2213702153971,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.822225570678707,
+      "gaps_gt_20ms": 9,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 0.0,
+    "usb_corr": 0.0,
+    "usb_reliable": false,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "align_imu_static_20260926_151607",
+    "step": "imu_static",
+    "seconds": 23.1,
+    "frames": 225,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 225,
+    "jpg1": 226,
+    "times0": 225,
+    "times1": 226,
+    "drops": 0,
+    "usb": {
+      "n": 4630,
+      "hz": 200.09023714786167,
+      "dt_p50_ms": 4.730939865112305,
+      "dt_p95_ms": 6.2345027923583975,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 4335,
+      "hz": 187.28318766811068,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.84896421432495,
+      "gaps_gt_20ms": 14,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 0.0,
+    "usb_corr": 0.0,
+    "usb_reliable": false,
+    "calib_l": 0,
+    "calib_r": 0,
+    "usable": false
+  },
+  {
+    "name": "calib_board_bt_20260922_124351",
+    "step": "board_bt",
+    "seconds": 272.8,
+    "frames": 2484,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 2484,
+    "jpg1": 2104,
+    "times0": 2484,
+    "times1": 2661,
+    "drops": 0,
+    "usb": {
+      "n": 54553,
+      "hz": 199.9934126826103,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.412101745605469,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 51166,
+      "hz": 187.55408055183315,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.794950485229492,
+      "gaps_gt_20ms": 239,
+      "gaps_gt_50ms": 3
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "calib_intrinsics_20260922_123120",
+    "step": "intrinsics",
+    "seconds": 186.9,
+    "frames": 1685,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 1685,
+    "jpg1": 1425,
+    "times0": 1685,
+    "times1": 1821,
+    "drops": 0,
+    "usb": {
+      "n": 37381,
+      "hz": 200.00448262488405,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.368947982788086,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 35102,
+      "hz": 187.82612021295074,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.787797927856445,
+      "gaps_gt_20ms": 172,
+      "gaps_gt_50ms": 2
+    },
+    "usb_delay_ms": null,
+    "usb_corr": null,
+    "usb_reliable": null,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_123958",
+    "step": "rigid",
+    "seconds": 96.1,
+    "frames": 938,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 938,
+    "jpg1": 938,
+    "times0": 938,
+    "times1": 938,
+    "drops": 0,
+    "usb": {
+      "n": 19240,
+      "hz": 200.15047199733087,
+      "dt_p50_ms": 4.765987396240234,
+      "dt_p95_ms": 6.265020370483397,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 17988,
+      "hz": 187.14044787667834,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.820938110351562,
+      "gaps_gt_20ms": 57,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 75.0,
+    "usb_corr": 0.664,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_124243",
+    "step": "rigid",
+    "seconds": 69.8,
+    "frames": 680,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 681,
+    "jpg1": 681,
+    "times0": 681,
+    "times1": 681,
+    "drops": 0,
+    "usb": {
+      "n": 13967,
+      "hz": 200.12806135192716,
+      "dt_p50_ms": 4.771590232849121,
+      "dt_p95_ms": 6.259918212890625,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 13062,
+      "hz": 187.1991369139706,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.839057922363281,
+      "gaps_gt_20ms": 39,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 68.0,
+    "usb_corr": 0.746,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_133412",
+    "step": "rigid",
+    "seconds": 74.1,
+    "frames": 2228,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 2228,
+    "jpg1": 2228,
+    "times0": 2228,
+    "times1": 2228,
+    "drops": 0,
+    "usb": {
+      "n": 14825,
+      "hz": 200.1075890511959,
+      "dt_p50_ms": 4.7740936279296875,
+      "dt_p95_ms": 6.260871887207031,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 13876,
+      "hz": 187.29712698549434,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.853625297546385,
+      "gaps_gt_20ms": 45,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 25.0,
+    "usb_corr": 0.467,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_135318",
+    "step": "rigid",
+    "seconds": 86.7,
+    "frames": 2606,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 2606,
+    "jpg1": 2605,
+    "times0": 2606,
+    "times1": 2605,
+    "drops": 0,
+    "usb": {
+      "n": 17333,
+      "hz": 200.03079647061074,
+      "dt_p50_ms": 4.770994186401367,
+      "dt_p95_ms": 6.2569260597229,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 16227,
+      "hz": 187.22650445602028,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.818792343139648,
+      "gaps_gt_20ms": 66,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 23.0,
+    "usb_corr": 0.395,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_140510",
+    "step": "rigid",
+    "seconds": 92.3,
+    "frames": 901,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "jpg0": 901,
+    "jpg1": 901,
+    "times0": 901,
+    "times1": 901,
+    "drops": 0,
+    "usb": {
+      "n": 18460,
+      "hz": 200.02061401316885,
+      "dt_p50_ms": 4.7779083251953125,
+      "dt_p95_ms": 6.267070770263672,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 17284,
+      "hz": 187.23720651977405,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.798789024353022,
+      "gaps_gt_20ms": 54,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 78.0,
+    "usb_corr": 0.631,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260924_142902",
+    "step": "rigid",
+    "seconds": 84.2,
+    "frames": 821,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "jpg0": 821,
+    "jpg1": 821,
+    "times0": 821,
+    "times1": 821,
+    "drops": 0,
+    "usb": {
+      "n": 16837,
+      "hz": 200.0545383025616,
+      "dt_p50_ms": 4.779815673828125,
+      "dt_p95_ms": 6.25687837600708,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 15762,
+      "hz": 187.25219936144822,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.796857833862305,
+      "gaps_gt_20ms": 54,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 77.0,
+    "usb_corr": 0.58,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260926_143218",
+    "step": "rigid",
+    "seconds": 142.4,
+    "frames": 1389,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 1389,
+    "jpg1": 1389,
+    "times0": 1389,
+    "times1": 1389,
+    "drops": 0,
+    "usb": {
+      "n": 28488,
+      "hz": 200.07465972640838,
+      "dt_p50_ms": 4.73785400390625,
+      "dt_p95_ms": 6.244683265686033,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 26625,
+      "hz": 186.98481458251538,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.808063507080078,
+      "gaps_gt_20ms": 88,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 90.0,
+    "usb_corr": 0.613,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260926_151937",
+    "step": "rigid",
+    "seconds": 111.2,
+    "frames": 3296,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 3296,
+    "jpg1": 3344,
+    "times0": 3296,
+    "times1": 3344,
+    "drops": 0,
+    "usb": {
+      "n": 22253,
+      "hz": 200.0824248847056,
+      "dt_p50_ms": 4.739046096801758,
+      "dt_p95_ms": 6.236076354980469,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 20793,
+      "hz": 186.9815834802475,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.826934337615969,
+      "gaps_gt_20ms": 76,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 26.0,
+    "usb_corr": 0.526,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260926_152337",
+    "step": "rigid",
+    "seconds": 99.9,
+    "frames": 3003,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 3003,
+    "jpg1": 3004,
+    "times0": 3003,
+    "times1": 3004,
+    "drops": 0,
+    "usb": {
+      "n": 19984,
+      "hz": 200.06315159917278,
+      "dt_p50_ms": 4.72712516784668,
+      "dt_p95_ms": 6.237983703613281,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 18675,
+      "hz": 186.97884303257285,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.838199615478514,
+      "gaps_gt_20ms": 53,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 21.0,
+    "usb_corr": 0.506,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": false
+  },
+  {
+    "name": "rigid_20260926_153342",
+    "step": "rigid",
+    "seconds": 20.9,
+    "frames": 626,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 626,
+    "jpg1": 628,
+    "times0": 626,
+    "times1": 628,
+    "drops": 0,
+    "usb": {
+      "n": 4184,
+      "hz": 200.04037152964528,
+      "dt_p50_ms": 4.728078842163086,
+      "dt_p95_ms": 6.257915496826172,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 3918,
+      "hz": 187.22276508946194,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.76705551147461,
+      "gaps_gt_20ms": 15,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 130.0,
+    "usb_corr": 0.636,
+    "usb_reliable": true,
+    "calib_l": 50,
+    "calib_r": 50,
+    "usable": false
+  },
+  {
+    "name": "traj_20260923_015507",
+    "step": "traj",
+    "seconds": 60.7,
+    "frames": 1793,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 1793,
+    "jpg1": 1596,
+    "times0": 1793,
+    "times1": 1807,
+    "drops": 0,
+    "usb": {
+      "n": 12145,
+      "hz": 200.0804404039304,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.37109375,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 11378,
+      "hz": 187.44432400264324,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.80997085571289,
+      "gaps_gt_20ms": 56,
+      "gaps_gt_50ms": 2
+    },
+    "usb_delay_ms": 16.0,
+    "usb_corr": 0.634,
+    "usb_reliable": true,
+    "calib_l": 54,
+    "calib_r": 28,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_015629",
+    "step": "traj",
+    "seconds": 59.6,
+    "frames": 1732,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 1732,
+    "jpg1": 1504,
+    "times0": 1732,
+    "times1": 1744,
+    "drops": 0,
+    "usb": {
+      "n": 11927,
+      "hz": 200.08052258266184,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.393624305725098,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 11195,
+      "hz": 187.75544012648302,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.809017181396484,
+      "gaps_gt_20ms": 63,
+      "gaps_gt_50ms": 5
+    },
+    "usb_delay_ms": 14.0,
+    "usb_corr": 0.666,
+    "usb_reliable": true,
+    "calib_l": 34,
+    "calib_r": 15,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_015918",
+    "step": "traj",
+    "seconds": 40.8,
+    "frames": 399,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "jpg0": 399,
+    "jpg1": 391,
+    "times0": 399,
+    "times1": 398,
+    "drops": 0,
+    "usb": {
+      "n": 8173,
+      "hz": 200.06100198856566,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.447876453399658,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 7676,
+      "hz": 187.99514701025757,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.392309188842773,
+      "gaps_gt_20ms": 23,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 63.0,
+    "usb_corr": 0.749,
+    "usb_reliable": true,
+    "calib_l": 46,
+    "calib_r": 0,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_020132",
+    "step": "traj",
+    "seconds": 63.7,
+    "frames": 1560,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1920,
+      "height": 1080,
+      "fps": 15
+    },
+    "jpg0": 1560,
+    "jpg1": 1525,
+    "times0": 1560,
+    "times1": 1564,
+    "drops": 0,
+    "usb": {
+      "n": 12741,
+      "hz": 200.0154394872181,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.491065979003905,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 11940,
+      "hz": 187.46894113338894,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.046411514282232,
+      "gaps_gt_20ms": 41,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 28.0,
+    "usb_corr": 0.353,
+    "usb_reliable": true,
+    "calib_l": 76,
+    "calib_r": 4,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_020407",
+    "step": "traj",
+    "seconds": 75.8,
+    "frames": 1861,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1920,
+      "height": 1080,
+      "fps": 15
+    },
+    "jpg0": 1861,
+    "jpg1": 1814,
+    "times0": 1861,
+    "times1": 1862,
+    "drops": 0,
+    "usb": {
+      "n": 15171,
+      "hz": 200.020650658325,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 5.399513244628905,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 14210,
+      "hz": 187.3983405997822,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.737968444824219,
+      "gaps_gt_20ms": 49,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 29.0,
+    "usb_corr": 0.573,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 2,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_023241",
+    "step": "traj",
+    "seconds": 86.8,
+    "frames": 847,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 847,
+    "jpg1": 847,
+    "times0": 847,
+    "times1": 847,
+    "drops": 0,
+    "usb": {
+      "n": 17359,
+      "hz": 200.05940727764673,
+      "dt_p50_ms": 4.776954650878906,
+      "dt_p95_ms": 6.25300407409668,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 16244,
+      "hz": 187.19549597525622,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.827756881713867,
+      "gaps_gt_20ms": 58,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 90.0,
+    "usb_corr": 0.621,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": true
+  },
+  {
+    "name": "traj_20260923_023422",
+    "step": "traj",
+    "seconds": 115.2,
+    "frames": 1125,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 1125,
+    "jpg1": 1124,
+    "times0": 1125,
+    "times1": 1124,
+    "drops": 0,
+    "usb": {
+      "n": 23051,
+      "hz": 200.03584678721882,
+      "dt_p50_ms": 4.77910041809082,
+      "dt_p95_ms": 6.247043609619141,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 21553,
+      "hz": 187.01779587676003,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.829473495483398,
+      "gaps_gt_20ms": 88,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 84.0,
+    "usb_corr": 0.536,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": true
+  },
+  {
+    "name": "traj_20260924_143156",
+    "step": "traj",
+    "seconds": 194.9,
+    "frames": 1901,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "jpg0": 1901,
+    "jpg1": 1901,
+    "times0": 1901,
+    "times1": 1901,
+    "drops": 0,
+    "usb": {
+      "n": 38990,
+      "hz": 200.07394969648595,
+      "dt_p50_ms": 4.764080047607422,
+      "dt_p95_ms": 6.254625320434569,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 36460,
+      "hz": 187.12226236320922,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.803056716918945,
+      "gaps_gt_20ms": 128,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 55.0,
+    "usb_corr": 0.705,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": true
+  },
+  {
+    "name": "traj_20260924_144019",
+    "step": "traj",
+    "seconds": 174.0,
+    "frames": 1699,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "jpg0": 1699,
+    "jpg1": 1699,
+    "times0": 1699,
+    "times1": 1699,
+    "drops": 0,
+    "usb": {
+      "n": 34818,
+      "hz": 200.05351913638378,
+      "dt_p50_ms": 4.7760009765625,
+      "dt_p95_ms": 6.258964538574219,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 32559,
+      "hz": 187.0767563166129,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.806299209594725,
+      "gaps_gt_20ms": 117,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 83.0,
+    "usb_corr": 0.637,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": true
+  },
+  {
+    "name": "traj_20260926_143837",
+    "step": "traj",
+    "seconds": 122.4,
+    "frames": 1193,
+    "size": [
+      1280,
+      720
+    ],
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "jpg0": 1194,
+    "jpg1": 1194,
+    "times0": 1194,
+    "times1": 1194,
+    "drops": 0,
+    "usb": {
+      "n": 24474,
+      "hz": 200.03185746072035,
+      "dt_p50_ms": 4.746913909912109,
+      "dt_p95_ms": 6.25300407409668,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 22873,
+      "hz": 186.9717126122421,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.814977645874023,
+      "gaps_gt_20ms": 89,
+      "gaps_gt_50ms": 1
+    },
+    "usb_delay_ms": 102.0,
+    "usb_corr": 0.678,
+    "usb_reliable": true,
+    "calib_l": 80,
+    "calib_r": 80,
+    "usable": true
+  },
+  {
+    "name": "traj_20260926_153411",
+    "step": "traj",
+    "seconds": 14.7,
+    "frames": 440,
+    "size": [
+      640,
+      480
+    ],
+    "requested": {
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "jpg0": 440,
+    "jpg1": 442,
+    "times0": 440,
+    "times1": 442,
+    "drops": 0,
+    "usb": {
+      "n": 2939,
+      "hz": 200.05247156307334,
+      "dt_p50_ms": 4.733562469482422,
+      "dt_p95_ms": 6.2450408935546875,
+      "gaps_gt_20ms": 0,
+      "gaps_gt_50ms": 0
+    },
+    "bt": {
+      "n": 2753,
+      "hz": 187.32440020924747,
+      "dt_p50_ms": 5.000114440917969,
+      "dt_p95_ms": 9.859514236450195,
+      "gaps_gt_20ms": 8,
+      "gaps_gt_50ms": 0
+    },
+    "usb_delay_ms": 0.0,
+    "usb_corr": -0.014,
+    "usb_reliable": false,
+    "calib_l": 34,
+    "calib_r": 35,
+    "usable": false
+  }
+]

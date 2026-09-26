@@ -1,0 +1,62 @@
+{
+  "ronin_resnet": {
+    "synthetic_test": {
+      "n": 2400,
+      "zero_mm": 58.46,
+      "err_mm": 25.04,
+      "fast_mm": 38.94,
+      "fast_zero_mm": 101.66,
+      "pred_med_mm": 43.12,
+      "r2": 0.769
+    },
+    "synthetic_ood": {
+      "n": 800,
+      "zero_mm": 67.31,
+      "err_mm": 42.36,
+      "fast_mm": 50.11,
+      "fast_zero_mm": 109.56,
+      "pred_med_mm": 45.58,
+      "r2": 0.512
+    }
+  },
+  "tlio_resnet": {
+    "synthetic_test": {
+      "n": 2400,
+      "zero_mm": 58.46,
+      "err_mm": 27.4,
+      "fast_mm": 43.02,
+      "fast_zero_mm": 101.66,
+      "pred_med_mm": 46.17,
+      "r2": 0.726
+    },
+    "synthetic_ood": {
+      "n": 800,
+      "zero_mm": 67.31,
+      "err_mm": 43.44,
+      "fast_mm": 54.02,
+      "fast_zero_mm": 109.56,
+      "pred_med_mm": 45.08,
+      "r2": 0.475
+    }
+  },
+  "imunet": {
+    "synthetic_test": {
+      "n": 2400,
+      "zero_mm": 58.46,
+      "err_mm": 21.89,
+      "fast_mm": 33.55,
+      "fast_zero_mm": 101.66,
+      "pred_med_mm": 45.01,
+      "r2": 0.812
+    },
+    "synthetic_ood": {
+      "n": 800,
+      "zero_mm": 67.31,
+      "err_mm": 37.2,
+      "fast_mm": 47.81,
+      "fast_zero_mm": 109.56,
+      "pred_med_mm": 46.79,
+      "r2": 0.603
+    }
+  }
+}

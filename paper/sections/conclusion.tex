@@ -1,24 +1,26 @@
 \section{Conclusion}
 
-We presented a pure-inertial framework that estimates camera displacement
-from continuous 200-Hz IMU streams and audits the complete measurement chain
-used to train and test it. The analysis separates the 3-s target into an
-acceleration integral and an unobservable initial-velocity term. More than
-more than forty estimator variants occupied the same broad error plateau; regressing out the
-low-frequency velocity proxy reduced mean validation error by 16\%, whereas
-longer context and post-hoc session fusion did not recover it. A confirmed
-pause supplies a zero-velocity boundary condition, but the present experiment
-contains only one sub-2-s interval and its benefit deteriorates rapidly as
-attitude and bias errors accumulate. The measured pause rate of 0.5--2.3 per
-minute is therefore an acquisition limitation in the current data.
+We presented a measurement framework that estimates camera displacement from a
+continuous 200-Hz IMU stream alone at inference and characterizes the chain
+used to train and test it. Separating the 3-s target into an acceleration
+integral and an unobservable initial-velocity term is consistent with the error
+plateau shared by more than forty estimator variants and with their shrinkage
+toward zero; longer context and post-hoc session fusion did not recover the
+missing velocity, and the 10-fps reference is too noisy to measure its share
+of the residual. A confirmed pause
+supplies the missing boundary condition only over short intervals under the
+present attitude solution, and the current recordings contain 0.5--2.3 pauses
+per minute.
 
 PhysNet combines analytic anchor-frame pre-integration, dense displacement
-supervision, a stillness-conditioned velocity gate, lever-arm estimation and calibrated
-uncertainty. It reduced synthetic-test error by 24\% relative to adapted
-IMUNet with one seventh of the parameters and achieved the lowest
-leave-one-session-out error. On the single held-out recording the two methods
-were statistically tied; their blend reduced error from 49.7~mm for zero
-motion to 42.2~mm ($R^2=0.279$). The next validation step is therefore
-experimental: acquire several independent, prospectively sealed recordings with controlled
-pauses, improve the attitude solution, and compare the chessboard reference
-with an independent tracker before making a reference-grade trajectory claim.
+supervision, a stillness gate, lever-arm estimation and rescaled uncertainty.
+It reduced the synthetic-test error of an adapted IMUNet by 24\% with one
+seventh of the parameters. On real data, gated PhysNet, IMUNet and their blends
+beat zero motion in cross-validation and on the held-out recording, but do not
+differ significantly from one another; the equal-weight blend reached 42.2~mm
+against 49.7~mm for zero motion. With integrated-gyroscope attitude and the
+same periodic position anchors, the translation stream gives a relative
+trajectory error of 80.6~mm against 119.2~mm for zero motion. The next step is prospective:
+evaluate the frozen models once on sealed recordings acquired with frequent
+pauses, and compare the chessboard reference with a physical displacement
+standard before any reference-grade claim.

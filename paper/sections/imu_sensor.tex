@@ -12,9 +12,9 @@ alternating increments estimate the constant extrinsic rotation by
  \hat{\bf R}_{CI}=\arg\min_{{\bf R}\in SO(3)}
  \sum_k\|{\bf R}\boldsymbol\phi_{I,k}-\boldsymbol\phi_{C,k}\|^2 ,
 \end{equation}
-where $\operatorname{Log}^{\vee}$ is the rotation-vector logarithm defined
-below (\ref{eq:gyro}).
-and the remaining increments measure per-axis correlation, magnitude
+where $\operatorname{Log}^{\vee}$ is the rotation-vector logarithm of
+$SO(3)$. The rotation is fitted on one half of the increments, and the
+remaining increments measure per-axis correlation, magnitude
 correlation, scale and RMS residual. The test requires deliberate pitch, yaw
 and roll excitation with at least 1$^\circ$ standard deviation per axis, and
 acceptance requires each held-out axis correlation $\geq0.75$, magnitude

@@ -1,0 +1,492 @@
+[
+  {
+    "method": "Zero motion",
+    "fixed_split_test": false,
+    "cells": {
+      "syn": {
+        "value": 58.46,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/zero_motion/err_mm"
+      },
+      "syn_r2": {
+        "value": -0.001,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/zero_motion/r2"
+      },
+      "ood": {
+        "value": 67.31,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_ood/zero_motion/err_mm"
+      },
+      "direct": {
+        "value": 49.67,
+        "source": "session_cv_gate_benchmark.json:test/zero_motion/err_mm"
+      },
+      "val": {
+        "value": 42.23,
+        "source": "method_benchmark_20260924.json:datasets/real_validation/zero_motion/err_mm"
+      },
+      "cv": {
+        "value": 30.42,
+        "source": "session_cv_gate_benchmark.json:cv_zero_motion_over_pairs"
+      },
+      "test": {
+        "value": 49.67,
+        "source": "session_cv_gate_benchmark.json:test/zero_motion/err_mm"
+      },
+      "test_r2": {
+        "value": -0.016,
+        "source": "session_cv_gate_benchmark.json:test/zero_motion/r2"
+      },
+      "fast": {
+        "value": 90.27,
+        "source": "session_cv_gate_benchmark.json:test/zero_motion/fast_mm"
+      },
+      "ate": {
+        "value": 119.24,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/zero/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Ridge features",
+    "fixed_split_test": true,
+    "cells": {
+      "syn": {
+        "value": 56.29,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/ridge_real_fitted/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.074,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/ridge_real_fitted/r2"
+      },
+      "ood": {
+        "value": 72.42,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_ood/ridge_real_fitted/err_mm"
+      },
+      "val": {
+        "value": 33.98,
+        "source": "method_benchmark_20260924.json:datasets/real_validation/ridge_real_fitted/err_mm"
+      },
+      "test": {
+        "value": 50.16,
+        "source": "method_benchmark_20260924.json:datasets/real_test/ridge_real_fitted/err_mm"
+      },
+      "test_r2": {
+        "value": 0.04,
+        "source": "method_benchmark_20260924.json:datasets/real_test/ridge_real_fitted/r2"
+      },
+      "fast": {
+        "value": 79.34,
+        "source": "method_benchmark_20260924.json:datasets/real_test/ridge_real_fitted/fast_mm"
+      },
+      "ate": {
+        "value": 99.2,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/ridge/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Conv--BiGRU, body frame",
+    "fixed_split_test": true,
+    "cells": {
+      "syn": {
+        "value": 26.16,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/synthetic_zero_shot/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.74,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_test/synthetic_zero_shot/r2"
+      },
+      "ood": {
+        "value": 43.72,
+        "source": "method_benchmark_20260924.json:datasets/synthetic_ood/synthetic_zero_shot/err_mm"
+      },
+      "direct": {
+        "value": 90.8,
+        "source": "method_benchmark_20260924.json:datasets/real_test/synthetic_zero_shot/err_mm"
+      },
+      "val": {
+        "value": 30.58,
+        "source": "method_benchmark_20260924.json:datasets/real_validation/synthetic_pretrain_real_finetune/err_mm"
+      },
+      "test": {
+        "value": 46.27,
+        "source": "method_benchmark_20260924.json:datasets/real_test/synthetic_pretrain_real_finetune/err_mm"
+      },
+      "test_r2": {
+        "value": 0.148,
+        "source": "method_benchmark_20260924.json:datasets/real_test/synthetic_pretrain_real_finetune/r2"
+      },
+      "fast": {
+        "value": 77.86,
+        "source": "method_benchmark_20260924.json:datasets/real_test/synthetic_pretrain_real_finetune/fast_mm"
+      },
+      "ate": {
+        "value": 102.44,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/fine_tuned/ate_rmse_mm"
+      },
+      "par": {
+        "value": 0.337635,
+        "source": "traj_run_v17/*.pt state_dict (337635 parameters)"
+      }
+    }
+  },
+  {
+    "method": "RoNIN-LSTM (adapted)",
+    "fixed_split_test": false,
+    "cells": {
+      "syn": {
+        "value": 58.46,
+        "source": "external_benchmark/test_benchmark.json:ronin_lstm/zero_shot/synthetic_test/err_mm"
+      },
+      "syn_r2": {
+        "value": -0.001,
+        "source": "external_benchmark/test_benchmark.json:ronin_lstm/zero_shot/synthetic_test/r2"
+      },
+      "direct": {
+        "value": 49.72,
+        "source": "external_benchmark/test_benchmark.json:ronin_lstm/zero_shot/real_test/err_mm"
+      },
+      "par": {
+        "value": 0.21145899999999998,
+        "source": "latency_benchmark.json:models/ronin_lstm/parameters"
+      },
+      "lat": {
+        "value": 0.15013359375188884,
+        "source": "latency_benchmark.json:models/ronin_lstm/ms_per_window"
+      }
+    }
+  },
+  {
+    "method": "RoNIN-ResNet (adapted)",
+    "fixed_split_test": true,
+    "cells": {
+      "syn": {
+        "value": 25.04,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/zero_shot/synthetic_test/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.769,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/zero_shot/synthetic_test/r2"
+      },
+      "ood": {
+        "value": 42.36,
+        "source": "external_benchmark/zero_shot_synthetic_ood.json:ronin_resnet/synthetic_ood/err_mm"
+      },
+      "direct": {
+        "value": 128.22,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/zero_shot/real_test/err_mm"
+      },
+      "val": {
+        "value": 33.43,
+        "source": "external_benchmark/ronin_resnet_s0.json:fine_tuned_real_val/err_mm"
+      },
+      "test": {
+        "value": 44.74,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/fine_tuned/real_test/err_mm"
+      },
+      "test_r2": {
+        "value": 0.21,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/fine_tuned/real_test/r2"
+      },
+      "fast": {
+        "value": 74.14,
+        "source": "external_benchmark/test_benchmark.json:ronin_resnet/fine_tuned/real_test/fast_mm"
+      },
+      "ate": {
+        "value": 108.67,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/ronin_fine/ate_rmse_mm"
+      },
+      "par": {
+        "value": 3.847683,
+        "source": "latency_benchmark.json:models/ronin_resnet/parameters"
+      },
+      "lat": {
+        "value": 0.1319073437480256,
+        "source": "latency_benchmark.json:models/ronin_resnet/ms_per_window"
+      }
+    }
+  },
+  {
+    "method": "TLIO-ResNet (adapted)",
+    "fixed_split_test": true,
+    "cells": {
+      "syn": {
+        "value": 27.4,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/zero_shot/synthetic_test/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.726,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/zero_shot/synthetic_test/r2"
+      },
+      "ood": {
+        "value": 43.44,
+        "source": "external_benchmark/zero_shot_synthetic_ood.json:tlio_resnet/synthetic_ood/err_mm"
+      },
+      "direct": {
+        "value": 108.16,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/zero_shot/real_test/err_mm"
+      },
+      "val": {
+        "value": 33.9,
+        "source": "external_benchmark/tlio_resnet_s0.json:fine_tuned_real_val/err_mm"
+      },
+      "test": {
+        "value": 46.15,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/fine_tuned/real_test/err_mm"
+      },
+      "test_r2": {
+        "value": 0.185,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/fine_tuned/real_test/r2"
+      },
+      "fast": {
+        "value": 75.53,
+        "source": "external_benchmark/test_benchmark.json:tlio_resnet/fine_tuned/real_test/fast_mm"
+      },
+      "par": {
+        "value": 3.8492219999999997,
+        "source": "latency_benchmark.json:models/tlio_resnet/parameters"
+      },
+      "lat": {
+        "value": 0.13852887500434008,
+        "source": "latency_benchmark.json:models/tlio_resnet/ms_per_window"
+      }
+    }
+  },
+  {
+    "method": "IMUNet (adapted)",
+    "fixed_split_test": false,
+    "cells": {
+      "syn": {
+        "value": 21.89,
+        "source": "external_benchmark/test_benchmark.json:imunet/zero_shot/synthetic_test/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.812,
+        "source": "external_benchmark/test_benchmark.json:imunet/zero_shot/synthetic_test/r2"
+      },
+      "ood": {
+        "value": 37.2,
+        "source": "external_benchmark/zero_shot_synthetic_ood.json:imunet/synthetic_ood/err_mm"
+      },
+      "direct": {
+        "value": 118.78,
+        "source": "external_benchmark/test_benchmark.json:imunet/zero_shot/real_test/err_mm"
+      },
+      "val": {
+        "value": 31.9,
+        "source": "external_benchmark/optimized_ensemble.json:candidate_validation/imunet_real_ensemble/err_mm"
+      },
+      "cv": {
+        "value": 25.77,
+        "source": "session_cv_gate_benchmark.json:cv_calibration/cv_err_mm_imunet"
+      },
+      "test": {
+        "value": 42.93,
+        "source": "session_cv_gate_benchmark.json:test/imunet_cv_ensemble/err_mm"
+      },
+      "test_r2": {
+        "value": 0.25,
+        "source": "session_cv_gate_benchmark.json:test/imunet_cv_ensemble/r2"
+      },
+      "fast": {
+        "value": 74.2,
+        "source": "session_cv_gate_benchmark.json:test/imunet_cv_ensemble/fast_mm"
+      },
+      "ate": {
+        "value": 82.21,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/cv_imunet/ate_rmse_mm"
+      },
+      "par": {
+        "value": 2.8261789999999998,
+        "source": "latency_benchmark.json:models/imunet/parameters"
+      },
+      "lat": {
+        "value": 0.13886018749872164,
+        "source": "latency_benchmark.json:models/imunet/ms_per_window"
+      }
+    }
+  },
+  {
+    "method": "PhysNet (proposed)",
+    "fixed_split_test": false,
+    "cells": {
+      "syn": {
+        "value": 16.69,
+        "source": "physnet_v1/eval_synonly_181622.json:synthetic_test/err_mm"
+      },
+      "syn_r2": {
+        "value": 0.864,
+        "source": "physnet_v1/eval_synonly_181622.json:synthetic_test/r2"
+      },
+      "ood": {
+        "value": 34.27,
+        "source": "physnet_v1/eval_synonly_181622.json:synthetic_ood/err_mm"
+      },
+      "direct": {
+        "value": 90.19,
+        "source": "physnet_v1/eval_synonly_181622.json:test/err_mm"
+      },
+      "val": {
+        "value": 31.46,
+        "source": "physnet_v1/eval_wd1.json:val/err_mm"
+      },
+      "cv": {
+        "value": 25.17,
+        "source": "session_cv_benchmark.json:cv_calibration/cv_err_mm_physnet"
+      },
+      "test": {
+        "value": 44.39,
+        "source": "session_cv_benchmark.json:test/physnet_cv_ensemble/err_mm"
+      },
+      "test_r2": {
+        "value": 0.215,
+        "source": "session_cv_benchmark.json:test/physnet_cv_ensemble/r2"
+      },
+      "fast": {
+        "value": 75.15,
+        "source": "session_cv_benchmark.json:test/physnet_cv_ensemble/fast_mm"
+      },
+      "ate": {
+        "value": 87.79,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/cv_physnet/ate_rmse_mm"
+      },
+      "par": {
+        "value": 0.424039,
+        "source": "latency_benchmark.json:models/physnet/parameters"
+      },
+      "lat": {
+        "value": 0.1551697500053706,
+        "source": "latency_benchmark.json:models/physnet/ms_per_window"
+      }
+    }
+  },
+  {
+    "method": "PhysNet + stillness gate",
+    "fixed_split_test": false,
+    "cells": {
+      "val": {
+        "value": 29.67,
+        "source": "physnet_a/eval_ens_gate.json:val/err_mm"
+      },
+      "cv": {
+        "value": 24.95,
+        "source": "session_cv_gate_benchmark.json:cv_calibration/cv_err_mm_physnet"
+      },
+      "test": {
+        "value": 43.55,
+        "source": "session_cv_gate_benchmark.json:test/physnet_cv_ensemble/err_mm"
+      },
+      "test_r2": {
+        "value": 0.252,
+        "source": "session_cv_gate_benchmark.json:test/physnet_cv_ensemble/r2"
+      },
+      "fast": {
+        "value": 72.67,
+        "source": "session_cv_gate_benchmark.json:test/physnet_cv_ensemble/fast_mm"
+      },
+      "ate": {
+        "value": 109.82,
+        "source": "session_cv_gate_benchmark.json:test/trajectory_physnet/single_edge/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Equal blend, no gate",
+    "fixed_split_test": false,
+    "cells": {
+      "cv": {
+        "value": 24.65,
+        "source": "session_cv_benchmark.json:cv_calibration/cv_err_mm_equal_blend"
+      },
+      "test": {
+        "value": 42.6,
+        "source": "session_cv_benchmark.json:test/equal_blend_physnet_imunet/err_mm"
+      },
+      "test_r2": {
+        "value": 0.256,
+        "source": "session_cv_benchmark.json:test/equal_blend_physnet_imunet/r2"
+      },
+      "fast": {
+        "value": 74.29,
+        "source": "session_cv_benchmark.json:test/equal_blend_physnet_imunet/fast_mm"
+      },
+      "ate": {
+        "value": 81.06,
+        "source": "session_cv_benchmark.json:test/trajectory_equal_blend/single_edge/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Calibrated blend, no gate",
+    "fixed_split_test": false,
+    "cells": {
+      "cv": {
+        "value": 24.62,
+        "source": "session_cv_benchmark.json:cv_calibration/cv_err_mm_calibrated"
+      },
+      "test": {
+        "value": 42.68,
+        "source": "session_cv_benchmark.json:test/cv_calibrated_blend/err_mm"
+      },
+      "test_r2": {
+        "value": 0.257,
+        "source": "session_cv_benchmark.json:test/cv_calibrated_blend/r2"
+      },
+      "fast": {
+        "value": 73.8,
+        "source": "session_cv_benchmark.json:test/cv_calibrated_blend/fast_mm"
+      },
+      "ate": {
+        "value": 80.7,
+        "source": "trajectory_comparison/summary.json:real_test/metrics/cv_cv_calibrated_blend/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Equal blend, gate",
+    "fixed_split_test": false,
+    "cells": {
+      "cv": {
+        "value": 24.58,
+        "source": "session_cv_gate_benchmark.json:cv_calibration/cv_err_mm_equal_blend"
+      },
+      "test": {
+        "value": 42.21,
+        "source": "session_cv_gate_benchmark.json:test/equal_blend_physnet_imunet/err_mm"
+      },
+      "test_r2": {
+        "value": 0.276,
+        "source": "session_cv_gate_benchmark.json:test/equal_blend_physnet_imunet/r2"
+      },
+      "fast": {
+        "value": 72.97,
+        "source": "session_cv_gate_benchmark.json:test/equal_blend_physnet_imunet/fast_mm"
+      },
+      "ate": {
+        "value": 90.78,
+        "source": "session_cv_gate_benchmark.json:test/trajectory_equal_blend/single_edge/ate_rmse_mm"
+      }
+    }
+  },
+  {
+    "method": "Calibrated blend, gate",
+    "fixed_split_test": false,
+    "cells": {
+      "cv": {
+        "value": 24.51,
+        "source": "session_cv_gate_benchmark.json:cv_calibration/cv_err_mm_calibrated"
+      },
+      "test": {
+        "value": 42.29,
+        "source": "session_cv_gate_benchmark.json:test/cv_calibrated_blend/err_mm"
+      },
+      "test_r2": {
+        "value": 0.279,
+        "source": "session_cv_gate_benchmark.json:test/cv_calibrated_blend/r2"
+      },
+      "fast": {
+        "value": 72.1,
+        "source": "session_cv_gate_benchmark.json:test/cv_calibrated_blend/fast_mm"
+      }
+    }
+  }
+]

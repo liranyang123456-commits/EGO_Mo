@@ -84,6 +84,8 @@ def main() -> None:
     ap.add_argument("--split-file", default="trajectory_split_20260924.json")
     ap.add_argument("--test", action="store_true", help="also open the sealed test sessions")
     ap.add_argument("--output", type=Path, default=DATA / "uncertainty_calibration.json")
+    ap.add_argument("--cross-session", action="store_true",
+                    help="fit the scale on one validation recording, score the other")
     args = ap.parse_args()
     api.LABELS, api.TARGET_S = "pose_gt_raw", args.horizon
     length = int(round((1.5 * args.horizon + 2 * args.context) * phys.HZ))
@@ -109,6 +111,32 @@ def main() -> None:
                                                 f"rescaled by {scale} (fitted on validation)")
         print(json.dumps({group: report[group]}, ensure_ascii=False, indent=2), flush=True)
     report["validation_scale"] = scale
+    if args.cross_session and len(split["val"]) > 1:
+        # Out-of-sample check: the scale is fitted on one validation recording
+        # and the coverage is scored on the other.
+        parts = {n: collect(models, [n], args.context, args.horizon, length, device)
+                 for n in split["val"]}
+        z1, z2, cross = [], [], {}
+        for held in split["val"]:
+            fit = [n for n in split["val"] if n != held]
+            zs = []
+            for n in fit:
+                d, p, a, e = parts[n]
+                zs.append(((p - d["y"]) / np.sqrt(np.maximum(a + e, 1e-12))).ravel())
+            k = float(np.sqrt(np.mean(np.concatenate(zs) ** 2)))
+            d, p, a, e = parts[held]
+            z = (p - d["y"]) / np.sqrt(np.maximum((a + e) * k ** 2, 1e-12))
+            z1.append((np.abs(z) <= 1).ravel())
+            z2.append((np.abs(z) <= 2).ravel())
+            cross[held] = {"scale_from_other": round(k, 3),
+                           "coverage_1sigma": round(float((np.abs(z) <= 1).mean()), 3),
+                           "coverage_2sigma": round(float((np.abs(z) <= 2).mean()), 3)}
+        report["cross_session"] = {
+            "per_session": cross,
+            "pooled_coverage_1sigma": round(float(np.concatenate(z1).mean()), 3),
+            "pooled_coverage_2sigma": round(float(np.concatenate(z2).mean()), 3),
+        }
+        print(json.dumps({"cross_session": report["cross_session"]}, indent=2), flush=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
 

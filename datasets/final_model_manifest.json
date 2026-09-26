@@ -1,0 +1,242 @@
+{
+  "status": "FROZEN_BEFORE_PROSPECTIVE_TEST",
+  "protocol_id": "85393aba60ecdc40",
+  "created_utc": "2026-09-26T03:20:56+00:00",
+  "models_and_configs": [
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015507_s0.pt",
+      "bytes": 1707218,
+      "sha256": "fbc1069020cbc479c9a22968e822f35a3e324bcf63bae19a39e4b5e7c2976727"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015507_s1.pt",
+      "bytes": 1707218,
+      "sha256": "15c7d178e408c0bc6bcdf7b980f1cb212939798779d40329b7d7e8a268efceb5"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015629_s0.pt",
+      "bytes": 1707218,
+      "sha256": "fe8b70a51a3bd38b29a5ac607ed7bdbab1dc89428eb96e51b44cbf263ae007ad"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015629_s1.pt",
+      "bytes": 1707218,
+      "sha256": "ecadd2eca630c81f7f0c59dcc1268ab168564d1cfc1b41f9d5d277a2b3ed0876"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015918_s0.pt",
+      "bytes": 1707218,
+      "sha256": "5341cf57236f414b3cd5697173d6bdb74a2035d748d04c10dbcb53410b079a44"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_015918_s1.pt",
+      "bytes": 1707218,
+      "sha256": "9e0903c0bb4e9a698056a48639e2a13653106877e8d03d6ba8eddfb8fc52760c"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_020132_s0.pt",
+      "bytes": 1707218,
+      "sha256": "3679a7f50b781770aa6a236ab82d8e14aef3e0142ce01f7ee27798cd8d743804"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_020132_s1.pt",
+      "bytes": 1707218,
+      "sha256": "1aa3914124b6d3832e891b6e0899cf9a3babfdaa0737c26357bf1c26fb4e075e"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_020407_s0.pt",
+      "bytes": 1707218,
+      "sha256": "85ad1e57e62f2c0b791a1a4772abbeed3a98a36548c25ec1ebfc19ab5b6839f9"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_020407_s1.pt",
+      "bytes": 1707218,
+      "sha256": "481ef0a8f8bbe60cc38fca74cc280d3dcf27987193be8d09a09867f8a92a3014"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_023241_s0.pt",
+      "bytes": 1707218,
+      "sha256": "7e1e687d14eaee58902e2e3d4a9fb928e0d13568e64e2fb19c04c06a34cf3eec"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260923_023241_s1.pt",
+      "bytes": 1707218,
+      "sha256": "e7124f05f5dfa4d75f2c3b64fe2e0978db63f28e84d456676b5196503714e8ca"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260924_143156_s0.pt",
+      "bytes": 1707218,
+      "sha256": "ad6549d3f81f367c4dc6e81bc558c7029ccca1cbada8f7017221ba8e18d03bb2"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260924_143156_s1.pt",
+      "bytes": 1707218,
+      "sha256": "bb00b8dcf300eb3e4da4c09504ffe08fb7cb60c9c2c5626be527263e504fa35a"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260924_144019_s0.pt",
+      "bytes": 1707218,
+      "sha256": "ffcf71c8c139566699186d220b8c8b4f8540c4e1c452292216a02311ca6990c4"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\physnet_cv\\physnet_cvg_traj_20260924_144019_s1.pt",
+      "bytes": 1707218,
+      "sha256": "e73d2c2d9dea0c9091e9bba919a981f9f145ee555c23285e4121000bbd4d1ed9"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015507_s0.pt",
+      "bytes": 11431737,
+      "sha256": "830ccf215f5e1fb8213dbc9224a576f802f61adf4d77e5a9ea1ae6825ea8fc75"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015507_s1.pt",
+      "bytes": 11431737,
+      "sha256": "17b1bc707e0d938ef59dd8608ee3f9512232ef6ca66305ec5e248df63841ab27"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015629_s0.pt",
+      "bytes": 11431737,
+      "sha256": "006e4e8cf454b06de76c011ee79416632b2b4e0d36e2b39b5befb3d00ef5f134"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015629_s1.pt",
+      "bytes": 11431737,
+      "sha256": "1cc1d4c9b226cd7b210a67ff3db1637992b0503384e33954fca3153c3033a9e1"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015918_s0.pt",
+      "bytes": 11431737,
+      "sha256": "9dd20bc9feff86d2eee400d9cec811c3cbc609d6eb9cd393dff15de3c9fc7dd6"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_015918_s1.pt",
+      "bytes": 11431737,
+      "sha256": "b777499607629c2cc8e71406aa3ef3a1d988c948abe328413ca54bbf61f27dc4"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_020132_s0.pt",
+      "bytes": 11431737,
+      "sha256": "134785871ab8a9601b7aa3cab1b59d2e3dd6786f7f7b95cdb21bb3dd62f45ae6"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_020132_s1.pt",
+      "bytes": 11431737,
+      "sha256": "63916c60ab79b49f973599041ac161e177b0a3a4b4ee82c4e36d0cd220a96af8"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_020407_s0.pt",
+      "bytes": 11431737,
+      "sha256": "6af5b4fdf34aa2e045c239e38753f120a053785a8a9416bc24d4f4bb63301975"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_020407_s1.pt",
+      "bytes": 11431737,
+      "sha256": "edc525d65de5a12df93691a92c6bf9406079aa9d479a13ac8837f026fb1f5215"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_023241_s0.pt",
+      "bytes": 11431737,
+      "sha256": "3ad7f32c7b6768e479577dd1f3b74cbfd4a8f23445ef75093541670b03a210bb"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260923_023241_s1.pt",
+      "bytes": 11431737,
+      "sha256": "7a64c8d22a4e635a81dabad72827e41fa7137f532c370111fb91220f33d62473"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260924_143156_s0.pt",
+      "bytes": 11431737,
+      "sha256": "b12dca7ce132f57e65625a90bb002249420aa2b718466616f20f6ab6db36da59"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260924_143156_s1.pt",
+      "bytes": 11431737,
+      "sha256": "0d06e01c41c92e987912e754ad890228857449d0915d5d845f7789bff9dbd01b"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260924_144019_s0.pt",
+      "bytes": 11431737,
+      "sha256": "12206caad34a41e4b36924d990fe144571d2d2775beb46e4f3079dac55c02508"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\external_benchmark\\imunet_cvx_traj_20260924_144019_s1.pt",
+      "bytes": 11431737,
+      "sha256": "9a9fc9e28aafa0a00779f5d84920094916092ca14f6963952939373cf09ff761"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\train_physnet.py",
+      "bytes": 56383,
+      "sha256": "23e2b023b577b850b0b8de87439563e2c9176ef74d5719716ef57a56886a277f"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\train_seq.py",
+      "bytes": 10848,
+      "sha256": "f36b67e0fc19ae541a2b54ab1d7b4b4527e469909c49da650998126113a6ea3a"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\eval_session_cv.py",
+      "bytes": 14816,
+      "sha256": "3cede2a44f8c9cf5f588e48bada604dbeb73906d6dcfbd68b2a555176a4aac25"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\train_external_architectures.py",
+      "bytes": 11632,
+      "sha256": "e0de47fa04a4b2cef7cb2d3670f39f2cf8bb03cee21a5f5ad396155d5adacef0"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\build_trajectory_comparison.py",
+      "bytes": 9235,
+      "sha256": "1ea5c419502defe6039e599ec29f57da27792a19650bd385cba0116782ab851b"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\build_pose_gt.py",
+      "bytes": 8139,
+      "sha256": "b47262b56816501a7e7a08edb67edf7c37dbaaec0f5d79bc20fc45016b312347"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\export_gt_raw.py",
+      "bytes": 1566,
+      "sha256": "f5ff3f498a50f5606b0feb625a7a12ff07dcb2e72b6da0d12fc378596b9362ba"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\prepare_trajectory_data.py",
+      "bytes": 9224,
+      "sha256": "e62d8cb101c79284a6d724912738fa44022a44bc6acdbba3eec092c8e421e544"
+    },
+    {
+      "path": "E:\\EGO_Mo\\tools\\final_prospective_evaluation.py",
+      "bytes": 8649,
+      "sha256": "bc5bc6335b2572269e14586c1b4b9e73b8213de69e49981c3f76839efd86b904"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\session_cv_gate_benchmark.json",
+      "bytes": 10406,
+      "sha256": "603646eec11c76875e234841f28fa33e16754a6f395ac1d54b616c27b448ac8c"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\uncertainty_val.json",
+      "bytes": 1761,
+      "sha256": "9c378b0b4b3cc71068b34158758785f3936764ed26edee7d4aad52d296936a64"
+    },
+    {
+      "path": "E:\\EGO_Mo\\datasets\\study_protocol_v2.lock.json",
+      "bytes": 3471,
+      "sha256": "12d6f2bc49d1306f751c5dd0c887ee3a59d17506ed8ae0ae7af2f63b48104bbd"
+    }
+  ],
+  "analysis": {
+    "primary_method_claim": "pooled prospective-test mean displacement error",
+    "significance": "paired 3-s block-bootstrap CI excludes zero",
+    "sota_claim": "only protocol-matched evaluated methods; no cross-protocol official-score claim",
+    "test_reuse": "one final evaluation bundle; a correction requires a signed amendment and new test data"
+  },
+  "metrics": [
+    "mean 3-s Euclidean displacement error (mm)",
+    "multivariate R2",
+    "fastest-reference-third error (mm)",
+    "translation-trajectory ATE RMSE (mm)",
+    "1-sigma and 2-sigma interval coverage",
+    "3-s block-bootstrap paired 95% confidence interval"
+  ],
+  "manifest_sha256": "e50df3c997d46e7ad1c358b72265f7b1400c3f804901bb2543d36a7d994362af"
+}

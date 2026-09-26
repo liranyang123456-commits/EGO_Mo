@@ -1,0 +1,28 @@
+{
+  "architecture": "imunet",
+  "seed": 0,
+  "protocol": "adapted 6-axis to 3-D 3-s displacement",
+  "real_only_real_val": {
+    "n": 1302,
+    "zero_mm": 15.77,
+    "err_mm": 17.6,
+    "fast_mm": 39.1,
+    "fast_zero_mm": 38.34,
+    "pred_med_mm": 7.64,
+    "r2": -0.188
+  },
+  "holdout": "traj_20260923_015629",
+  "train_sessions": [
+    "traj_20260923_015507",
+    "traj_20260923_015918",
+    "traj_20260923_020132",
+    "traj_20260923_020407",
+    "traj_20260924_143156",
+    "traj_20260923_023241",
+    "traj_20260924_144019",
+    "rigid_20260924_123958",
+    "rigid_20260924_124243",
+    "rigid_20260924_140510",
+    "rigid_20260924_142902"
+  ]
+}
