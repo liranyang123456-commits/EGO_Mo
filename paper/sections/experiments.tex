@@ -1,0 +1,110 @@
+\section{Experimental Protocol}
+\label{sec:experiments}
+
+\subsection{Data Governance}
+Table~\ref{tab:data} gives the complete data inventory at the selected 3-s
+horizon. Splits are by recording, not by overlapping windows. In the fixed
+split, hyperparameters and blend weights use only the two real validation
+recordings; the real test recording is excluded from gradient fitting and the
+initial fixed-split architecture selection. Multiple post-selection
+diagnostics (cross-validation ensembles, stillness gating and blends) were
+subsequently evaluated on the same recording, so these comparisons are
+exploratory rather than a strict one-shot confirmatory test. In the
+leave-one-session-out protocol, every one of the eight non-test recordings is
+held out in turn; the four rigidity recordings that passed the mount test
+(rotation-dominant motion with still phases, 2723 pairs) are training-only
+in every fold and never scored. Synthetic seeds are disjoint across train,
+validation, test, and OOD.
+
+\begin{table}[t]
+\centering
+\caption{Datasets at the selected 3-s horizon with 2-s context.}
+\label{tab:data}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrl}
+\toprule
+Dataset & Seq. & Duration & Pairs & Role \\
+\midrule
+Real train & 6 & 495.5~s & 6754 & Fit (fixed split) \\
+Real validation & 2 & 260.8~s & 1436 & Selection (fixed split) \\
+Real train$+$validation & 8 & 756.3~s & 8190 & 8 CV folds \\
+Real extra-train (rigid) & 4 & 342~s & 2723 & Training only \\
+Real test & 1 & 115.2~s & 647 & held-out test \\
+Synthetic train & 60 & 1200~s & 7200$^\ast$ & Pretrain / direct \\
+Synthetic validation & 15 & 300~s & 1800$^\ast$ & Twin audit \\
+Synthetic test & 15 & 300~s & 2400 & Test \\
+Synthetic OOD & 5 & 100~s & 800 & Stress test \\
+\bottomrule
+\multicolumn{5}{l}{$^\ast$Pairs capped per sequence to balance motion families.}
+\end{tabular}
+\end{table}
+
+\subsection{Baselines, Measurements, and Metrics}
+The nonlearned baselines are zero motion, zero-initial-velocity double
+integration, and ridge regression on acceleration/gyroscope summary features.
+We adapt official-source architectures from RoNIN (ResNet and
+LSTM)~\cite{yan2020ronin}, TLIO (ResNet mean head)~\cite{liu2020tlio}, and
+IMUNet (depthwise-separable CNN)~\cite{zeinali2024imunet}. Their input/output
+layers are changed from pedestrian 2-D velocity to the common six-axis, 3-D,
+3-s displacement protocol. These results are denoted \emph{adapted/retrained};
+they are not official pretrained-model scores. Official repositories contain
+no directly compatible weights, and TLIO explicitly requires retraining on a
+user-generated dataset. Our earlier Conv--BiGRU estimator on demeaned
+body-frame channels is kept as an ablation of the representation.
+
+Every architecture is evaluated under the same three regimes: synthetic
+direct, real-only, and synthetic-pretrained/real-fine-tuned. IMUNet, the
+strongest public architecture on this protocol, is additionally trained
+under the leave-one-session-out protocol with the same extra-train data as
+PhysNet (two seeds per fold, sixteen models each).
+Parameter counts include all trainable parameters. Latency is averaged per
+window after warm-up on an NVIDIA GeForce RTX 5090 Laptop GPU with batch size
+16 and CUDA synchronization; it is a relative architecture comparison, not an
+embedded-device measurement.
+
+\paragraph{Estimator-independent measurements.}
+Two experiments characterize the protocol rather than a model and use only
+reference data and the raw inertial stream. The information-limit measurement
+computes, for every pair, the mean camera velocity over the context from the
+reference positions, and compares $\bar{\bf v}\Delta t$ with the residual of
+the estimator and with its own magnitude as a function of context length. The
+zero-velocity bound detects still phases in the reference (speed below
+3~mm/s for at least 0.4~s), integrates the gravity-compensated acceleration
+between consecutive phases with the velocity pinned at both ends, solves the
+one constant bias per interval that this pinning identifies, and compares the
+result with the reference displacement; the attitude is taken either from the
+reference (upper bound) or from the integrated gyroscope (operational case).
+Both are reported per interval length so that the crossover between
+model-based and learned estimation is visible.
+
+\paragraph{Metrics.}
+Local displacement error is
+\begin{equation}
+ e_p=\frac{1}{N}\sum_{n=1}^{N}
+ \|\widehat{\Delta{\bf p}}_n-\Delta{\bf p}_n\|_2 ,
+\end{equation}
+where $N$ is the number of displacement pairs. We also report the
+multivariate coefficient of determination
+$R^2=1-\sum_n\|\widehat{\Delta{\bf p}}_n-\Delta{\bf p}_n\|_2^2/
+\sum_n\|\Delta{\bf p}_n-\bar{\Delta{\bf p}}\|_2^2$, where
+$\bar{\Delta{\bf p}}=N^{-1}\sum_n\Delta{\bf p}_n$; the error in the fastest
+third, defined by the top third of reference displacement magnitudes; and the median
+predicted magnitude (a shrinkage indicator). Because overlapping windows are
+strongly correlated, confidence intervals on the held-out test use a block
+bootstrap over non-overlapping 3-s blocks (2000 resamples). Trajectory error
+uses anchor-only absolute trajectory error
+$\mathrm{ATE}=[M^{-1}\sum_{i=1}^{M}\|\hat{\bf p}_i-{\bf p}_i\|_2^2]^{1/2}$
+over the $M$ finite pose-graph nodes; no post-hoc rigid alignment is applied
+because each connected component already has one metric anchor. For
+the digital twin, the audit reports ideal/noisy kinematic consistency,
+timestamp statistics, corner detection rate, corner-to-exact-projection RMSE,
+and split-seed overlap.
+
+\paragraph{Ablations.}
+All design choices are made on the fixed validation split only: for the
+earlier Conv--BiGRU, context and horizon sweeps, loss weighting, pooling,
+camera-aligned axes, twin version and replay ratio; for PhysNet, with two
+seeds each, the variants listed in Table~\ref{tab:ablation}.
+Section~\ref{sec:results} reports every post-selection evaluation performed on
+the held-out recording.

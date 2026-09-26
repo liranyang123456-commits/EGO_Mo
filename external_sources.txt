@@ -1,0 +1,6 @@
+Third-party reference implementations used for the adapted baselines (clone into external/):
+duet   https://github.com/kk9six/duet.git         89b480d
+imunet https://github.com/BehnamZeinali/IMUNet.git c57f14d
+ronin  https://github.com/Sachini/ronin.git        805b7f0
+tlio   https://github.com/CathIAS/TLIO.git          d7051c4
+

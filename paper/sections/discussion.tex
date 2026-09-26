@@ -1,0 +1,60 @@
+\section{Discussion}
+
+\subsection{Findings and Measurement Implications}
+\emph{Reference (RQ1).} The board is highly repeatable when static, but
+dynamic quality depends on frame rate and axis, and a small reprojection
+residual does not exclude a translation error caused by tilt. It is suitable
+for controlled relative comparisons; without an independent tracker it is
+not an externally traceable ground truth.
+
+\emph{Information and acquisition (RQ2--RQ3).} The decomposition in
+(\ref{eq:decomp}) explains why more than forty variants show no consistent gain beyond the seed spread: regressing out a low-frequency velocity proxy reduces mean error by 16\%
+(about 30\% in squared error), while longer context and session-level fusion
+do not identify the absolute velocity. A confirmed pause supplies a boundary
+condition, but the experiment contains only one sub-2-s interval and pooled
+error already reaches 54--104~mm at 2--4~s. Constant tilt can be absorbed by
+the fitted constant bias; the rapid degradation instead points to
+time-varying attitude error and nonconstant sensor errors. Because the present
+recordings contain only 0.5--2.3 pauses per minute, the revised protocol
+specifies a 1--2-s pause every 10--15~s and treats attitude quality as the
+second controllable factor.
+
+\emph{Estimator and twin (RQ4).} Anchor-frame pre-integration and an integrated
+velocity stream reach the observed limit with fewer parameters and less
+training data than the adapted public architectures. The result on the held-out
+recording remains a statistical tie with IMUNet, so the evidence supports
+efficiency and data economy, not an unconditional real-data accuracy claim.
+Correcting the twin's board-to-gravity attitude and replaying real training
+motion enabled useful direct transfer, but did not improve the fine-tuned
+model; the remaining domain gap is more consistent with unmodelled sensor
+latency, vibration, scale/misalignment and temperature effects.
+
+\paragraph{Implications.}
+Mount rigidity must be tested over increments long enough to exceed PnP noise,
+and the input sensor must not be used to correct its own labels. Data curation
+had a larger effect than any architecture change: excluding two recordings
+that failed the rigidity test reduced validation error materially. A single
+115-s test recording contains only about 38 independent 3-s blocks, so its
+$\pm3$-mm bootstrap interval cannot resolve a 1--2-mm method difference.
+Finally, the stillness-conditioned gate improved local error while worsening
+trajectory ATE through shrinkage; both metrics are needed to select an
+operating point.
+
+\subsection{Limitations and Next Measurements}
+The board pitch and flatness tolerance, the intrinsic covariance, rolling
+shutter and the current stereo extrinsic are not part of a full GUM budget,
+and the reference has not been compared with an independent tracker. The real
+dataset has nine trajectory and four rigidity recordings and one held-out test
+recording. The next acquisition round, defined in the protocol shipped with
+the code, records three-minute 10-fps sessions with 10--20~cm travel, mixed
+rotation and a 1--2-s pause every 10--15~s, at least four independent,
+prospectively sealed
+test sessions on different days and operators, and a daily rotation/still
+recording that doubles as mount test and training data. Reference orientation
+is used in the translation-only trajectory comparison; a complete inertial
+pose stream must fuse predicted translation with gyroscope attitude and
+propagate its covariance. Because the usable length of a zero-velocity
+interval is limited by attitude rather than by the accelerometer, improving
+the attitude---by estimating the gyroscope bias against the still phases, or
+by a higher-grade unit---is the second lever on the dominant error term and
+the natural companion to a higher pause rate.

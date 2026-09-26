@@ -1,0 +1,93 @@
+\section{Physical Measurement System}
+\label{sec:system}
+
+\subsection{Instrumentation, Timing, and Calibration}
+The instrument comprises a two-view camera with an endoscopic field of view,
+a camera-mounted WitMotion USB IMU, a GP050 board, and a second WitMotion BLE
+IMU fixed to the board. The USB unit measures the camera rigid body; the BLE
+unit is not a camera input and only verifies that the reference board is
+stationary. Table~\ref{tab:instrument} lists the parameters entering the
+measurement model together with their provenance.
+
+\begin{table}[t]
+\centering
+\caption{Instrument parameters and measured provenance.}
+\label{tab:instrument}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lll}
+\toprule
+Quantity & Value & Source \\
+\midrule
+Board inner corners & $11\times8$ & GP050 specification \\
+Square pitch & 3~mm & Board specification \\
+Left intrinsic RMS & 0.243~px & 80 calibration images \\
+Right intrinsic RMS & 0.284~px & 80 calibration images \\
+Nominal baseline & 46.5~mm & Mechanical measurement \\
+USB IMU rate & 200.0~Hz & Session timestamps \\
+BLE IMU rate & 187.1--188.0~Hz & Session timestamps \\
+Camera delay & 14--90~ms & Motion correlation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Concurrent acquisition and timing.}
+Camera grabbing, USB decoding, BLE notification processing, board detection,
+and disk writing execute in separate threads pinned to distinct logical CPU
+cores. The accepted recordings have a median USB interval near 5.0~ms and no
+gap above 20~ms. Camera times are host-clock arrival times and include
+exposure and USB delivery. A per-recording delay is estimated by maximizing
+correlation between image-difference and gyroscope magnitudes. Interpolation
+is used when an IMU value is required on a regular 200-Hz grid; frame metadata
+records the latest sample at or before the delay-corrected frame time.
+
+\paragraph{Calibration.}
+Both cameras are calibrated at $1280\times720$ using Zhang's
+method~\cite{zhang2000flexible}; matrices are scaled for other resolutions
+while distortion is retained. IMU-to-camera rotation is estimated in a
+dedicated three-axis recording by Wahba/Kabsch fitting on one half of
+one-second increments and evaluated on the other half
+(Section~\ref{sec:imu}). A fixed-intrinsic stereo fit on quasi-static frames
+of the intrinsic recording gives a 46.3-mm baseline (nominal 46.5~mm) and a
+$10.2^\circ$ roll between the two cameras, with 0.58-px reprojection RMS. The
+cameras are not hardware-synchronized, and the fit does not meet our held-out
+acceptance limits; right images therefore support rendering and acquisition
+checks but not the reference pose.
+
+\subsection{Real Dataset and Audit}
+The split contains nine complete trajectory recordings totaling 871.5~s:
+six training recordings (495.5~s), two validation recordings (260.8~s), and
+one held-out test recording (115.2~s). Acceptance requires at least 40~s,
+USB rate $\geq150$~Hz with at most five gaps above 50~ms, BLE rate
+$\geq120$~Hz, and left images for at least 85\% of frames. No window from one
+recording appears in another split. At the selected 3-s horizon, train,
+validation, and test contain 6754, 1436, and 647 pairs, respectively. Four
+rigidity recordings (342~s) that passed the mount test also carry chessboard
+poses; they contain nodding, yawing, rolling, and still phases with little
+translation and are used as training-only data in the cross-validation
+protocol. Two rigidity recordings made before the mount was secured fail the
+test and are excluded from every split.
+
+Fig.~\ref{fig:dataset} shows the corpus qualitatively. The board occupies a
+small part of the endoscopic field of view at the working distance, which is
+why the corner-noise propagation of Section~\ref{sec:reference} matters;
+panels (e) and (f) show the 200-Hz stream together with the reference speed
+that defines the stillness labels, and panel (g) shows that the measurand
+distribution differs between splits---the held-out test recording is the fastest
+of the nine, with a mean 3-s displacement of 50~mm against 28~mm for the
+training recordings, so its zero-motion baseline is correspondingly larger.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\columnwidth]{dataset.pdf}
+\caption{The corpus. Each of (a)--(c) is a four-frame montage from a different
+real acquisition domain (30-Hz trajectory, 10-Hz trajectory and
+rotation/still recording), cropped around the board with detected inner
+corners in green; (d) four Blender/OpenCV renders spanning synthetic
+configurations. (e) Demeaned specific force
+and angular-rate magnitude at 200~Hz, with the reference-confirmed pauses
+shaded; (f) the reference speed of the same interval and the two thresholds
+that define the stillness labels; (g) the distribution of the measurand over
+the splits.}
+\label{fig:dataset}
+\end{figure}

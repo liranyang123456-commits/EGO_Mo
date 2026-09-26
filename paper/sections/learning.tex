@@ -1,0 +1,165 @@
+\section{Physics-Structured Inertial Displacement Network}
+\label{sec:learning}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\columnwidth]{architecture.pdf}
+\caption{PhysNet. The gyroscope and extrinsic rotation are applied
+analytically, and the valid-sample window mean removes the slowly varying
+gravity-plus-mean-acceleration component before the network sees the data, so the
+trunk only has to supply what is not deterministic. The three heads produce a
+velocity stream, a stillness probability that gates that stream,
+and a variance; the displacement stream is their integral and is anchored at
+$t_a$ by construction. Supervision is dense: every usable chessboard frame
+inside the window contributes, not only the 3-s target.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Physics-Structured Sequence Model}
+Public inertial networks~\cite{yan2020ronin,liu2020tlio,zeinali2024imunet}
+consume body-frame specific force and angular rate and must learn orientation
+integration, gravity separation, double integration and the camera--IMU lever
+arm implicitly. These operations have known analytical structure once the
+extrinsic rotation, relative attitude and a gravity estimate are supplied;
+they are not inferred from the gyroscope alone. With a few hundred seconds of
+reference motion, learning all of them implicitly is wasteful, so PhysNet
+(Fig.~\ref{fig:architecture}) computes them explicitly and spends network
+capacity only on what is not deterministic: initial velocity, bias and motion
+priors.
+
+For a pair $(t_a,t_b)$ the input window is $[t_a-c,\,t_b+c]$ resampled to
+200~Hz, with $c=2$~s. Gyroscope increments are integrated from the anchor
+$t_a$ in both directions after removing the still-phase bias, giving
+${\bf R}_{I_aI_k}$ for every sample $k$. With the convention of
+Section~\ref{sec:framework}, the relative camera rotation used below is
+${\bf R}_{a\leftarrow k}\equiv{\bf R}_{C_aC_k}
+={\bf R}_{CI}{\bf R}_{I_aI_k}{\bf R}_{CI}^{\top}$. The start camera
+$C_a$ is also the target frame of
+(\ref{eq:target}). Specific force is rotated into $C_a$,
+${\bf f}^{C_a}_k={\bf R}_{a\leftarrow k}{\bf R}_{CI}\tilde{\bf f}_{I,k}$.
+The valid-sample window mean $\hat{\boldsymbol\mu}_{f}$ is the empirical
+window-mean specific force, so
+$\boldsymbol\ell_k={\bf f}^{C_a}_k-\hat{\boldsymbol\mu}_{f}$ is the dynamic component used
+by the network. This is demeaning, not an unbiased gravity compensation:
+$\hat{\boldsymbol\mu}_{f}$ contains both the gravity reaction and any nonzero
+mean translation acceleration, and both are removed. Its first and second
+signed cumulative sums from the anchor are the strapdown velocity and
+position pre-integrals. The 24 input channels are
+$\boldsymbol\ell_k$ (3), angular rate mapped from $I_k$ into its instantaneous
+camera frame $C_k$ by ${\bf R}_{CI}$ (3), the first two columns of
+${\bf R}_{a\leftarrow k}$, the two pre-integrals, the gravity direction, the
+pair mask, a validity mask, and a normalized time coordinate. All channels
+are standardized with training statistics. These channels are computed from
+the six-axis IMU stream and timestamps alone; chessboard images and poses are
+used only to form training targets and evaluation metrics and are absent at
+inference.
+
+\paragraph{Velocity integration and dense supervision.}
+Two strided convolutions reduce the sequence to 50~Hz, five dilated residual
+convolutions and a bidirectional GRU provide context, and a two-layer head
+outputs a velocity stream $\hat{\bf v}_k$ (0.42~M parameters). The
+displacement stream is the discrete integral
+\begin{equation}
+ \hat{\bf d}_k={\cal I}_{a\rightarrow k}(\hat{\bf v})
+ +({\bf R}_{a\leftarrow k}-{\bf I})\,\boldsymbol\lambda ,\qquad
+ \hat{\bf d}_a\equiv{\bf 0},
+ \label{eq:stream}
+\end{equation}
+where ${\cal I}_{a\rightarrow k}$ is the signed rectangular sum at sampling
+rate $f_s$ (forward for $k>a$ and negative backward for $k<a$), and
+$\boldsymbol\lambda$ is the lever arm from the IMU origin to the camera
+centre expressed in the camera frame
+($\boldsymbol\lambda=-{\bf r}_{CI}^{C}$ under the twin convention).
+Every usable chessboard frame $m$ inside the
+window supervises the stream at its own time,
+\begin{equation}
+ {\cal L}=\rho\big(\hat{\bf d}(t_b)-\Delta{\bf p}_{ab}\big)
+ +\frac{1}{|{\cal M}|}\sum_{m\in{\cal M}}
+ \rho\big(\hat{\bf d}(t_m)-\Delta{\bf p}_{am}\big),
+\end{equation}
+with $\Delta{\bf p}_{am}$ the reference displacement from $t_a$ to $t_m$ by
+(\ref{eq:target}) and $\rho$ the smooth-$L_1$ loss on residuals expressed in
+centimetres. The first term deliberately gives $t_b$ one additional unit of
+weight; $t_b$ also appears in the dense sum when $t_b\in{\cal M}$. A 7-s
+valid window contains on average 145 supervised frames instead of one end point, which turns the
+regression into a sequence-to-sequence problem and makes overlapping windows
+mutually consistent. Augmentation applies per-window bias and white noise to
+both sensors, a small random extrinsic rotation, and optionally an exact
+time warp (acceleration scaled by $s^2$, rate by $s$) and translation
+amplitude scaling.
+
+\subsection{Stillness Detection and Velocity Gating}
+The unobservable quantity in (\ref{eq:stream}) is the absolute velocity at the
+anchor: an accelerometer only determines velocity increments. A confirmed
+stationary phase supplies a zero-velocity boundary condition but remains
+subject to detection, attitude and bias errors. A second head on the shared
+features outputs a stillness logit $s_k$, supervised by the reference speed
+with a dead band---frames slower than 3~mm/s are labelled still, frames faster
+than 8~mm/s moving, and the band between is not supervised, which keeps
+boundary noise out of the classifier. The detected probability then enters the
+kinematics structurally,
+\begin{equation}
+ \hat{\bf v}_k \leftarrow \hat{\bf v}_k\,[1-\sigma(s_k)] ,
+ \label{eq:gate}
+\end{equation}
+This is a soft stillness-conditioned gate rather than a Kalman-style state
+reset; it suppresses displacement accumulation when the instrument is likely
+to be still. We also
+tested a two-pass variant that re-anchors the strapdown velocity at the
+detected still samples and feeds the resulting absolute-velocity estimate back
+as an input channel; it helps on its own but not in combination with
+(\ref{eq:gate}) and is not adopted (Table~\ref{tab:ablation}).
+
+A pseudo-measurement also requires an uncertainty statement, not only an
+aggregate error, so a third head predicts the per-axis log-variance
+$\boldsymbol\eta_k$ of the displacement stream (the implied variance is in
+cm$^2$). For displacement residuals
+${\bf r}=\hat{\bf d}-\Delta{\bf p}$ expressed in centimetres, it minimizes
+$\frac{1}{2}\sum_{q\in\{x,y,z\}}[r_q^2e^{-\eta_q}+\eta_q]$ over the same
+dense frames. With
+$\boldsymbol\sigma_k^2=\exp(\boldsymbol\eta_k)$ the aleatoric variance and
+${\bf s}_{\rm ens}^2$ the component-wise sample variance of the ensemble, the
+reported component-wise standard uncertainty is
+$\kappa\sqrt{\boldsymbol\sigma_k^2+{\bf s}_{\rm ens}^2}$; the single positive
+scale $\kappa$ is fitted on validation and is assessed by held-out interval
+coverage~\cite{kendall2017uncertainties,lakshminarayanan2017simple}.
+
+\subsection{Protocols and Trajectory Formation}
+Three protocols are used. The \emph{fixed split} fits on six training
+recordings and uses the two validation recordings for early stopping and all
+design choices. \emph{Leave-one-session-out} holds out each of the eight
+non-test recordings in turn while fitting on the other seven plus the
+rotation-rich rigidity recordings (\emph{extra-train}), which scores every
+non-test second exactly once and yields a session-level error distribution;
+the fold models are then averaged and applied to the held-out test
+recording after fold training. \emph{Synthetic direct} trains on the twin only and is evaluated
+without real updates. A convex blend weight between PhysNet and the strongest
+public architecture and a scalar shrink factor are fitted on the held-out
+cross-validation predictions before any test recording is opened.
+
+For trajectory evaluation, displacement pseudo-measurements are converted to
+board-frame edges using the reference orientation when translation is assessed
+in isolation, and a sparse least-squares pose graph solves
+\begin{equation}
+ \min_{\{{\bf p}_i\}}\sum_{(i,j)\in{\cal E}}
+ \alpha_{ij}^{2}\|({\bf p}_j-{\bf p}_i)-{\bf R}_{BC,i}
+ \widehat{\Delta{\bf p}}_{ij}\|^2 ,
+\end{equation}
+where ${\bf p}_i$ is node $i$ expressed in $B$, ${\cal E}$ is the edge set,
+and one metric anchor removes the translation gauge in each connected
+component. End-point regressors provide
+one edge per window; the PhysNet stream (\ref{eq:stream}) additionally
+provides an edge from the anchor to every frame in the window
+with row scaling
+$\alpha_{ij}=e^{-|t_j-t_i|/(1.5\,{\rm s})}$. This experiment measures temporal
+error correlation; it is not reported as pure-IMU pose because reference
+orientation is supplied.
+
+A separate relative-pose diagnostic removes that assistance. The first
+reference pose fixes the otherwise arbitrary $SE(3)$ gauge, gyroscope
+increments propagate orientation thereafter, and the predicted local
+translations are rotated by that inertial attitude before the same pose-graph
+solve. No later image or board observation is used. This evaluates an
+initially anchored pure-IMU relative 6-DoF stream; orientation is
+gyro-integrated rather than learned and the result is not an absolute-pose
+estimate.

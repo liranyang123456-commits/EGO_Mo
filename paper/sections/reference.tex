@@ -1,0 +1,50 @@
+\section{Uncertainty of the Chessboard Reference}
+\label{sec:reference}
+
+\subsection{Model and Type-A Repeatability}
+For each left image the chessboard is detected and PnP returns
+$({\bf R}_{CB},{\bf t}_{CB})$, mapping a board point into the camera frame.
+The frame is kept if the reprojection error is at most 1.5~px and the board is
+still; the camera pose used in Section~\ref{sec:framework} is
+${\bf R}_{BC}={\bf R}_{CB}^{\top}$ and
+${\bf p}_{BC}=-{\bf R}_{CB}^{\top}{\bf t}_{CB}$, and
+physically implausible jumps (over 25$^\circ$ within 0.5~s or 40~mm within
+0.2~s) are removed. Frames whose camera gyroscope stays below 1.5~$^\circ$/s
+for $\pm0.25$~s are grouped into still intervals, and the pose standard
+deviation inside an interval is the Type-A estimate $u_A$. To probe dynamic
+consistency without assuming the IMU is correct, 20\% of accepted poses are
+removed and predicted from the adjacent remaining poses by linear position and
+geodesic rotation interpolation; this residual mixes measurement error with
+unmodelled motion curvature and is therefore reported as an empirical upper
+bound rather than a standard uncertainty.
+
+\subsection{Corner Propagation and Tilt--Translation Coupling}
+For 120 reference frames per recording, the board is re-projected from the
+estimated pose, isotropic Gaussian noise is added to every corner, and PnP is
+re-solved 60 times; the sample covariance is the Type-B contribution
+$\boldsymbol\Sigma_{\rm corner}$, evaluated at
+$\sigma\in\{0.1,0.25,0.5\}$~px, where 0.25~px is close to the
+intrinsic-calibration RMS. Because reprojection is a residual and not a pose
+uncertainty, each accepted rotation is additionally perturbed by 0.5$^\circ$
+about one camera axis and translation is refit to the unchanged corners. The
+ratios
+\begin{equation}
+ s_p=\frac{\|\delta{\bf p}\|}{\|\delta\boldsymbol\theta\|},\qquad
+ s_r=\frac{\Delta e_{\rm px}}{\|\delta\boldsymbol\theta\|}
+\end{equation}
+measure the pose sensitivity and the ability of reprojection gating to reveal
+it. The implementation evaluates $\|\delta\boldsymbol\theta\|$ in degrees, so
+$s_p$ and $s_r$ are reported in mm/deg and px/deg, respectively.
+
+\paragraph{Operational uncertainty.}
+For a scalar pose component $q$ the reported standard uncertainty is
+\begin{equation}
+ u_{\rm op}(q)=\sqrt{u_A^2(q)+u_{\rm corner}^2(q)}, \label{eq:uncertainty}
+\end{equation}
+where $u_{\rm corner}(q)$ is the square root of the corresponding diagonal
+entry of $\boldsymbol\Sigma_{\rm corner}$; the expanded value is
+$U_{\rm op}=2u_{\rm op}$. It is called
+\emph{operational} and not SI-traceable: board pitch and flatness tolerance,
+intrinsic-parameter covariance, rolling shutter and an independent tracker
+comparison are not yet available. Dynamic holdout residuals are reported
+separately and are not combined as independent Gaussian terms.

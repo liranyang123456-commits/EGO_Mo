@@ -1,0 +1,24 @@
+\section{Conclusion}
+
+We presented a pure-inertial framework that estimates camera displacement
+from continuous 200-Hz IMU streams and audits the complete measurement chain
+used to train and test it. The analysis separates the 3-s target into an
+acceleration integral and an unobservable initial-velocity term. More than
+more than forty estimator variants occupied the same broad error plateau; regressing out the
+low-frequency velocity proxy reduced mean validation error by 16\%, whereas
+longer context and post-hoc session fusion did not recover it. A confirmed
+pause supplies a zero-velocity boundary condition, but the present experiment
+contains only one sub-2-s interval and its benefit deteriorates rapidly as
+attitude and bias errors accumulate. The measured pause rate of 0.5--2.3 per
+minute is therefore an acquisition limitation in the current data.
+
+PhysNet combines analytic anchor-frame pre-integration, dense displacement
+supervision, a stillness-conditioned velocity gate, lever-arm estimation and calibrated
+uncertainty. It reduced synthetic-test error by 24\% relative to adapted
+IMUNet with one seventh of the parameters and achieved the lowest
+leave-one-session-out error. On the single held-out recording the two methods
+were statistically tied; their blend reduced error from 49.7~mm for zero
+motion to 42.2~mm ($R^2=0.279$). The next validation step is therefore
+experimental: acquire several independent, prospectively sealed recordings with controlled
+pauses, improve the attitude solution, and compare the chessboard reference
+with an independent tracker before making a reference-grade trajectory claim.

@@ -1,0 +1,32 @@
+\section{The Camera-Mounted IMU as a Pose Sensor}
+\label{sec:imu}
+
+\subsection{One-Second Rigidity Test}
+Adjacent 10-Hz planar-PnP rotations are too noisy for a rigidity decision, so
+the proposed test compares relative rotations over 0.8--1.2~s. With
+$\boldsymbol\phi_I$ the integrated IMU rotation vector and
+$\boldsymbol\phi_C=\operatorname{Log}^{\vee}
+[{\bf R}_{BC}^{\top}(t_a){\bf R}_{BC}(t_b)]$,
+alternating increments estimate the constant extrinsic rotation by
+\begin{equation}
+ \hat{\bf R}_{CI}=\arg\min_{{\bf R}\in SO(3)}
+ \sum_k\|{\bf R}\boldsymbol\phi_{I,k}-\boldsymbol\phi_{C,k}\|^2 ,
+\end{equation}
+where $\operatorname{Log}^{\vee}$ is the rotation-vector logarithm defined
+below (\ref{eq:gyro}).
+and the remaining increments measure per-axis correlation, magnitude
+correlation, scale and RMS residual. The test requires deliberate pitch, yaw
+and roll excitation with at least 1$^\circ$ standard deviation per axis, and
+acceptance requires each held-out axis correlation $\geq0.75$, magnitude
+correlation $\geq0.90$ and scale in $[0.85,1.15]$; correlation $\geq0.90$ on
+all axes is marked high quality. On board-visible intervals of 5--30~s the
+same comparison yields an empirical gyroscope drift rate, reported per axis
+because planar-PnP sensitivity is anisotropic.
+
+\subsection{Label-Leakage Test}
+To quantify leakage, a second label set replaces the PnP rotation by the
+gyroscope chain and refits translation to the same corners, so that a network
+trained on these labels receives the sensor that helped create its target. We
+compare its held-out $R^2$ with the same architecture trained on unmodified,
+cleaned PnP labels. Gyroscope-constrained labels are not used for any
+reported model.

@@ -1,0 +1,20 @@
+{
+  "title": "EGO_Mo: Pure-Inertial Camera Motion Estimation from Continuous IMU Streams",
+  "description": "Reproducible acquisition, calibration, measurement-digital-twin, physics-structured learning, and evaluation software for IMU-only camera displacement and relative trajectory estimation.",
+  "creators": [
+    {"name": "Li, Ranyang", "affiliation": "Henan University of Technology"},
+    {"name": "Wei, Nan", "affiliation": "Henan Provincial People's Hospital, Zhengzhou University"},
+    {"name": "Lin, Zhipeng", "affiliation": "Beihang University"},
+    {"name": "Liu, Wufeng", "affiliation": "Henan University of Technology"},
+    {"name": "Fan, Chao", "affiliation": "Henan University of Technology"}
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "keywords": [
+    "IMU", "inertial odometry", "camera motion", "digital twin",
+    "measurement uncertainty", "observability"
+  ],
+  "notes": "The DOI and repository URL are assigned only after the authors create the public release. Raw recordings require a separate dataset archive and integrity manifest."
+}

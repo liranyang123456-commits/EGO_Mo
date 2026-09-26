@@ -1,0 +1,35 @@
+\begin{abstract}
+Estimating metric camera motion from a single low-cost inertial measurement
+unit (IMU) is ill-conditioned because acceleration does not reveal the
+initial velocity and attitude errors leak gravity into translation. We
+propose an audited pure-inertial measurement framework for a handheld camera
+with an endoscopic field of view. The framework combines 1) a chessboard
+reference characterized by repeatability, Monte Carlo corner propagation,
+dynamic holdout and tilt--translation sensitivity; 2) a
+parameter-provenance digital twin that reproduces the measured sampling
+jitter, three-axis noise, board-to-gravity orientation and real-motion
+distribution; and 3) PhysNet, a physics-structured network that transforms
+200-Hz IMU streams into a densely supervised displacement stream, applies a
+detected zero-velocity phase as a structural update, learns the camera--IMU
+lever arm and predicts calibrated uncertainty. We further decompose each 3-s
+displacement into an IMU-observable double integral and an unobservable
+initial-velocity term, which connects an empirical accuracy plateau to a protocol-dependent observability floor. More than forty estimator variants show no consistent improvement beyond the seed-to-seed variation, and reference measurements reduce the residual by
+16\% (31.4 to 26.3~mm) when a low-frequency velocity proxy is regressed out.
+A correctly identified pause supplies a zero-velocity boundary condition, but
+the measured benefit deteriorates rapidly with interval length under the
+present attitude solution; the current recordings contain only 0.5--2.3 such
+pauses per minute. This yields a quantitative pause requirement for future
+acquisition. Under a protocol-matched comparison,
+PhysNet reduces synthetic-test error by 24\% relative to adapted IMUNet with
+one seventh of its parameters and gives the lowest leave-one-session-out
+error (25.6 versus 26.4~mm). On one held-out recording the methods are
+statistically tied; their blend reduces the zero-motion error from 49.7 to
+42.2~mm ($R^2=0.279$). The proposed framework therefore identifies what the
+sensor can measure, provides an efficient estimator that reaches that limit,
+and specifies which acquisition change can move it.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Camera motion, digital twin, inertial measurement unit, measurement
+uncertainty, observability, pose measurement, simulation-to-real transfer.
+\end{IEEEkeywords}

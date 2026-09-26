@@ -1,0 +1,97 @@
+\section{Parameter-Provenance Measurement Digital Twin}
+\label{sec:twin}
+
+Following the measurement-oriented view of digital
+twins~\cite{zimmer2025digital,wright2024dt}, every twin parameter is either
+measured, specified, or explicitly marked provisional. The twin generates
+stereo images, exact pose, an ideal IMU stream, and a noisy/quantized stream
+on the same timestamps.
+
+\subsection{Rigid-Body and IMU Model}
+Let $W$ denote the inertial world frame used by the twin (the fixed board
+frame plays this role in the real experiment). For IMU position
+${\bf p}_{WI}$ expressed in $W$ and orientation ${\bf R}_{WI}$ mapping IMU
+coordinates into $W$, ideal
+specific force is
+\begin{equation}
+ {\bf f}_I(t)={\bf R}_{WI}^{\top}(t)
+ [\ddot{\bf p}_{WI}(t)-{\bf g}_W], \label{eq:specific-force}
+\end{equation}
+where ${\bf g}_W$ is the gravitational-acceleration vector expressed in
+$W$, including its sign. If ${\bf r}_{CI}^{C}$ is the vector from the camera
+centre to the IMU sensing centre expressed in $C$, then
+${\bf p}_{WI}={\bf p}_{WC}+{\bf R}_{WC}{\bf r}_{CI}^{C}$; its second
+derivative contributes tangential and centripetal acceleration. The
+exported accelerometer channel is ${\bf f}_I/g_0$ in units of $g$, with
+$g_0=9.80665$~m/s$^2$. Angular rate is obtained from
+\begin{equation}
+ \boldsymbol\omega_I(t_k)=\frac{1}{\Delta t_k}
+ \operatorname{Log}^{\vee}[{\bf R}_{WI}^{\top}(t_{k-1})
+ {\bf R}_{WI}(t_k)] , \label{eq:gyro}
+\end{equation}
+where $\operatorname{Log}^{\vee}:SO(3)\rightarrow\mathbb R^3$ is the
+rotation-vector logarithm and $\Delta t_k=t_k-t_{k-1}$; the result represents
+the average body rate over $[t_{k-1},t_k]$, resolved in the preceding IMU
+frame.
+The noisy sensor output is
+\begin{align}
+ \tilde{\bf f}_k &= Q_a({\bf f}_k+{\bf b}_{a,k}+{\bf n}_{a,k}),\\
+ \tilde{\boldsymbol\omega}_k &=
+ Q_g(\boldsymbol\omega_k+{\bf b}_{g,k}+{\bf n}_{g,k}),
+\end{align}
+where $Q_a(\cdot)$ and $Q_g(\cdot)$ are the component-wise quantization and
+full-scale-clipping operators. The white noises
+${\bf n}_{a,k}$ and ${\bf n}_{g,k}$ are zero-mean Gaussian variables with
+their measured discrete-sample full three-axis covariance (no additional
+$\Delta t_k$ factor); each bias follows
+${\bf b}_{k+1}={\bf b}_k+{\bf w}_k\sqrt{\Delta t_k}$ with a zero-mean
+Gaussian random-walk increment ${\bf w}_k$. Sampling intervals are
+drawn from the measured jitter distribution and clipped to physically valid
+bounds.
+
+\paragraph{Parameter provenance.}
+Camera matrices and distortion come from the physical calibration. The
+camera--IMU rotation comes from the independent rigidity recording. Noise,
+bias walk, quantization, and timing jitter are fitted to the first 5~s of a
+real static recording. Board geometry is generated directly from its metric
+specification, not reconstructed from images. The orientation of gravity in
+the board frame is measured from the reference poses and the accelerometer:
+the real board stands tilted, with the specific force along
+$(0,-0.87,-0.49)$ in board axes, whereas the initial twin assumed a flat
+board with gravity along the board normal. A ``replay'' motion family drives
+the twin camera along smoothed real training trajectories (positions from
+the reference, rotation from the integrated real gyroscope) at random speed
+and amplitude, so that synthetic sequences inherit the real motion
+statistics without using validation or test motion. The stereo baseline and
+IMU lever arm remain provisional; this status is serialized with every
+sequence.
+
+\subsection{Scene, Motion Domain and Audit}
+The OpenCV renderer provides fast pinhole-plus-distortion generation and
+Blender Eevee provides 720p--2K materials, shadows and lighting. Twelve motion
+families span lateral, depth, circular, random-spline, long-range slow,
+aggressive 6-DoF, pure-rotation, three-axis translation, pitch-sweep,
+stop--go, spiral and mixed motion, with lighting, blur, image noise, speed,
+bias and covariance scale randomized per sequence; board motion is an OOD
+condition because a camera-mounted IMU cannot observe it. The selected corpus
+contains 60 synthetic-training, 15 validation, 15 test and five OOD inertial
+sequences plus 25 rendered representatives. All pass the timestamp,
+finiteness, rotation-orthogonality and geometric audits, the median
+checkerboard detection rate is 100\%, the median and p90 detected-corner error
+against exact projection are 0.252 and 0.842~px, and recomputed ideal signals
+agree with the exported ones below $5\times10^{-5}$~g and $10^{-4}$~deg/s per
+axis. A separate 156-sequence stress corpus extends distance, rotation and
+acceleration; it is retained for OOD analysis but is not selected by the
+present validation split.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\columnwidth]{domain_gap.pdf}
+\caption{Implemented twin and its domain audit. (a) The PySide6 workbench
+shows the synchronized stereo preview, 3-D camera path and all-axis 200-Hz
+IMU stream; the same interface also exposes method benchmarking and dataset
+audits. (b),(c) Percentiles over complete training streams. The initial twin
+contained too much rotation and too little translational acceleration; the
+tuned twin matches the measured operating domain more closely.}
+\label{fig:domain}
+\end{figure}

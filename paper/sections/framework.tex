@@ -1,0 +1,117 @@
+\section{Measurement Framework and Problem Formulation}
+\label{sec:framework}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\columnwidth]{framework.pdf}
+\caption{Audited measurement framework, read top to bottom. The optical path
+supplies the reference ${\bf T}_{BC}$, the inertial path supplies the
+gravity-free acceleration $\ell_k$ and hence the second term of
+(\ref{eq:decomp}), and the twin supplies distribution-matched synthetic
+streams. The first term of (\ref{eq:decomp}) is an initial condition that
+neither path observes inside a window, which is what makes the acquisition
+protocol part of the measurement. In the twin block,
+$\boldsymbol\Sigma$, ${\bf b}\!\sim\!{\rm RW}$, $Q$, $\delta t$ and
+${\bf g}_B$ denote noise covariance, bias random walk, quantization, sampling
+jitter and board-frame gravity; beneath the measured integral,
+${\bf b}$, $s$ and $\delta\boldsymbol\theta\times{\bf g}$ denote bias, scale
+factor and attitude-induced gravity leakage. Each source carries its own audit
+($u_A$ Type-A, $\Sigma_{\rm corner}$ corner propagation, $s_p$ tilt
+sensitivity, and $r_{\rm axis}$ the held-out per-axis rigidity correlation),
+and the held-out recording is excluded from gradient fitting and
+cross-validation.}
+\label{fig:framework}
+\end{figure}
+
+\subsection{Measurand and Observable Information}
+Let $B$, $C$, and $I$ denote the board, left-camera, and USB-IMU frames. A
+rotation ${\bf R}_{XY}$ maps the coordinates of a vector from frame $Y$ to
+frame $X$; in particular, ${\bf R}_{CI}$ maps IMU vectors into the camera
+frame. The
+measurand is the time-varying camera pose
+\begin{equation}
+ {\bf T}_{BC}(t)=
+ \begin{bmatrix}{\bf R}_{BC}(t)&{\bf p}_{BC}(t)\\{\bf 0}^{\top}&1\end{bmatrix}
+ \in SE(3),
+\end{equation}
+where ${\bf p}_{BC}$ is the camera-center position expressed in $B$. For two
+times $t_a<t_b$, the learning target is the translation increment expressed
+in the start camera frame,
+\begin{equation}
+ \Delta{\bf p}_{ab}={\bf R}_{BC}^{\top}(t_a)
+ [ {\bf p}_{BC}(t_b)-{\bf p}_{BC}(t_a) ] . \label{eq:target}
+\end{equation}
+This definition removes the arbitrary board orientation while retaining
+metric scale. Although the reference is a full $SE(3)$ pose, the learned
+output in this study is the three-dimensional translation increment and its
+integrated translation trajectory; the network does not claim a learned
+six-degree-of-freedom pose. Reference orientation is used only in the
+translation-isolated trajectory analysis, and the pure-inertial deployment
+input remains the IMU stream alone.
+
+The IMU reports specific force $\tilde{\bf f}_I$ and angular rate
+$\tilde{\boldsymbol\omega}_I$ at approximately 200~Hz. Camera frames are
+timestamped at 10--30~Hz. The constant rotation ${\bf R}_{CI}$ is estimated
+in a dedicated rigidity recording, not from validation or test trajectories.
+
+\label{sec:observable}
+Writing the measurand as a double integral of acceleration separates it into
+two parts with different information status,
+\begin{equation}
+ \Delta{\bf p}_{ab}=
+ \underbrace{{\bf v}(t_a)\,\Delta t}_{\text{initial condition}}
+ +\underbrace{\int_{t_a}^{t_b}\!\!\int_{t_a}^{s}{\bf a}(\tau)\,
+ {\rm d}\tau\,{\rm d}s}_{\text{measured by the IMU}},\qquad
+ \Delta t=t_b-t_a, \label{eq:decomp}
+\end{equation}
+where ${\bf v}(t_a)$ and ${\bf a}(\tau)$ are respectively the camera-center
+velocity at $t_a$ and its gravity-compensated acceleration, both resolved in
+the fixed start frame $C_a$. The second term is determined by the inertial measurement up to bias,
+scale, and the gravity that an attitude error leaks into the integrand. The
+first term is an \emph{initial condition}: no accelerometer sample inside the
+context window $[t_a-c,\,t_b+c]$, where $c>0$ is the context duration on each
+side of the target interval, determines it. A windowed estimator can therefore only
+replace ${\bf v}(t_a)$ by a prior learned from the training motion, and the
+best zero-knowledge prior is the training mean, which is close to zero for a
+handheld instrument that reverses direction. The residual of any such
+estimator consequently tracks the deviation of the actual low-frequency
+velocity from zero, and Section~\ref{sec:limit} measures that this is indeed
+where most of the residual sits.
+
+Two acquisition properties can reduce this ambiguity. A longer context does
+not make ${\bf v}(t_a)$ observable; it only supplies more motion history from
+which a learned prior may infer low-frequency velocity. A correctly
+identified stationary epoch $t_0$ instead supplies the boundary condition
+${\bf v}(t_0)={\bf0}$, so that
+${\bf v}(t_a)=-\int_{t_a}^{t_0}{\bf a}\,{\rm d}\tau$ can be estimated from
+the inertial stream. That estimate remains limited by attitude, bias and
+integration errors, and its usable interval is limited by the same gravity
+leakage that affects the second term of (\ref{eq:decomp}). Sections
+\ref{sec:limit} and \ref{sec:pause} measure both effects for this instrument
+and use them to define the acquisition protocol.
+
+\subsection{Information Governance and Outputs}
+The framework separates four information classes: \emph{calibration} (camera
+intrinsics, time delay, ${\bf R}_{CI}$, board scale, IMU noise parameters);
+\emph{reference} (cleaned planar-PnP pose while the board is visible and
+verified stationary); \emph{learning} (complete training recordings, the
+rotation-rich rigidity recordings that are never scored, and synthetic-train
+sequences); and \emph{evaluation} (the validation recordings for selection in
+the fixed split, leave-one-session-out folds over all non-test recordings, and
+one held-out real-test recording). Test data do not parameterize the twin,
+labels or gradient fitting; Section~\ref{sec:experiments} distinguishes the
+initial selection protocol from subsequent exploratory diagnostics on this
+recording. The boundary matters here because using the gyroscope to modify
+PnP labels that are then predicted from the same gyroscope biases the reported
+inertial accuracy upward, as Section~\ref{sec:imu} quantifies.
+
+\paragraph{Outputs.}
+The system produces: 1) an audited but explicitly bounded camera-pose
+reference; 2) paired ideal/noisy synthetic sensor streams with exact pose;
+3) a displacement stream anchored at the pair start, with empirical
+uncertainty from a model ensemble, whose end point is the local
+pseudo-measurement; 4) overlapping displacement edges---one per window, or
+one per reference frame from the stream---that can be fused into a
+trajectory; and 5) a quantitative bound on how much of the remaining error is
+physically unobservable under the chosen window. The learned trajectory is
+an estimator output, not a new ground-truth source.
