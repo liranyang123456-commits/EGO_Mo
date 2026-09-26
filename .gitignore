@@ -45,3 +45,7 @@ datasets/trajectory_comparison/*
 datasets/traj_run_v8/*
 !datasets/traj_run_v8/gt_uncertainty.json
 datasets/interim_eval.json
+!datasets/physnet_v3/
+datasets/physnet_v3/*
+!datasets/physnet_v3/*.json
+

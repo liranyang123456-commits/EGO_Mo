@@ -114,10 +114,24 @@ def _renderer(cfg: SimConfig, depth_mm: float) -> StereoRenderer:
     return r
 
 
+PSF_SIGMA = 0.0   # optical point-spread function (px); 1.5 matches real edge width
+
+
 def render_trials(plan_rows, depth_mm, tilt_deg, fps, pause_s, move_s, seed):
-    cfg = SimConfig(width=1280, height=720, seed=seed, image_noise_std=2.0,
+    cfg = SimConfig(width=1280, height=720, seed=seed, image_noise_std=0.0,
                     light_flicker=0.08, motion_blur=0.0)
     renderer = _renderer(cfg, depth_mm)
+    noise_rng = np.random.default_rng(seed + 7)
+    raw_render = renderer.render
+
+    def render(*a, **k):
+        img = raw_render(*a, **k).astype(np.float32)
+        if PSF_SIGMA > 0:
+            img = cv2.GaussianBlur(img, (0, 0), PSF_SIGMA)
+        img += noise_rng.normal(0.0, 2.0, img.shape)
+        return np.clip(img, 0, 255).astype(np.uint8)
+
+    renderer.render = render
     R_W_B, p0 = _board_pose(depth_mm, tilt_deg, cfg)
     axes = {"X": np.array([1.0, 0, 0]), "Y": np.array([0, 1.0, 0]), "Z": np.array([0, 0, -1.0])}
     trials, index = [], seed * 100000
@@ -144,7 +158,7 @@ def render_trials(plan_rows, depth_mm, tilt_deg, fps, pause_s, move_s, seed):
 def cached_render(plan_rows, depth_mm, tilt_deg, fps, pause_s, move_s, seed):
     """Rendering dominates the run time; detected corners are cached on disk."""
     import pickle
-    key = f"{depth_mm:g}_{tilt_deg:g}_{fps:g}_{pause_s:g}_{move_s:g}_{seed}_{len(plan_rows)}"
+    key = f"{depth_mm:g}_{tilt_deg:g}_{fps:g}_{pause_s:g}_{move_s:g}_{seed}_{len(plan_rows)}_psf{PSF_SIGMA:g}"
     path = DATA / "sim_reference_cache" / f"{key}.pkl"
     if path.is_file():
         with path.open("rb") as f:
@@ -234,7 +248,11 @@ def main():
     ap.add_argument("--render-only", action="store_true",
                     help="fill the render cache and exit (for parallel runs)")
     ap.add_argument("--seed-base", type=int, default=11)
+    ap.add_argument("--psf", type=float, default=0.0,
+                    help="Gaussian optical blur in px after rendering (image noise is added after it)")
     args = ap.parse_args()
+    global PSF_SIGMA
+    PSF_SIGMA = args.psf
     plan_rows = list(csv.DictReader(args.plan.open(newline="", encoding="utf-8-sig")))
     rng = np.random.default_rng(20260926)
 

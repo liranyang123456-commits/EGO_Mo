@@ -1,0 +1,28 @@
+{
+  "global": {
+    "cross_session_1sigma": 0.800493255495232,
+    "cross_session_2sigma": 0.9431456488555092,
+    "test_1sigma": 0.631633178773828,
+    "test_2sigma": 0.8516228748068007
+  },
+  "stratified": {
+    "cross_session_1sigma": 0.7615101165330673,
+    "cross_session_2sigma": 0.9280548810602618,
+    "test_1sigma": 0.6136012364760433,
+    "test_2sigma": 0.8212261720762494
+  },
+  "conformal": {
+    "cross_session_1sigma": 0.6872811251567473,
+    "cross_session_2sigma": 0.9531286273729462,
+    "test_1sigma": 0.4992272024729521,
+    "test_2sigma": 0.8639876352395672
+  },
+  "magnitude": {
+    "gamma": 0.0,
+    "kappa": 4.558542984231473,
+    "cross_session_1sigma": 0.800493255495232,
+    "cross_session_2sigma": 0.9431456488555092,
+    "test_1sigma": 0.631633178773828,
+    "test_2sigma": 0.8516228748068007
+  }
+}

@@ -138,6 +138,20 @@ variants with 3-s and 4-s context on each side were worse
 (Table~\ref{tab:ablation}), and 756~s of reference motion did not establish a
 long-range motion prior.
 
+The shrinkage is not an artefact of the training loss. In additional
+fixed-split experiments after the models were frozen (two seeds each, scored on
+validation only), a near-quadratic loss ($\beta=5$~cm), the Gaussian NLL as the
+main term, and a time-varying gyroscope bias interpolated between pauses left
+the per-axis slopes at 0.42--0.48, 0.47--0.56 and 0.19--0.29 and the error at
+29.5--31.0~mm. Scaling the predictions up by $\alpha>1$ increased both the error
+and the trajectory error (for the gated model, 126 to 152~mm ATE at
+$\alpha=1.5$), so the trajectory error is driven by the variance of the window
+errors rather than by their bias. Averaging gated and non-gated models lowered
+the leave-one-session-out error from 24.95 to 24.63~mm and kept the validation
+trajectory error close to that of the non-gated model, but on the held-out
+recording it did not improve on IMUNet (43.89 versus 42.93~mm). These results
+are what a conditional-mean estimator with missing information would show.
+
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{observability.pdf}
@@ -282,40 +296,28 @@ improves on zero motion.}
 \label{fig:benchmark}
 \end{figure*}
 
-On real data, where the evaluated architectures approach the empirical floor of
-Section~\ref{sec:limit}, the two best do not differ significantly. With the
-stillness gate PhysNet has the lowest single-family error on the fixed
-validation split (29.67~mm, against 29.91~mm without the gate on the same
-training data and 31.90~mm for IMUNet trained on real train only) and in the
-leave-one-session-out protocol (fold ensembles 24.95 versus 25.77~mm;
-single-model means 25.56 versus 26.38~mm, six of eight sessions won;
-Fig.~\ref{fig:benchmark}(c)). On the held-out test the two are within 0.62~mm
-of each other (43.55 versus 42.93~mm); the block-bootstrap 95\% interval of the
-PhysNet$-$IMUNet error difference is $[-1.8,\,+3.2]$~mm, and PhysNet has the
-lower error in the fastest third (72.7 versus 74.2~mm). Averaging the two ensembles gives
-the lowest mean error (equal blend, 42.21~mm, $R^2=0.276$), and the calibrated
-blend (weight $w=0.65$, scale $\alpha=1.05$) gives the highest $R^2$ (0.279) and
-the lowest fast-third error (72.1~mm) at 42.29~mm. Its improvement over IMUNet,
-$[-1.2,\,+2.5]$~mm, contains zero. With about 38 independent 3-s blocks the
-recording cannot resolve differences below roughly 3~mm, so it shows neither
-superiority nor equivalence. IMUNet, gated PhysNet and the blends beat zero
-motion by 6.1--7.5~mm, with improvement intervals that exclude zero
-($[2.2,\,10.8]$~mm for gated PhysNet, $[2.6,\,11.4]$~mm for IMUNet and
-$[3.3,\,11.9]$~mm for the calibrated blend); Ridge features, the earlier Conv--BiGRU and the fixed-split
-RoNIN and TLIO models gain at most 4.9~mm. Under this protocol the proposed
-representation is distinguished by efficiency: one seventh of the IMUNet
-parameters, the lowest synthetic and OOD errors, and useful
-direct transfer, at real-data accuracy that matches the larger models.
-
-The session-level view in Fig.~\ref{fig:benchmark}(c) is more informative than
-either aggregate. On the four large-motion recordings (zero-motion error
-37--45~mm) both architectures reach $R^2$ 0.17--0.62, whereas on the three
-near-static recordings (16--23~mm) neither improves on zero motion. Data
-curation had effects of the same order as architecture: adding the rigidity
-recordings as extra training data moved the CV mean of IMUNet from 27.17 to
-26.38~mm, and excluding the two rigidity recordings that fail the mount test
-moved the single-model validation error of PhysNet from 31.89~mm (two seeds)
-to 30.68~mm (five seeds), a change comparable to the seed range.
+On real data the two best families do not differ significantly. Gated PhysNet
+has the lowest single-family error on fixed validation (29.67~mm; 29.91~mm
+without the gate on the same data) and in cross-validation (fold ensembles
+24.95 versus 25.77~mm for IMUNet; six of eight sessions won,
+Fig.~\ref{fig:benchmark}(c)). On the held-out test the PhysNet$-$IMUNet error
+difference is 0.62~mm with a 95\% interval of $[-1.8,\,+3.2]$~mm; averaging the
+two families gives the lowest mean error (equal blend, 42.21~mm) and the
+calibrated blend ($w=0.65$, $\alpha=1.05$) the highest $R^2$ (0.279), but its
+improvement over IMUNet, $[-1.2,\,+2.5]$~mm, also contains zero. With about 38
+independent 3-s blocks the recording cannot resolve differences below roughly
+3~mm. IMUNet, gated PhysNet and the blends beat zero motion by 6.1--7.5~mm with
+intervals that exclude zero (Fig.~\ref{fig:benchmark}(b)), whereas Ridge,
+the Conv--BiGRU and the fixed-split RoNIN and TLIO models gain at most 4.9~mm.
+The proposed representation is therefore distinguished by efficiency---one
+seventh of the IMUNet parameters, the lowest synthetic and OOD errors and
+useful direct transfer---at real-data accuracy that matches the larger models.
+Learned displacement helps only on the four large-motion recordings ($R^2$
+0.17--0.62); on the three near-static ones no model improves on zero motion.
+Data curation had effects of the same order as architecture: adding the
+rigidity recordings moved the IMUNet CV error from 27.17 to 26.38~mm
+(single-model means), and excluding the two that fail the mount test moved the
+PhysNet validation error from 31.89 to 30.68~mm.
 
 \subsection{Estimator Performance, Uncertainty, and Physical Consistency}
 The heteroscedastic head costs no accuracy (Table~\ref{tab:ablation}); it is

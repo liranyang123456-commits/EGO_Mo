@@ -55,15 +55,19 @@ noise and illumination flicker, along a caliper protocol: 0--40~mm travel on
 each camera axis, seven 5-s pauses, three traversals per axis. The images pass
 through the same detector and PnP as the real reference, and each axis is
 scored after fitting only its direction and origin, so scale errors remain in
-the held-out residual. With exact intrinsics the held-out RMSE is 0.73~mm at
-250~mm and 1.20~mm at 350~mm working distance, the axis scale error reaches
-2.1\% and 2.5\%, and the cross-axis RMSE reaches 0.9 and 1.9~mm, while
-repeatability is about 0.01~mm; the error is therefore systematic and
-pose-dependent, not noise. Drawing the intrinsics from their calibration
-standard deviations raises the median held-out RMSE to 1.0 and 1.4~mm, and the
-95th-percentile lateral scale error to 10--19\%, so intrinsic uncertainty
-dominates the budget; no working distance passes the 1\%/0.5-mm acceptance
-limits. At the mean 3-s test displacement of about 50~mm, the 2.5\% nominal
-scale error is about 1.2~mm, roughly 3\% of the 42--44-mm model errors in
-Section~\ref{sec:results}; it does not change the method ranking but bounds
-claims below the millimetre level.
+the held-out residual. The result depends on the modelled optics. With the
+renderer's sharp edges (10--90\% edge width 0.8~px) and exact intrinsics, the
+held-out RMSE is 0.73~mm at 250~mm and 1.20~mm at 350~mm working distance and
+the axis scale error reaches 2.1\% and 2.5\%. With an optical blur matched to
+the 3.9-px edge width measured in real images ($\sigma=1.5$~px), the 250-mm
+case improves to 0.56~mm RMSE, 1.4\% maximum scale error and 0.64~mm maximum
+cross-axis RMSE, with 0.02-mm repeatability, so a systematic pose-dependent
+error remains; at 350~mm the blurred $3$-mm squares are detected only
+intermittently. Drawing the intrinsics from their calibration standard
+deviations raises the median held-out RMSE at 250~mm to 0.86~mm and the
+95th-percentile lateral scale error to about 10\% (10--19\% across working
+distances for sharp rendering), so intrinsic uncertainty dominates the budget,
+and no case passes the 1\%/0.5-mm acceptance limits. At the mean 3-s test
+displacement of about 50~mm, a 1.4--2.5\% scale error is 0.7--1.2~mm, at most
+3\% of the 42--44-mm model errors in Section~\ref{sec:results}; it does not
+change the method ranking but bounds claims below the millimetre level.

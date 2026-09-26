@@ -126,6 +126,24 @@ def results():
     for name, ms in (("physnet", 0.16), ("imunet", 0.14), ("tlio_resnet", 0.14),
                      ("ronin_resnet", 0.13), ("ronin_lstm", 0.15)):
         close(f"latency {name}", lat[name]["ms_per_window"], ms, 0.006)
+    # Post-freeze v3 analyses (validation / existing fold predictions only).
+    v3 = load(DATA / "physnet_v3" / "results.json")
+    slopes = np.array([v3[k]["slope"] for k in v3])
+    close("v3 slope x min", slopes[:, 0].min(), 0.42, 0.006)
+    close("v3 slope x max", slopes[:, 0].max(), 0.48, 0.006)
+    close("v3 slope z min", slopes[:, 2].min(), 0.19, 0.006)
+    close("v3 slope z max", slopes[:, 2].max(), 0.29, 0.006)
+    sweep = load(DATA / "physnet_v3" / "scale_sweep.json")
+    close("v3 gated ATE alpha 1.0", sweep["base"]["1.0"]["ate_mm"], 126.4, 0.06)
+    close("v3 gated ATE alpha 1.5", sweep["base"]["1.5"]["ate_mm"], 152.2, 0.06)
+    mixj = load(DATA / "physnet_v3" / "mixture.json")
+    close("mixture CV error", mixj["cv_mm"]["mix"], 24.63, 0.006)
+    close("mixture test error", mixj["test"]["mix"]["err_mm"], 43.89)
+    psf = load(DATA / "sim_reference_validation_psf.json")["depths"]["250"]
+    close("sim PSF 250 mm RMSE", psf["nominal"]["heldout_rmse_mm"], 0.56, 0.006)
+    close("sim PSF 250 mm max |scale| %", max(abs(v) for v in psf["nominal"]["scale_error_percent"].values()), 1.37, 0.006)
+    close("sim PSF 250 mm max cross-axis", max(psf["nominal"]["cross_axis_rmse_mm"].values()), 0.64, 0.006)
+    close("sim PSF 250 mm MC median RMSE", psf["monte_carlo"]["heldout_rmse_mm_p50_p95"][0], 0.86, 0.006)
     close("uncertainty validation scale", unc["validation_scale"], 4.559)
     close("uncertainty 1-sigma coverage",
           unc["val"]["total_rescaled"]["coverage_1sigma"], 0.814)
@@ -175,7 +193,7 @@ def text_claims():
                      for p in [PAPER / "main.tex", *sorted((PAPER / "sections").glob("*.tex"))])
     required = ["$[-1.8,\\,+3.2]$", "24.95", "25.77", "25.17", "31 connected",
                 "14.1\\%", "4.3\\%", "0.37/0.48/0.20", "81.0\\%", "63.2\\%",
-                "0.13--0.16~ms", "(-20.9,\\,-4.1,\\,-17.8)", "10--19\\%"]
+                "0.13--0.16~ms", "(-20.9,\\,-4.1,\\,-17.8)", "10--19\\%", "24.63", "43.89"]
     retired = ["26.3~mm", "lower inference latency", "reaches that limit",
                "information-limit measurement", "More than\nmore than"]
     for s in required:
