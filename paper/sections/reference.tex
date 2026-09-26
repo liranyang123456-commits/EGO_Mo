@@ -44,7 +44,24 @@ For a scalar pose component $q$ the reported standard uncertainty is
 where $u_{\rm corner}(q)$ is the square root of the corresponding diagonal
 entry of $\boldsymbol\Sigma_{\rm corner}$; the expanded value is
 $U_{\rm op}=2u_{\rm op}$. It is called
-\emph{operational} and not SI-traceable: board pitch and flatness tolerance,
-intrinsic-parameter covariance, rolling shutter and an independent tracker
-comparison are not yet available. Dynamic holdout residuals are reported
-separately and are not combined as independent Gaussian terms.
+\emph{operational} and not SI-traceable: board flatness, rolling shutter and
+an independent physical displacement standard are not yet available. Dynamic
+holdout residuals are reported separately and are not combined as independent
+Gaussian terms.
+
+\paragraph{Simulated known-displacement test.}
+The digital twin renders the board, with the calibrated distortion, sensor
+noise and illumination flicker, along a caliper protocol: 0--40~mm travel on
+each camera axis, seven 5-s pauses, three traversals per axis. The images pass
+through the same detector and PnP as the real reference, and each axis is
+scored after fitting only its direction and origin, so scale errors remain in
+the held-out residual. With exact intrinsics the held-out RMSE is 0.73~mm at
+250~mm and 1.20~mm at 350~mm working distance, the axis scale error reaches
+2.1\% and 2.5\%, and the cross-axis RMSE reaches 0.9 and 1.9~mm, while
+repeatability is about 0.01~mm; the error is therefore systematic and
+pose-dependent, not noise. Drawing the intrinsics from their calibration
+standard deviations raises the median held-out RMSE to 1.0 and 1.4~mm. At the
+mean 3-s test displacement of about 50~mm, a 2.5\% scale error is about
+1.2~mm, roughly 3\% of the 42--44-mm model errors in
+Section~\ref{sec:results}; it does not change the method ranking but bounds
+claims below the millimetre level.

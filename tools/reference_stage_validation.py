@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Independent metric validation of the chessboard-PnP reference.
 
@@ -231,8 +231,15 @@ def init_caliper_plan(path: Path, repeats: int = 3) -> None:
           f"{len(CALIPER_POSITIONS_MM)} pauses each)")
 
 
-def _static_segments(session: str, still_mm: float, min_s: float):
-    """Median camera-in-board position of every stationary interval, in order."""
+def _static_segments(session: str, still_step_mm: float, min_s: float, n_expected: int):
+    """Median camera-in-board position of the n_expected pauses, in time order.
+
+    Positions are first median-filtered over +-0.7 s, which removes the flips
+    of the PnP solution between nearby discrete poses (~1 mm) inside a pause
+    while following a move; a frame is stationary when the filtered
+    frame-to-frame step is below ``still_step_mm``. The longest n_expected runs
+    are kept, so short false pauses during a move are discarded.
+    """
     raw = DATA / "pose_gt_raw" / f"{session}.npz"
     if not raw.is_file():
         raise FileNotFoundError(f"missing {raw}; run pose_gt export first")
@@ -240,29 +247,30 @@ def _static_segments(session: str, still_mm: float, min_s: float):
     use = blob["usable"] == 1
     t = blob["t"][use]
     p = blob["p"][use].astype(np.float64) * 1000.0
-    still = np.zeros(len(p), bool)
-    for k in range(len(p)):
-        w = np.abs(t - t[k]) <= 0.5
-        if w.sum() >= 3:
-            q = p[w]
-            still[k] = np.linalg.norm(q - np.median(q, axis=0), axis=1).max() < still_mm
-    segs, i = [], 0
-    while i < len(p):
-        if not still[i]:
-            i += 1
-            continue
-        j = i
-        while j + 1 < len(p) and still[j + 1]:
-            j += 1
-        if t[j] - t[i] >= min_s:
-            q = p[i:j + 1]
-            med = np.median(q, axis=0)
-            segs.append({
-                "t0": float(t[i]), "t1": float(t[j]), "frames": int(j - i + 1),
-                "median_mm": med,
-                "p95_mm": float(np.quantile(np.linalg.norm(q - med, axis=1), 0.95)),
-            })
-        i = j + 1
+    smooth = np.array([np.median(p[np.abs(t - tk) <= 0.7], axis=0) for tk in t])
+    step = np.r_[0.0, np.linalg.norm(np.diff(smooth, axis=0), axis=1)]
+    still = step < still_step_mm
+    edges = np.flatnonzero(np.diff(np.r_[0, still.astype(int), 0]))
+    runs = [(a, b - 1) for a, b in zip(edges[::2], edges[1::2])]
+    merged = runs[:1]
+    for a, b in runs[1:]:
+        a0, b0 = merged[-1]
+        same = np.linalg.norm(np.median(smooth[a0:b0 + 1], 0) - np.median(smooth[a:b + 1], 0)) < 0.5
+        if t[a] - t[b0] <= 0.8 and same:
+            merged[-1] = (a0, b)
+        else:
+            merged.append((a, b))
+    runs = [(a, b) for a, b in merged if t[b] - t[a] >= min_s]
+    runs = sorted(sorted(runs, key=lambda r: t[r[1]] - t[r[0]], reverse=True)[:n_expected])
+    segs = []
+    for i, j in runs:
+        q = p[i:j + 1]
+        med = np.median(q, axis=0)
+        segs.append({
+            "t0": float(t[i]), "t1": float(t[j]), "frames": int(j - i + 1),
+            "median_mm": med,
+            "p95_mm": float(np.quantile(np.linalg.norm(q - med, axis=1), 0.95)),
+        })
     return segs
 
 
@@ -284,11 +292,12 @@ def analyze_caliper(plan: Path, output: Path, still_mm: float, min_s: float) -> 
     per_axis, details = {}, {}
     for r in rows:
         readings = np.array([float(v) for v in r["readings_mm"].split()])
-        segs = _static_segments(r["session"].strip(), still_mm, min_s)
+        segs = _static_segments(r["session"].strip(), still_mm, min_s, len(readings))
         if len(segs) != len(readings):
             raise RuntimeError(
                 f"{r['session']}: found {len(segs)} stationary intervals, "
-                f"plan lists {len(readings)} readings; re-record or adjust --still-mm")
+                f"plan lists {len(readings)} readings; re-record with >=3-s pauses "
+                "and moves faster than 3 mm/s")
         med = np.array([sg["median_mm"] for sg in segs])
         per_axis.setdefault(r["axis"], []).append((int(r["trial"]), readings, med))
         details[r["session"].strip()] = {
@@ -359,7 +368,7 @@ def analyze_caliper(plan: Path, output: Path, still_mm: float, min_s: float) -> 
     report = {
         "kind": "independent_caliper_validation_no_scale_fit",
         "plan": str(plan), "passed": bool(passed), "thresholds": thresholds,
-        "segmentation": {"still_mm_per_frame": still_mm, "min_duration_s": min_s},
+        "segmentation": {"median_step_mm_max": still_mm, "min_duration_s": min_s},
         "summary": summary, "recordings": details,
         "limitations": [
             "Caliper calibration or gauge-block check must be archived separately.",
@@ -385,9 +394,9 @@ def main() -> None:
     p_an.add_argument("--mode", choices=("stage", "caliper"), default="stage")
     p_an.add_argument("--plan", type=Path)
     p_an.add_argument("--output", type=Path, default=DEFAULT_REPORT)
-    p_an.add_argument("--still-mm", type=float, default=0.3,
-                      help="caliper mode: max deviation from the 1-s window median in a pause")
-    p_an.add_argument("--min-s", type=float, default=2.0,
+    p_an.add_argument("--still-mm", type=float, default=0.2,
+                      help="caliper mode: max median-filtered frame-to-frame step in a pause")
+    p_an.add_argument("--min-s", type=float, default=1.5,
                       help="caliper mode: minimum pause duration")
     args = parser.parse_args()
     plan = args.plan or (CALIPER_PLAN if args.mode == "caliper" else DEFAULT_PLAN)

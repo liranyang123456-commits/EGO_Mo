@@ -48,6 +48,11 @@ def analyze(path: Path, output: Path):
         raise RuntimeError(f"incomplete mechanical measurements: {missing[:8]}")
     xyz = np.asarray([[float(r[f"imu_to_camera_{a}_mm"]) for a in "xyz"]
                       for r in rows])
+    # z is measured to the lens front surface; the optical centre lies
+    # `optical_center_correction_mm` behind it, i.e. towards -z.
+    corr = np.asarray([float((r.get("optical_center_correction_mm") or "0").strip() or 0)
+                       for r in rows])
+    xyz[:, 2] -= corr
     mean = xyz.mean(0)
     std = xyz.std(0, ddof=1) if len(xyz) > 1 else np.full(3, np.nan)
     radial = np.linalg.norm(xyz - mean, axis=1)
