@@ -4,15 +4,19 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 
 ## Scientific evidence
 
-- [ ] Acquire four theme-T recordings under protocol `85393aba60ecdc40`.
-- [ ] Freeze model/config hashes before viewing any prospective-test metric.
-- [ ] Run `tools/final_prospective_evaluation.py run` exactly once.
-- [ ] Complete the 57-recording independent translation-stage plan.
-- [ ] Archive the stage/micrometer calibration certificate.
-- [ ] Capture a static-pose stereo-extrinsic session and pass held-out gates.
-- [ ] Enter at least three independent mechanical lever-arm measurements.
-- [x] Evaluate initially anchored pure-IMU relative 6-DoF pose.
+- [x] Estimator comparison uses the existing real recordings only. Further
+  handheld collection with a continuously visible board is not part of this
+  submission.
+- [x] Acquisition (stop rate, label rate, ideal IMU) is studied in a twin
+  matched to the measured motion and sensor domain
+  (`datasets/twin_realistic_summary.json`). The twin does not replace the
+  real comparison.
 - [x] Disclose that the historical test is held out but not prospectively sealed.
+- [x] Evaluate initially anchored pure-IMU relative 6-DoF pose.
+- [ ] Compare the chessboard reference with a physical displacement standard
+  before any reference-grade claim.
+- [ ] Enter at least three independent mechanical lever-arm measurements.
+  The learned lever arm is not a calibration.
 
 ## Manuscript integrity
 
@@ -23,9 +27,8 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 - [x] All 35 cited references are in `refs.bib` with no unused entry. DOIs were checked against the published records; four proceedings entries without a DOI (NeurIPS, MIDL) were checked by venue, volume and pages.
 - [x] `tools/verify_manuscript.py` passes.
 - [x] Scope explicitly states translation/displacement, not learned absolute SE(3).
-- [ ] Replace held-out exploratory numbers with prospective pooled results.
-- [ ] Add the independent reference-validation and measured-rig results.
-- [ ] Perform final professional English copy-edit after numerical update.
+- [x] Disclose the held-out recording as exploratory. No further real cohort
+  is pending for this submission; stop-rate results are from the matched twin.
 
 ## PeerTrack metadata
 

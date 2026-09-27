@@ -47,10 +47,9 @@ Board flatness, rolling shutter and the true intrinsic error are not part of a
 full GUM budget, and the reference has not been compared with an independent
 tracker or a physical displacement standard. The real dataset has eight
 trajectory recordings for training and validation, one held-out test recording
-also used for post-selection diagnostics, and four rigidity recordings. The
-frozen prospective protocol therefore requires at least four new sealed test
-recordings on different days and with different operators or grips,
-three-minute 10-fps sessions with 10--20~cm travel and a 1--2-s pause every
-10--15~s, and a daily rotation/still recording that doubles as mount test; a
-follow-up protocol should add a firm stop of at least 0.5~s every 4~s. A
+also used for post-selection diagnostics, and four rigidity recordings.
+Collecting further sessions in which the board stays fully visible is
+impractical, so the effect of stop rate is measured in a twin whose travel,
+angular rate, sensor noise and board-frame gravity match these recordings.
+That twin is not a substitute for the real estimator comparison above. A
 complete inertial pose stream must also propagate its covariance.

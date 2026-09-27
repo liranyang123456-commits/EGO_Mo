@@ -22,11 +22,15 @@ ROOT_FILES = [
     "run_capture.bat", "run_simulator.bat",
 ]
 RESULT_FILES = [
-    "trajectory_split_20260924.json", "study_protocol_v2.lock.json",
-    "prospective_test_checklist.json", "method_benchmark_20260924.json",
+    "trajectory_split_paper.json", "trajectory_split_20260924.json",
+    "study_protocol_v2.lock.json",
+    "method_benchmark_20260924.json",
     "session_cv_benchmark.json", "session_cv_gate_benchmark.json",
     "uncertainty_val.json", "zupt_bound.json", "pure_imu_pose_benchmark.json",
     "reference_audit.json", "stereo_extrinsic_measured.json",
+    "summary_table.json", "twin_realistic_summary.json",
+    "twin_protocol_sweep.json", "twin_motion_class_eval.json",
+    "twin_imunet_synthetic.json", "latency_benchmark.json",
 ]
 CODE_DIRS = ["ego_capture", "ego_sim", "tools"]
 PAPER_GLOBS = ["*.tex", "*.bib", "REVISION_NOTES.md", "figures/*.pdf"]
