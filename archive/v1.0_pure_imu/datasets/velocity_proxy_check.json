@@ -1,0 +1,48 @@
+{
+  "model": "physnet_v1/eval_wd1.npz",
+  "variants": {
+    "full": {
+      "n": 1272,
+      "mean_error_mm": 29.86100959777832,
+      "per_axis_correlation": [
+        -0.4538315207600587,
+        -0.3875912725951275,
+        -0.5581796430174467
+      ],
+      "in_sample_mm": 25.646278009411557,
+      "in_sample_reduction_percent": 14.114497952809813,
+      "cross_session_mm": 28.567333221435547,
+      "cross_session_reduction_percent": 4.332326313705826,
+      "mean_proxy_magnitude_mm": 24.157666856599448
+    },
+    "context": {
+      "n": 1272,
+      "mean_error_mm": 29.86100959777832,
+      "per_axis_correlation": [
+        0.35517522609307817,
+        0.2855624023441454,
+        0.19809767934595207
+      ],
+      "in_sample_mm": 29.31824071043692,
+      "in_sample_reduction_percent": 1.8176508251140366,
+      "cross_session_mm": 31.81485939025879,
+      "cross_session_reduction_percent": -6.543147129981297,
+      "mean_proxy_magnitude_mm": 33.60689518508384
+    },
+    "oracle_initial": {
+      "n": 771,
+      "mean_error_mm": 25.792837142944336,
+      "per_axis_correlation": [
+        -0.10285881941876521,
+        -0.022338631728557597,
+        -0.262390668761888
+      ],
+      "in_sample_mm": 25.26919552090479,
+      "in_sample_reduction_percent": 2.0301823298364385,
+      "cross_session_mm": 28.316036224365234,
+      "cross_session_reduction_percent": -9.782557333407272,
+      "mean_proxy_magnitude_mm": 75.77708851689418
+    }
+  },
+  "oracle_reference_displacement_mm": 35.62127685546875
+}

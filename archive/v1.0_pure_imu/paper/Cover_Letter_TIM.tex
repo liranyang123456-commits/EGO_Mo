@@ -1,0 +1,57 @@
+﻿\documentclass[11pt]{letter}
+\usepackage[margin=25mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\signature{Ranyang Li\\Corresponding Author\\
+School of Artificial Intelligence and Big Data\\
+Henan University of Technology\\
+\href{mailto:lry@haut.edu.cn}{lry@haut.edu.cn}}
+\address{School of Artificial Intelligence and Big Data\\
+Henan University of Technology\\
+Zhengzhou 450001, China}
+\begin{document}
+\begin{letter}{Editor-in-Chief\\
+IEEE Transactions on Instrumentation and Measurement}
+\opening{Dear Editor-in-Chief,}
+
+We submit the regular paper ``Pure-Inertial Camera Motion Estimation from
+Continuous IMU Streams'' for consideration in the \emph{IEEE Transactions on
+Instrumentation and Measurement}.
+
+The paper addresses an instrumentation question: which part of a camera
+displacement is observable from a continuous low-cost IMU stream, and which
+part requires an acquisition constraint. We provide a leakage-controlled
+reference and calibration chain with a simulated known-displacement test, a
+digital twin with measured sensor parameters, and a compact physics-structured
+IMU-only estimator. The experiments include protocol-matched reimplementations
+of public inertial architectures, session-wise cross-validation, uncertainty
+coverage, and translation trajectory error. Images are used for calibration,
+training supervision and evaluation only; deployment inference is based solely
+on the IMU stream. We report the real-data comparison as it stands: all learned
+models beat zero motion, while the proposed network matches the larger public
+architectures with one seventh of their parameters rather than outperforming
+them significantly.
+
+We make the following limitation explicit. The historical real-test recording
+was excluded from gradient fitting and the initial fixed-split architecture
+selection, but it was subsequently reused for reported exploratory
+cross-validation-ensemble, stillness-gate and blend diagnostics. We therefore
+call it ``held out'', not a one-shot sealed confirmatory test. Further
+handheld sessions with a continuously visible board were not collected.
+The effect of stop rate is therefore taken from a digital twin whose travel,
+angular rate, noise and board-frame gravity match the existing recordings;
+that twin does not replace the real estimator comparison.
+
+The manuscript is original, is not under consideration elsewhere, contains no
+human-subject or clinical data, and has been approved by all authors. Software,
+configuration, split manifests, the frozen study protocol and aggregate result
+artefacts are available at
+\url{https://github.com/liranyang123456-commits/EGO_Mo}; an archived release
+with a DOI will be referenced in the final version.
+
+The current IEEE two-column manuscript has 15 pages. We acknowledge the
+mandatory overlength-page policy and will identify an author with financial
+authority in PeerTrack.
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}

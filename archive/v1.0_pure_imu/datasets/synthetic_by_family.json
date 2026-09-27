@@ -1,0 +1,66 @@
+{
+  "synthetic_test": {
+    "lateral": {
+      "sequences": 3,
+      "err_mm": 5.15,
+      "zero_mm": 36.63333333333333,
+      "reduction_percent": 85.9417652411283
+    },
+    "depth": {
+      "sequences": 3,
+      "err_mm": 8.776666666666667,
+      "zero_mm": 47.78333333333333,
+      "reduction_percent": 81.63236832926404
+    },
+    "circle": {
+      "sequences": 3,
+      "err_mm": 10.336666666666668,
+      "zero_mm": 77.13666666666668,
+      "reduction_percent": 86.59954193855063
+    },
+    "mixed": {
+      "sequences": 3,
+      "err_mm": 9.723333333333334,
+      "zero_mm": 46.36666666666667,
+      "reduction_percent": 79.0294751976995
+    },
+    "random_spline": {
+      "sequences": 3,
+      "err_mm": 49.44666666666667,
+      "zero_mm": 84.39666666666668,
+      "reduction_percent": 41.4115881353924
+    }
+  },
+  "synthetic_ood": {
+    "lateral": {
+      "sequences": 1,
+      "err_mm": 9.91,
+      "zero_mm": 7.209999999999999,
+      "reduction_percent": -37.44798890429959
+    },
+    "depth": {
+      "sequences": 1,
+      "err_mm": 16.99,
+      "zero_mm": 77.21,
+      "reduction_percent": 77.99507835772567
+    },
+    "circle": {
+      "sequences": 1,
+      "err_mm": 20.75,
+      "zero_mm": 103.2,
+      "reduction_percent": 79.89341085271317
+    },
+    "mixed": {
+      "sequences": 1,
+      "err_mm": 23.35,
+      "zero_mm": 62.220000000000006,
+      "reduction_percent": 62.47187399549985
+    },
+    "random_spline": {
+      "sequences": 1,
+      "err_mm": 100.33,
+      "zero_mm": 86.72,
+      "reduction_percent": -15.694188191881908
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "name": "EGO_Mo prospective validation v2",
+  "status": "FROZEN",
+  "scientific_scope": {
+    "inference_input": "continuous six-axis IMU stream and timestamps only",
+    "visual_data_role": "calibration, training supervision, and evaluation only",
+    "output": "3-D camera displacement increments and translation trajectory",
+    "not_claimed": "reference-grade ground truth or learned full absolute SE(3) pose"
+  },
+  "sensor_protocol": {
+    "imu_hz": 200,
+    "camera_resolution": [
+      1280,
+      720
+    ],
+    "camera_actual_fps_target": 10,
+    "board": "GP050, 11x8 inner corners, 3-mm pitch"
+  },
+  "window_protocol": {
+    "horizon_s": 3.0,
+    "context_before_s": 2.0,
+    "context_after_s": 2.0,
+    "target_frame": "camera frame at pair start"
+  },
+  "prospective_acquisition": {
+    "session_duration_s": 180,
+    "pause_every_s": [
+      10,
+      15
+    ],
+    "pause_duration_s": [
+      1,
+      2
+    ],
+    "travel_cm": [
+      10,
+      20
+    ],
+    "working_distance_cm": [
+      15,
+      40
+    ],
+    "required_test_sessions": 4,
+    "test_theme": "T",
+    "independence_requirements": [
+      "at least two acquisition days",
+      "at least two operators or grip configurations",
+      "split assigned before capture",
+      "no model or threshold update after viewing a theme-T metric"
+    ]
+  },
+  "acceptance": {
+    "usb_imu_hz_min": 195,
+    "ble_imu_hz_min": 150,
+    "left_image_fraction_min": 0.85,
+    "chessboard_usable_fraction_min": 0.7,
+    "reprojection_p50_px_max_720p": 0.4,
+    "frame_drops_max": 0,
+    "rigidity_axis_correlation_min": 0.75,
+    "rigidity_magnitude_correlation_min": 0.9,
+    "rigidity_scale_range": [
+      0.85,
+      1.15
+    ]
+  },
+  "frozen_models": {
+    "physnet": {
+      "input_representation": "anchor-frame 24-channel physics features",
+      "width": 96,
+      "weight_decay": 0.1,
+      "dense_supervision": true,
+      "lever_arm": true,
+      "stillness_weight": 1.0,
+      "stillness_gate": true,
+      "still_mm_s": 3.0,
+      "moving_mm_s": 8.0
+    },
+    "baseline": "adapted IMUNet, same input/target/split protocol",
+    "ensemble": "eight leave-one-session-out folds x two seeds",
+    "blend": {
+      "equal_weight_local_error": [
+        0.5,
+        0.5
+      ],
+      "cv_calibrated_physnet_weight": 0.65,
+      "cv_calibrated_shrink": 1.05
+    },
+    "uncertainty_scale": 4.559
+  },
+  "final_metrics": [
+    "mean 3-s Euclidean displacement error (mm)",
+    "multivariate R2",
+    "fastest-reference-third error (mm)",
+    "translation-trajectory ATE RMSE (mm)",
+    "1-sigma and 2-sigma interval coverage",
+    "3-s block-bootstrap paired 95% confidence interval"
+  ],
+  "comparisons": [
+    "zero motion",
+    "ridge summary features",
+    "adapted RoNIN-ResNet",
+    "adapted TLIO-ResNet",
+    "adapted IMUNet",
+    "PhysNet",
+    "predeclared PhysNet/IMUNet blends"
+  ],
+  "decision_rules": {
+    "primary_method_claim": "pooled prospective-test mean displacement error",
+    "significance": "paired 3-s block-bootstrap CI excludes zero",
+    "sota_claim": "only protocol-matched evaluated methods; no cross-protocol official-score claim",
+    "test_reuse": "one final evaluation bundle; a correction requires a signed amendment and new test data"
+  },
+  "protocol_id": "85393aba60ecdc40",
+  "frozen_at_utc": "2026-09-26T01:10:42+00:00"
+}

@@ -1,0 +1,119 @@
+{
+  "seeds": [
+    0,
+    1
+  ],
+  "tag": "_e50",
+  "corpora": {
+    "pause_4": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.699,
+      "all": {
+        "zero": 56.76,
+        "learned": 57.49,
+        "hybrid": 33.32,
+        "learned_on_switched": 57.7,
+        "physics_on_switched": 23.11
+      },
+      "free": {
+        "n": 175,
+        "switched": 103,
+        "zero": 71.12,
+        "learned": 71.98,
+        "hybrid": 41.46
+      },
+      "context": {
+        "n": 717,
+        "switched": 90,
+        "zero": 59.27,
+        "learned": 59.04,
+        "hybrid": 56.85
+      },
+      "window": {
+        "n": 2308,
+        "switched": 2044,
+        "zero": 54.9,
+        "learned": 55.91,
+        "hybrid": 25.39
+      }
+    },
+    "pause_12.5": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.315,
+      "all": {
+        "zero": 55.79,
+        "learned": 55.29,
+        "hybrid": 46.53,
+        "learned_on_switched": 52.03,
+        "physics_on_switched": 24.24
+      },
+      "free": {
+        "n": 1344,
+        "switched": 44,
+        "zero": 63.0,
+        "learned": 62.0,
+        "hybrid": 62.08
+      },
+      "context": {
+        "n": 470,
+        "switched": 16,
+        "zero": 55.22,
+        "learned": 54.77,
+        "hybrid": 54.47
+      },
+      "window": {
+        "n": 1386,
+        "switched": 948,
+        "zero": 49.0,
+        "learned": 48.95,
+        "hybrid": 28.76
+      }
+    },
+    "pause_inf": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.024,
+      "all": {
+        "zero": 57.36,
+        "learned": 56.42,
+        "hybrid": 56.15,
+        "learned_on_switched": 55.48,
+        "physics_on_switched": 44.39
+      },
+      "free": {
+        "n": 2555,
+        "switched": 25,
+        "zero": 60.49,
+        "learned": 58.96,
+        "hybrid": 58.91
+      },
+      "context": {
+        "n": 176,
+        "switched": 3,
+        "zero": 50.31,
+        "learned": 52.68,
+        "hybrid": 51.97
+      },
+      "window": {
+        "n": 469,
+        "switched": 49,
+        "zero": 42.92,
+        "learned": 43.96,
+        "hybrid": 42.67
+      }
+    }
+  },
+  "val_pooled_err_by_max_span": {
+    "0.0": 49.95,
+    "0.25": 49.89,
+    "0.5": 49.86,
+    "0.75": 49.86,
+    "1.0": 49.47,
+    "1.5": 46.27,
+    "2.0": 43.52,
+    "3.0": 41.88
+  },
+  "chosen_max_span_s": 3.0
+}

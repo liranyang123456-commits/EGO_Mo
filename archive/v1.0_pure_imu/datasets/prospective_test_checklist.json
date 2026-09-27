@@ -1,0 +1,101 @@
+{
+  "protocol_id": "85393aba60ecdc40",
+  "slots": [
+    {
+      "slot": "T1",
+      "theme": "T",
+      "split": "test",
+      "session": "traj_20260926_143837",
+      "day": "2026-09-26",
+      "operator": null,
+      "grip": null,
+      "status": "ACCEPTED"
+    },
+    {
+      "slot": "T2",
+      "theme": "T",
+      "split": "test",
+      "session": null,
+      "day": null,
+      "operator": null,
+      "grip": null,
+      "status": "PENDING"
+    },
+    {
+      "slot": "T3",
+      "theme": "T",
+      "split": "test",
+      "session": null,
+      "day": null,
+      "operator": null,
+      "grip": null,
+      "status": "PENDING"
+    },
+    {
+      "slot": "T4",
+      "theme": "T",
+      "split": "test",
+      "session": null,
+      "day": null,
+      "operator": null,
+      "grip": null,
+      "status": "PENDING"
+    }
+  ],
+  "rejected": [
+    {
+      "session": "traj_20260926_144821",
+      "day": "2026-09-26",
+      "reason": "BLE board IMU delivered 0 samples (28 reconnects); protocol requires >=150 Hz, no board-still labels possible",
+      "kept_on_disk": "E:\\EGO_Mo\\datasets\\rejected_prospective\\traj_20260926_144821"
+    },
+    {
+      "session": "traj_20260926_153439",
+      "reason": "failed frozen acceptance: resolution, reprojection_p50",
+      "values": {
+        "resolution": "640x480",
+        "seconds": 124.1,
+        "usb_hz": 200.0,
+        "bt_hz": 187.7,
+        "bt_samples": 23202,
+        "left_image_fraction": 1.0,
+        "usable_fraction": 0.986,
+        "reproj_p50_px": 0.749,
+        "drops": 0,
+        "created_at": "2026-09-26T15:34:39"
+      },
+      "kept_on_disk": "E:\\EGO_Mo\\datasets\\rejected_prospective\\traj_20260926_153439"
+    },
+    {
+      "session": "traj_20260926_154054",
+      "reason": "failed frozen acceptance: resolution, reprojection_p50",
+      "values": {
+        "resolution": "640x480",
+        "seconds": 126.1,
+        "usb_hz": 200.1,
+        "bt_hz": 187.6,
+        "bt_samples": 23581,
+        "left_image_fraction": 1.0,
+        "usable_fraction": 0.882,
+        "reproj_p50_px": 0.917,
+        "drops": 0,
+        "created_at": "2026-09-26T15:40:54"
+      },
+      "kept_on_disk": "E:\\EGO_Mo\\datasets\\rejected_prospective\\traj_20260926_154054"
+    }
+  ],
+  "interim_looks": [
+    {
+      "utc": "2026-09-26T07:52:23+00:00",
+      "protocol_sessions": [
+        "traj_20260926_143837"
+      ],
+      "exploratory": [
+        "traj_20260926_153439",
+        "traj_20260926_154054"
+      ],
+      "output": "E:\\EGO_Mo\\datasets\\interim_eval.json",
+      "commitment": "no model, threshold or blend change after this look"
+    }
+  ]
+}

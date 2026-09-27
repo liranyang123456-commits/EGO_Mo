@@ -1,0 +1,169 @@
+{
+  "kind": "measured_stereo_extrinsic_fixed_intrinsics",
+  "session": "calib_intrinsics_20260922_123120",
+  "paired_detections": 41,
+  "selection": {
+    "pairing": "same image index",
+    "right_offset_frames": -0.5175128103963131,
+    "lag_estimate": {
+      "offsets": [
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "corr": [
+        0.8818,
+        0.9,
+        0.9111,
+        0.9109,
+        0.9014,
+        0.885,
+        0.8592
+      ],
+      "peak_offset_frames": -0.5175128103963131
+    },
+    "left_frames": 1685,
+    "left_detected": 1435,
+    "right_detected": 1304,
+    "pairs": 41,
+    "motion_px_max": 4.0,
+    "min_spacing_s": 0.0,
+    "mode": "quasi_static",
+    "fold_block_s": 10.0
+  },
+  "pair_offset": {
+    "right_offset_frames": -0.5175128103963131
+  },
+  "image_size": [
+    1280,
+    720
+  ],
+  "fit_rms_px": 0.5750613941573044,
+  "convention": "p_C1 = R_C1_C0 p_C0 + t_C1_C0",
+  "R_C1_C0": [
+    [
+      0.9842315463060037,
+      -0.17649404071640665,
+      -0.011752312440040378
+    ],
+    [
+      0.17680372112417228,
+      0.9836186661889653,
+      0.035139204904023294
+    ],
+    [
+      0.0053579336258356754,
+      -0.036662966549863396,
+      0.9993133239535159
+    ]
+  ],
+  "t_C1_C0_m": [
+    -0.04608775054886521,
+    0.0037283581137447417,
+    -0.0024461941059313696
+  ],
+  "baseline_mm": 46.302972587973706,
+  "rotation_vector_deg": [
+    -2.068312474875785,
+    -0.4928727734783586,
+    10.176992608501516
+  ],
+  "E": [
+    [
+      0.00045247251582747404,
+      0.0022694295149053873,
+      0.003811755255458655
+    ],
+    [
+      -0.0021606862990405725,
+      -0.0012579749745990083,
+      0.04608485163194886
+    ],
+    [
+      -0.011818053466755504,
+      -0.04467473873379194,
+      -0.0015756700806609986
+    ]
+  ],
+  "F": [
+    [
+      3.8598509533587374e-10,
+      1.932004865926644e-09,
+      2.554172267003984e-06
+    ],
+    [
+      -1.8586634401855777e-09,
+      -1.0799265703099175e-09,
+      4.5121816675239476e-05
+    ],
+    [
+      -1.0418001502018073e-05,
+      -4.157372161722982e-05,
+      0.004884541944160249
+    ]
+  ],
+  "cross_validation": {
+    "folds": [
+      {
+        "fold": 0,
+        "train": 10,
+        "test": 31,
+        "fit_rms_px": 0.7171168576922144,
+        "holdout_rotation_rmse_deg": 1.3527824346633293,
+        "holdout_translation_rmse_mm": 4.391519979605245,
+        "holdout_epipolar_p50_px": 0.9891826071041424
+      },
+      {
+        "fold": 1,
+        "train": 41,
+        "test": 0,
+        "fit_rms_px": 0.5750613941573044,
+        "holdout_rotation_rmse_deg": NaN,
+        "holdout_translation_rmse_mm": NaN,
+        "holdout_epipolar_p50_px": NaN
+      },
+      {
+        "fold": 2,
+        "train": 38,
+        "test": 3,
+        "fit_rms_px": 0.5792508517963274,
+        "holdout_rotation_rmse_deg": 1.901786005125177,
+        "holdout_translation_rmse_mm": 5.948678039595016,
+        "holdout_epipolar_p50_px": 0.6245508741708747
+      },
+      {
+        "fold": 3,
+        "train": 37,
+        "test": 4,
+        "fit_rms_px": 0.4860550834621234,
+        "holdout_rotation_rmse_deg": 1.756116277569609,
+        "holdout_translation_rmse_mm": 5.965750629935347,
+        "holdout_epipolar_p50_px": 2.0102900980374994
+      },
+      {
+        "fold": 4,
+        "train": 38,
+        "test": 3,
+        "fit_rms_px": 0.5565415395339474,
+        "holdout_rotation_rmse_deg": 1.6781692934532202,
+        "holdout_translation_rmse_mm": 6.256837499501841,
+        "holdout_epipolar_p50_px": 1.0702376690143305
+      }
+    ],
+    "rotation_rmse_deg": 1.46807933147162,
+    "translation_rmse_mm": 4.848469609503719,
+    "epipolar_p50_px": 1.0197810765077584,
+    "epipolar_p95_px": 2.5968992721816417
+  },
+  "acceptance": {
+    "fit_rms_px_max": 0.6,
+    "holdout_epipolar_p95_px_max": 1.0,
+    "holdout_rotation_rmse_deg_max": 0.5,
+    "holdout_translation_rmse_mm_max": 2.0
+  },
+  "passed": false
+}

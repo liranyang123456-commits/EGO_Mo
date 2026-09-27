@@ -1,0 +1,66 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{multirow}
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\title{Pure-Inertial Camera Motion Estimation from Continuous IMU Streams}
+
+\author{Ranyang~Li,
+        Nan~Wei,
+        Zhipeng~Lin,
+        Wufeng~Liu,
+        and~Chao~Fan
+\thanks{This work was supported in part by the National Natural Science
+Foundation of China under Grant 62402163;  in part by the Open
+Project Program of the State Key Laboratory of Virtual Reality Technology and
+Systems under Grant VRLAB2023C03; in part by the High-Level Talents Fund of
+Henan University of Technology under Grants 2022BS076 and 2022BS075; and in
+part by the Cultivation Project of the Tuoxin Team at Henan University of
+Technology under Grant 2024TXTD18. \emph{(Corresponding author: Ranyang Li.)}}
+\thanks{Ranyang Li, Wufeng Liu, and Chao Fan are with the School of
+Artificial Intelligence and Big Data, Henan University of Technology,
+Zhengzhou 450001, China (e-mail: lry@haut.edu.cn).}
+\thanks{Nan Wei is with Henan Provincial People's Hospital, Zhengzhou
+University, Zhengzhou 450003, China.}
+\thanks{Zhipeng Lin is with the State Key Laboratory of Virtual Reality
+Technology and Systems, Beihang University, Beijing 100191, China (e-mail:
+linzhi\_p@outlook.com).}
+}
+
+\markboth{IEEE Transactions on Instrumentation and Measurement}{}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related}
+\input{sections/framework}
+\input{sections/system}
+\input{sections/reference}
+\input{sections/imu_sensor}
+\input{sections/digital_twin}
+\input{sections/learning}
+\input{sections/experiments}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\section*{Data and Code Availability}
+Code, the frozen study protocol, the model manifest and the scripts that
+regenerate every table and figure are at
+\url{https://github.com/liranyang123456-commits/EGO_Mo}; the recorded sessions
+(about 17~GB) are a separate archive with a per-file SHA-256 manifest.
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+% Author biographies and photographs are omitted from the review manuscript
+% and retained in sections/biographies.tex for the accepted final version.
+
+\end{document}

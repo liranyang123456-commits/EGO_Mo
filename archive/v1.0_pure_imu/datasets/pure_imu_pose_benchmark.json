@@ -1,0 +1,168 @@
+{
+  "kind": "initially_anchored_pure_imu_relative_6dof",
+  "not_claimed": [
+    "absolute attitude without initialization",
+    "reference-grade ground truth",
+    "learned orientation (orientation is gyroscope-integrated)"
+  ],
+  "sessions": {
+    "traj_20260923_023422": {
+      "physnet": {
+        "session": "traj_20260923_023422",
+        "method": "physnet",
+        "gauge": "reference position and attitude at first usable node only",
+        "inference_after_initialization": "IMU stream only",
+        "nodes": 713,
+        "edges": 647,
+        "orientation": {
+          "rmse_deg": 4.514256709856653,
+          "mean_deg": 3.822173585994929,
+          "p95_deg": 7.390248671988671,
+          "terminal_deg": 5.548201888950216,
+          "terminal_drift_deg_s": 0.0482141834983714
+        },
+        "translation": {
+          "nodes": 678,
+          "ate_rmse_mm": 87.03,
+          "ate_mean_mm": 72.02,
+          "ate_p90_mm": 143.16
+        },
+        "translation_error_p95_mm": 164.0501288475558,
+        "relative_pose_error": {
+          "1s": {
+            "n": 675,
+            "rotation_rmse_deg": 3.235009308526892,
+            "translation_rmse_mm": 47.65664959845999
+          },
+          "3s": {
+            "n": 690,
+            "rotation_rmse_deg": 3.4795685590239644,
+            "translation_rmse_mm": 52.458426756097836
+          },
+          "10s": {
+            "n": 674,
+            "rotation_rmse_deg": 3.8139421728551595,
+            "translation_rmse_mm": 84.68686570659014
+          }
+        }
+      },
+      "imunet": {
+        "session": "traj_20260923_023422",
+        "method": "imunet",
+        "gauge": "reference position and attitude at first usable node only",
+        "inference_after_initialization": "IMU stream only",
+        "nodes": 713,
+        "edges": 647,
+        "orientation": {
+          "rmse_deg": 4.514256709856653,
+          "mean_deg": 3.822173585994929,
+          "p95_deg": 7.390248671988671,
+          "terminal_deg": 5.548201888950216,
+          "terminal_drift_deg_s": 0.0482141834983714
+        },
+        "translation": {
+          "nodes": 678,
+          "ate_rmse_mm": 82.8,
+          "ate_mean_mm": 69.52,
+          "ate_p90_mm": 135.02
+        },
+        "translation_error_p95_mm": 147.92634500757956,
+        "relative_pose_error": {
+          "1s": {
+            "n": 675,
+            "rotation_rmse_deg": 3.235009308526892,
+            "translation_rmse_mm": 61.47353578895572
+          },
+          "3s": {
+            "n": 690,
+            "rotation_rmse_deg": 3.4795685590239644,
+            "translation_rmse_mm": 52.25887600612434
+          },
+          "10s": {
+            "n": 674,
+            "rotation_rmse_deg": 3.8139421728551595,
+            "translation_rmse_mm": 92.02205742840763
+          }
+        }
+      },
+      "equal_blend": {
+        "session": "traj_20260923_023422",
+        "method": "equal_blend",
+        "gauge": "reference position and attitude at first usable node only",
+        "inference_after_initialization": "IMU stream only",
+        "nodes": 713,
+        "edges": 647,
+        "orientation": {
+          "rmse_deg": 4.514256709856653,
+          "mean_deg": 3.822173585994929,
+          "p95_deg": 7.390248671988671,
+          "terminal_deg": 5.548201888950216,
+          "terminal_drift_deg_s": 0.0482141834983714
+        },
+        "translation": {
+          "nodes": 678,
+          "ate_rmse_mm": 81.11,
+          "ate_mean_mm": 66.86,
+          "ate_p90_mm": 136.85
+        },
+        "translation_error_p95_mm": 152.02967203710884,
+        "relative_pose_error": {
+          "1s": {
+            "n": 675,
+            "rotation_rmse_deg": 3.235009308526892,
+            "translation_rmse_mm": 48.03802116903883
+          },
+          "3s": {
+            "n": 690,
+            "rotation_rmse_deg": 3.4795685590239644,
+            "translation_rmse_mm": 51.11752854822999
+          },
+          "10s": {
+            "n": 674,
+            "rotation_rmse_deg": 3.8139421728551595,
+            "translation_rmse_mm": 83.25665794754832
+          }
+        }
+      },
+      "cv_calibrated_blend": {
+        "session": "traj_20260923_023422",
+        "method": "cv_calibrated_blend",
+        "gauge": "reference position and attitude at first usable node only",
+        "inference_after_initialization": "IMU stream only",
+        "nodes": 713,
+        "edges": 647,
+        "orientation": {
+          "rmse_deg": 4.514256709856653,
+          "mean_deg": 3.822173585994929,
+          "p95_deg": 7.390248671988671,
+          "terminal_deg": 5.548201888950216,
+          "terminal_drift_deg_s": 0.0482141834983714
+        },
+        "translation": {
+          "nodes": 678,
+          "ate_rmse_mm": 80.59,
+          "ate_mean_mm": 65.94,
+          "ate_p90_mm": 136.57
+        },
+        "translation_error_p95_mm": 152.96786505937078,
+        "relative_pose_error": {
+          "1s": {
+            "n": 675,
+            "rotation_rmse_deg": 3.235009308526892,
+            "translation_rmse_mm": 45.69173659661206
+          },
+          "3s": {
+            "n": 690,
+            "rotation_rmse_deg": 3.4795685590239644,
+            "translation_rmse_mm": 50.91662399563791
+          },
+          "10s": {
+            "n": 674,
+            "rotation_rmse_deg": 3.8139421728551595,
+            "translation_rmse_mm": 81.8772972736272
+          }
+        }
+      }
+    }
+  }
+}

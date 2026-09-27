@@ -1,0 +1,47 @@
+{
+  "round": "network optimisation 2026-09-25",
+  "new_model": {
+    "name": "PhysNet (anchor-frame physics-structured Conv-BiGRU)",
+    "script": "tools/train_physnet.py",
+    "selected_config": "width 96, weight decay 0.1, dense supervision, pre-integration channels, learnable lever arm, ext 1 deg, no time reversal",
+    "parameters": 423846,
+    "learned_lever_arm_mm_range": "x -18..-22, y -1..-4, z -19..-28 (camera optical centre relative to IMU, camera frame)"
+  },
+  "validation_selected_ensemble_5_seeds": {
+    "source": "datasets/physnet_v1/eval_wd1.json",
+    "real_validation": {"err_mm": 31.46, "fast_mm": 51.88, "r2": 0.428},
+    "real_test": {"err_mm": 45.53, "fast_mm": 76.29, "r2": 0.173}
+  },
+  "leave_one_session_out_cv": {
+    "source": "datasets/session_cv_benchmark.json",
+    "folds": 8,
+    "seeds_per_fold": 2,
+    "cv_err_mm": {"zero_motion": 30.42, "imunet": 27.17, "physnet": 26.38, "equal_blend": 25.72, "calibrated_blend": 25.60},
+    "sessions_won": {"physnet": 5, "imunet": 3},
+    "real_test_fold_ensembles": {
+      "imunet_cv16": {"err_mm": 44.35, "fast_mm": 75.89, "r2": 0.199, "ate_rmse_mm": 94.38},
+      "physnet_cv16": {"err_mm": 44.61, "fast_mm": 74.97, "r2": 0.201, "ate_rmse_mm": 105.8},
+      "equal_blend": {"err_mm": 43.43, "fast_mm": 75.01, "r2": 0.226, "ate_rmse_mm": 98.09},
+      "cv_calibrated_blend": {"err_mm": 43.69, "fast_mm": 76.14, "r2": 0.216, "ate_rmse_mm": 99.96}
+    },
+    "block_bootstrap_95ci_mm": {
+      "physnet_vs_imunet": [-2.81, 2.35],
+      "calibrated_blend_vs_imunet": [-1.08, 2.45],
+      "physnet_vs_zero": [1.1, 9.68]
+    }
+  },
+  "ablations_val_err_mm_mean_of_2_seeds": {
+    "wd0.1 (selected)": 31.97, "base wd0.01": 32.55, "width 64": 32.29, "no dense": 32.83, "no phys channels": 32.55,
+    "no lever": 32.81, "dropout 0.2": 33.0, "context 3 s": 32.87, "context 4 s": 33.11, "coarse 21 s branch": 32.58,
+    "coarse 31 s branch": 32.12, "time reversal": 34.2, "synthetic pretrain": 32.38, "balance": 32.38, "aug x2": 32.93
+  },
+  "error_analysis": {
+    "window_mean_velocity_term": "corr(err, v_mean*dt) = -0.69/-0.43/-0.61 per axis; oracle removal 29.3 -> 22.9 mm on validation",
+    "drift_term_rms_mm_vs_window_s": {"7": 29.2, "11": 19.3, "15": 16.1, "21": 11.2, "31": 7.4, "61": 4.7},
+    "note": "longer windows did not help in practice with ~500 s of training motion"
+  },
+  "test_evaluations_performed": [
+    "physnet wd1 5-seed ensemble (validation-selected)",
+    "fold ensembles physnet/imunet + their fixed equal and CV-calibrated blends (single pass)"
+  ]
+}

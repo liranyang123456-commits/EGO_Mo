@@ -1,0 +1,464 @@
+{
+  "device": "cuda",
+  "corpus": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023",
+  "real_screen": [
+    {
+      "name": "rigid_20260924_123958",
+      "role": "extra_train",
+      "seconds": 96.1,
+      "cam0": 938,
+      "cam1": 938,
+      "usb_hz": 200.15,
+      "bt_hz": 187.14,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "rigid_20260924_124243",
+      "role": "extra_train",
+      "seconds": 69.8,
+      "cam0": 681,
+      "cam1": 681,
+      "usb_hz": 200.13,
+      "bt_hz": 187.2,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "rigid_20260924_133412",
+      "role": null,
+      "seconds": 74.1,
+      "cam0": 2228,
+      "cam1": 2228,
+      "usb_hz": 200.11,
+      "bt_hz": 187.3,
+      "usable": false,
+      "reasons": [
+        "rigidity verdict 'NOT rigid'"
+      ]
+    },
+    {
+      "name": "rigid_20260924_135318",
+      "role": null,
+      "seconds": 86.7,
+      "cam0": 2606,
+      "cam1": 2605,
+      "usb_hz": 200.03,
+      "bt_hz": 187.23,
+      "usable": false,
+      "reasons": [
+        "rigidity verdict 'NOT rigid'"
+      ]
+    },
+    {
+      "name": "rigid_20260924_140510",
+      "role": "extra_train",
+      "seconds": 92.3,
+      "cam0": 901,
+      "cam1": 901,
+      "usb_hz": 200.02,
+      "bt_hz": 187.24,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "rigid_20260924_142902",
+      "role": "extra_train",
+      "seconds": 84.2,
+      "cam0": 821,
+      "cam1": 821,
+      "usb_hz": 200.05,
+      "bt_hz": 187.25,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_015507",
+      "role": "train",
+      "seconds": 60.7,
+      "cam0": 1793,
+      "cam1": 1596,
+      "usb_hz": 200.08,
+      "bt_hz": 187.44,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_015629",
+      "role": "train",
+      "seconds": 59.6,
+      "cam0": 1732,
+      "cam1": 1504,
+      "usb_hz": 200.08,
+      "bt_hz": 187.76,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_015918",
+      "role": "train",
+      "seconds": 40.8,
+      "cam0": 399,
+      "cam1": 391,
+      "usb_hz": 200.06,
+      "bt_hz": 188.0,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_020132",
+      "role": "train",
+      "seconds": 63.7,
+      "cam0": 1560,
+      "cam1": 1525,
+      "usb_hz": 200.02,
+      "bt_hz": 187.47,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_020407",
+      "role": "train",
+      "seconds": 75.8,
+      "cam0": 1861,
+      "cam1": 1814,
+      "usb_hz": 200.02,
+      "bt_hz": 187.4,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_023241",
+      "role": "val",
+      "seconds": 86.8,
+      "cam0": 847,
+      "cam1": 847,
+      "usb_hz": 200.06,
+      "bt_hz": 187.2,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260923_023422",
+      "role": "test",
+      "seconds": 115.2,
+      "cam0": 1125,
+      "cam1": 1124,
+      "usb_hz": 200.04,
+      "bt_hz": 187.02,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260924_143156",
+      "role": "train",
+      "seconds": 194.9,
+      "cam0": 1901,
+      "cam1": 1901,
+      "usb_hz": 200.07,
+      "bt_hz": 187.12,
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "name": "traj_20260924_144019",
+      "role": "val",
+      "seconds": 174.0,
+      "cam0": 1699,
+      "cam1": 1699,
+      "usb_hz": 200.05,
+      "bt_hz": 187.08,
+      "usable": true,
+      "reasons": []
+    }
+  ],
+  "real_usable": [
+    "rigid_20260924_123958",
+    "rigid_20260924_124243",
+    "rigid_20260924_140510",
+    "rigid_20260924_142902",
+    "traj_20260923_015507",
+    "traj_20260923_015629",
+    "traj_20260923_015918",
+    "traj_20260923_020132",
+    "traj_20260923_020407",
+    "traj_20260923_023241",
+    "traj_20260923_023422",
+    "traj_20260924_143156",
+    "traj_20260924_144019"
+  ],
+  "real_rejected": [
+    {
+      "name": "rigid_20260924_133412",
+      "role": null,
+      "seconds": 74.1,
+      "cam0": 2228,
+      "cam1": 2228,
+      "usb_hz": 200.11,
+      "bt_hz": 187.3,
+      "usable": false,
+      "reasons": [
+        "rigidity verdict 'NOT rigid'"
+      ]
+    },
+    {
+      "name": "rigid_20260924_135318",
+      "role": null,
+      "seconds": 86.7,
+      "cam0": 2606,
+      "cam1": 2605,
+      "usb_hz": 200.03,
+      "bt_hz": 187.23,
+      "usable": false,
+      "reasons": [
+        "rigidity verdict 'NOT rigid'"
+      ]
+    }
+  ],
+  "synthetic_selected": [
+    {
+      "name": "sim_20260925_135117_s30096",
+      "motion": "lateral",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135117_s30096"
+    },
+    {
+      "name": "sim_20260925_135118_s30098",
+      "motion": "depth",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135118_s30098"
+    },
+    {
+      "name": "sim_20260925_135119_s30100",
+      "motion": "circle",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135119_s30100"
+    },
+    {
+      "name": "sim_20260925_135120_s30102",
+      "motion": "mixed",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135120_s30102"
+    },
+    {
+      "name": "sim_20260925_135124_s30108",
+      "motion": "aggressive_6dof",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135124_s30108"
+    },
+    {
+      "name": "sim_20260925_135126_s30112",
+      "motion": "translation_xyz",
+      "path": "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_135023\\imu\\sim_20260925_135126_s30112"
+    }
+  ],
+  "synthetic_used": [
+    "sim_20260925_135117_s30096",
+    "sim_20260925_135118_s30098",
+    "sim_20260925_135119_s30100",
+    "sim_20260925_135120_s30102",
+    "sim_20260925_135124_s30108",
+    "sim_20260925_135126_s30112"
+  ],
+  "sealed_real_test": [
+    "traj_20260923_023422"
+  ],
+  "public_note": "RoNIN and TLIO are the public architectures. Their published pedestrian weights are not scored: the frame and the carrier do not match this rig. zero_shot and fine_tuned are the protocol-adapted checkpoints.",
+  "scores": {
+    "sealed_real_test": {
+      "zero_motion": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 49.67,
+        "fast_mm": 90.27,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 0.0,
+        "r2": -0.016
+      },
+      "strapdown_zero_velocity": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 4924.54,
+        "fast_mm": 4793.95,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 3500.69,
+        "r2": -11907.213
+      },
+      "ronin_resnet": {
+        "zero_shot": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 128.22,
+          "fast_mm": 129.36,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 101.7,
+          "r2": -5.73
+        },
+        "fine_tuned": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 44.74,
+          "fast_mm": 74.14,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 19.46,
+          "r2": 0.21
+        }
+      },
+      "ronin_lstm": {
+        "zero_shot": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 49.72,
+          "fast_mm": 90.24,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 0.78,
+          "r2": -0.016
+        },
+        "fine_tuned": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 49.69,
+          "fast_mm": 90.25,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 0.3,
+          "r2": -0.016
+        }
+      },
+      "tlio_resnet": {
+        "zero_shot": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 108.16,
+          "fast_mm": 119.67,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 77.13,
+          "r2": -3.72
+        },
+        "fine_tuned": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 46.15,
+          "fast_mm": 75.53,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 17.54,
+          "r2": 0.185
+        }
+      },
+      "imunet": {
+        "zero_shot": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 118.78,
+          "fast_mm": 117.53,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 115.98,
+          "r2": -4.344
+        },
+        "fine_tuned": {
+          "n": 647,
+          "zero_mm": 49.67,
+          "err_mm": 46.42,
+          "fast_mm": 78.67,
+          "fast_zero_mm": 90.27,
+          "pred_med_mm": 18.77,
+          "r2": 0.139
+        }
+      }
+    },
+    "synthetic_subset": {
+      "zero_motion": {
+        "n": 480,
+        "zero_mm": 125.76,
+        "err_mm": 125.76,
+        "fast_mm": 271.66,
+        "fast_zero_mm": 271.66,
+        "pred_med_mm": 0.0,
+        "r2": -0.008
+      },
+      "strapdown_zero_velocity": {
+        "n": 480,
+        "zero_mm": 125.76,
+        "err_mm": 3314.36,
+        "fast_mm": 7551.42,
+        "fast_zero_mm": 271.66,
+        "pred_med_mm": 661.42,
+        "r2": -1463.927
+      },
+      "ronin_resnet": {
+        "zero_shot": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 172.38,
+          "fast_mm": 411.21,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 41.61,
+          "r2": -1.789
+        },
+        "fine_tuned": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 126.29,
+          "fast_mm": 271.56,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 10.57,
+          "r2": -0.018
+        }
+      },
+      "ronin_lstm": {
+        "zero_shot": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 125.73,
+          "fast_mm": 271.61,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 0.78,
+          "r2": -0.008
+        },
+        "fine_tuned": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 125.76,
+          "fast_mm": 271.65,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 0.3,
+          "r2": -0.008
+        }
+      },
+      "tlio_resnet": {
+        "zero_shot": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 132.41,
+          "fast_mm": 296.07,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 41.29,
+          "r2": -0.36
+        },
+        "fine_tuned": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 125.61,
+          "fast_mm": 266.78,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 10.89,
+          "r2": 0.01
+        }
+      },
+      "imunet": {
+        "zero_shot": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 129.19,
+          "fast_mm": 274.38,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 49.82,
+          "r2": -0.203
+        },
+        "fine_tuned": {
+          "n": 480,
+          "zero_mm": 125.76,
+          "err_mm": 124.59,
+          "fast_mm": 266.41,
+          "fast_zero_mm": 271.66,
+          "pred_med_mm": 10.63,
+          "r2": 0.024
+        }
+      }
+    }
+  }
+}
