@@ -175,11 +175,6 @@ def framework():
     # barrier: nothing flows back from the held-out evaluation
     ax.plot([0.50, 0.50], [y5 - 0.008, y5 + h5 + 0.020], color="#cc3333", linewidth=0.9,
             linestyle=(0, (4, 3)), zorder=5)
-    ax.text(0.5, 0.044, "green: optical    orange: inertial    purple: simulation    "
-                        "blue: estimation", ha="center", va="top", fontsize=4.9,
-            color="#444444")
-    ax.text(0.5, 0.015, "red: nothing crosses back from the held-out evaluation",
-            ha="center", va="top", fontsize=4.9, color="#cc3333")
     fig.savefig(OUT / "framework.pdf")
     plt.close(fig)
 
@@ -238,18 +233,18 @@ def architecture():
     _box(ax, xl, y3, full, h3, "", "", face="#eef4fb", edge="#35689a", lw=1.2)
     ax.text(0.030, y3 + h3 - 0.008, "Shared trunk", ha="left", va="top", weight="bold",
             fontsize=7.0)
+    ax.text(0.962, y3 + h3 - 0.010, "200 to 50 Hz, 0.42 M", ha="right", va="top",
+            fontsize=5.3, color="#2c5170")
     cells = [("Conv 7, stride 2", 0, 0), ("Conv 5, stride 2", 1, 0),
              ("$5\\times$ dilated residual, $d=1..16$", 0, 1), ("BiGRU, 96 units", 1, 1)]
     for text, col, row in cells:
         bx = 0.030 + col * 0.482
-        by = y3 + 0.058 - row * 0.038
+        by = y3 + 0.042 - row * 0.034
         ax.add_patch(FancyBboxPatch((bx, by), 0.452, 0.032, boxstyle="round,pad=0.002",
                                     facecolor="#ffffff", edgecolor="#9db6ce",
                                     linewidth=0.7, zorder=3))
         ax.text(bx + 0.226, by + 0.016, text, ha="center", va="center", fontsize=5.4,
                 zorder=4)
-    ax.text(0.5, y3 + 0.019, "200 to 50 Hz, 0.42 M parameters", ha="center", va="center",
-            fontsize=5.8, color="#2c5170")
 
     # ---- 4 three heads -----------------------------------------------------
     y4, h4 = 0.402, 0.134
@@ -274,17 +269,13 @@ def architecture():
     ax.text(0.030, y5 + h5 - 0.008,
             "Structural kinematics (no free parameters except $\\lambda$)",
             ha="left", va="top", fontsize=6.8, weight="bold")
-    ax.text(0.5, y5 + h5 - 0.048,
+    ax.text(0.5, y5 + h5 - 0.044,
             r"$\hat{\bf v}_k\leftarrow\hat{\bf v}_k\,[1-\sigma(s_k)]$"
             "    (stillness-conditioned gate)", ha="center", va="center", fontsize=6.2)
-    ax.text(0.5, y5 + h5 - 0.090,
-            r"$\hat{\bf d}_k=\frac{1}{f_s}\sum_{i=a}^{k}\hat{\bf v}_i"
-            r"+({\bf R}_{a\leftarrow k}-{\bf I})\,\lambda,\quad\hat{\bf d}(t_a)\equiv{\bf 0}$",
-            ha="center", va="center", fontsize=6.6)
-    ax.text(0.5, y5 + 0.017,
-            r"$u(\hat{\bf d})=\kappa\sqrt{\sigma_k^2+s^2_{\rm ens}}$,"
-            " $\\kappa$ fitted on validation", ha="center", va="center", fontsize=6.0,
-            color="#2c5170")
+    ax.text(0.5, y5 + h5 - 0.100,
+            r"$\hat{\bf d}_k=f_s^{-1}\sum_{i=a}^{k}\hat{\bf v}_i"
+            r"+({\bf R}_{a\leftarrow k}-{\bf I})\,\lambda,\ \hat{\bf d}(t_a)\equiv{\bf 0}$",
+            ha="center", va="center", fontsize=6.0)
 
     for k, (ya, yb_, colour) in enumerate((
             (y1, y2 + h2, "#7a8798"), (y2, y3 + h3, "#c4642f"),
@@ -318,10 +309,6 @@ def architecture():
     ax.text(x1 + 0.005, np.interp(x1, xx, curve), r"$\hat{\bf d}(t)$", ha="left",
             va="center", fontsize=6.6, color="#35689a")
     ax.text(x0 - 0.005, yb, "0", ha="right", va="center", fontsize=6.0, color="#7a8798")
-    ax.text(0.5, 0.018, "green: reference displacement at each usable chessboard frame, "
-                        "about 145 per window", ha="center", va="top", fontsize=5.4,
-            color="#444444")
-    _arrow(ax, (0.5, y5 - 0.003), (0.5, 0.212), color="#35689a", lw=0.9)
     fig.savefig(OUT / "architecture.pdf")
     plt.close(fig)
 
@@ -530,40 +517,47 @@ def domain_gap():
     initial_gyro = [14.11, 30.83, 51.14]
     tuned_gyro = [3.98, 11.57, 39.35]
     import cv2
-    fig = plt.figure(figsize=(3.45, 3.45))
-    gs = fig.add_gridspec(2, 2, height_ratios=(1.25, 1.0), hspace=0.46,
-                          wspace=0.42, left=0.145, right=0.975,
-                          top=0.945, bottom=0.085)
-    # A real screenshot of the implemented workbench. The full control panel,
-    # stereo views, 3-D path and all-axis IMU plot remain visible.
+    fig = plt.figure(figsize=(3.45, 3.55))
+    gs = fig.add_gridspec(2, 2, height_ratios=(1.35, 1.0), hspace=0.55,
+                          wspace=0.38, left=0.13, right=0.985,
+                          top=0.955, bottom=0.145)
+    # The parameter column is Chinese UI text that collides at column width.
+    # Keep the stereo preview, the camera path and the IMU plot.
     ax_gui = fig.add_subplot(gs[0, :])
     gui_path = OUT / "sim_gui_full.png"
     gui = cv2.imread(str(gui_path))
     if gui is not None:
         gui = cv2.cvtColor(gui, cv2.COLOR_BGR2RGB)
+        h, w = gui.shape[:2]
+        gui = gui[int(0.05 * h):int(0.93 * h), int(0.21 * w):int(0.995 * w)]
         ax_gui.imshow(gui)
     ax_gui.set_xticks([])
     ax_gui.set_yticks([])
-    ax_gui.set_title("(a) Implemented digital-twin workbench: stereo preview, "
-                     "3-D motion and 200-Hz IMU", fontsize=6.4, pad=2)
+    for spine in ax_gui.spines.values():
+        spine.set_visible(False)
+    ax_gui.set_title("(a) Stereo preview, camera path and 200-Hz IMU",
+                     fontsize=6.6, pad=2)
 
     axes = (fig.add_subplot(gs[1, 0]), fig.add_subplot(gs[1, 1]))
     x = np.arange(3)
     for ax, arrays, title, ylabel in (
-        (axes[0], (real_acc, initial_acc, tuned_acc), "(b) Acceleration",
-         r"$|\|a\|-1g|$ (g)"),
+        (axes[0], (real_acc, initial_acc, tuned_acc), "(b) Acceleration residual",
+         "residual (g)"),
         (axes[1], (real_gyro, initial_gyro, tuned_gyro), "(c) Angular rate",
-         r"$\|\omega\|$ (deg/s)"),
+         "deg/s"),
     ):
         for offset, values, name in zip((-0.25, 0, 0.25), arrays,
-                                        ("real", "initial twin", "tuned twin")):
+                                        ("Real", "Initial twin", "Tuned twin")):
             ax.bar(x + offset, values, 0.24, label=name)
-        ax.set_xticks(x, labels, fontsize=5.4)
-        ax.set_ylabel(ylabel)
+        ax.set_xticks(x, labels, fontsize=5.6)
+        ax.set_ylabel(ylabel, fontsize=6.0)
         ax.set_title(title, fontsize=6.8)
         ax.tick_params(axis="y", labelsize=5.4)
         ax.grid(axis="y", alpha=0.25)
-    axes[1].legend(fontsize=4.8, borderpad=0.2, handlelength=1.0, labelspacing=0.2)
+    handles, leg_labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, leg_labels, loc="lower center", ncol=3, fontsize=5.6,
+               frameon=False, bbox_to_anchor=(0.56, 0.0),
+               handlelength=1.0, columnspacing=1.0)
     fig.savefig(OUT / "domain_gap.pdf")
     plt.close(fig)
 

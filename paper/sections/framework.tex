@@ -4,21 +4,13 @@
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{framework.pdf}
-\caption{Audited measurement framework, read top to bottom. The optical path
-supplies the reference ${\bf T}_{BC}$, the inertial path supplies the
-window-demeaned specific force $\ell_k$ (Section~\ref{sec:learning}), whose
-double pre-integral approximates the second term of (\ref{eq:decomp}), and the twin supplies distribution-matched synthetic
-streams. The first term of (\ref{eq:decomp}) is an initial condition that
-neither path observes inside a window, which is what makes the acquisition
-protocol part of the measurement. In the twin block,
-$\boldsymbol\Sigma$, ${\bf b}\!\sim\!{\rm RW}$, $Q$, $\delta t$ and
-${\bf g}_B$ denote noise covariance, bias random walk, quantization, sampling
-jitter and board-frame gravity; beneath the measured integral,
-${\bf b}$, $s$ and $\delta\boldsymbol\theta\times{\bf g}$ denote bias, scale
-factor and attitude-induced gravity leakage. Each source carries its own audit
-($u_A$ Type-A, $\Sigma_{\rm corner}$ corner propagation, $s_p$ tilt
-sensitivity, and $r_{\rm axis}$ the held-out per-axis rigidity correlation),
-and the held-out recording is excluded from gradient fitting and
+\caption{Measurement framework, read top to bottom. The optical path supplies
+the reference, the inertial path the window-demeaned specific force, and the
+twin the synthetic streams. Neither path observes the initial velocity inside
+a window. In the twin block, $\boldsymbol\Sigma$, ${\bf b}\!\sim\!{\rm RW}$,
+$Q$, $\delta t$ and ${\bf g}_B$ are the noise covariance, bias random walk,
+quantization, sampling jitter and board-frame gravity. The red dashed line
+marks that the held-out recording does not flow back into fitting or
 cross-validation.}
 \label{fig:framework}
 \end{figure}

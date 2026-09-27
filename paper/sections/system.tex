@@ -80,14 +80,9 @@ training recordings, so its zero-motion baseline is correspondingly larger.
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{dataset.pdf}
-\caption{The corpus. Each of (a)--(c) is a four-frame montage from a different
-real acquisition domain (30-Hz trajectory, 10-Hz trajectory and
-rotation/still recording), cropped around the board with detected inner
-corners in green; (d) four Blender/OpenCV renders spanning synthetic
-configurations. (e) Demeaned specific force
-and angular-rate magnitude at 200~Hz, with the reference-confirmed pauses
-shaded; (f) the reference speed of the same interval and the two thresholds
-that define the stillness labels; (g) the distribution of the measurand over
-the splits.}
+\caption{The corpus. (a)--(c) Real acquisitions, cropped to the board with
+detected corners in green; (d) synthetic renders. (e), (f) One inertial
+interval, with reference-confirmed pauses and the two stillness thresholds.
+(g) The held-out recording has a larger 3-s displacement than the training set.}
 \label{fig:dataset}
 \end{figure}

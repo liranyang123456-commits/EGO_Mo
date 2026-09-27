@@ -148,6 +148,13 @@
       "physnet_raw_gyro_switch": {
         "err_mm": 36.71,
         "physics_share": 0.237
+      },
+      "imunet": {
+        "err_mm": 55.71
+      },
+      "imunet_switch": {
+        "err_mm": 43.24,
+        "physics_share": 0.396
       }
     },
     "pause_12.5": {
@@ -209,6 +216,13 @@
       "physnet_raw_gyro_switch": {
         "err_mm": 41.8,
         "physics_share": 0.127
+      },
+      "imunet": {
+        "err_mm": 54.23
+      },
+      "imunet_switch": {
+        "err_mm": 47.77,
+        "physics_share": 0.217
       }
     },
     "pause_inf": {

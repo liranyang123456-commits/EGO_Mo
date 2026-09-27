@@ -102,6 +102,90 @@
         "learned": 45.11,
         "hybrid": 43.9
       }
+    },
+    "pause_8": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.396,
+      "all": {
+        "zero": 55.43,
+        "learned": 55.71,
+        "hybrid": 43.24,
+        "learned_on_switched": 53.97,
+        "physics_on_switched": 22.48
+      },
+      "free": {
+        "n": 951,
+        "switched": 54,
+        "zero": 58.0,
+        "learned": 58.14,
+        "hybrid": 56.78,
+        "detected": 71,
+        "physics_on_detected": 33.65,
+        "learned_on_detected": 44.48
+      },
+      "context": {
+        "n": 660,
+        "switched": 28,
+        "zero": 55.6,
+        "learned": 57.71,
+        "hybrid": 57.33,
+        "detected": 486,
+        "physics_on_detected": 92.44,
+        "learned_on_detected": 57.06
+      },
+      "window": {
+        "n": 1589,
+        "switched": 1185,
+        "zero": 53.82,
+        "learned": 53.43,
+        "hybrid": 29.29,
+        "detected": 1240,
+        "physics_on_detected": 24.34,
+        "learned_on_detected": 53.95
+      }
+    },
+    "pause_20": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.217,
+      "all": {
+        "zero": 56.41,
+        "learned": 54.23,
+        "hybrid": 47.77,
+        "learned_on_switched": 53.28,
+        "physics_on_switched": 23.44
+      },
+      "free": {
+        "n": 1836,
+        "switched": 72,
+        "zero": 60.36,
+        "learned": 57.38,
+        "hybrid": 55.94,
+        "detected": 105,
+        "physics_on_detected": 67.74,
+        "learned_on_detected": 76.85
+      },
+      "context": {
+        "n": 375,
+        "switched": 6,
+        "zero": 58.98,
+        "learned": 55.35,
+        "hybrid": 55.25,
+        "detected": 209,
+        "physics_on_detected": 93.05,
+        "learned_on_detected": 54.9
+      },
+      "window": {
+        "n": 989,
+        "switched": 615,
+        "zero": 48.12,
+        "learned": 47.97,
+        "hybrid": 29.78,
+        "detected": 647,
+        "physics_on_detected": 21.89,
+        "learned_on_detected": 49.43
+      }
     }
   },
   "val_pooled_err_by_max_span": {

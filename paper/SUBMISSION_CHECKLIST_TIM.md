@@ -19,8 +19,8 @@ Status values: `[x]` complete, `[ ]` blocked or requires author action.
 - [x] IEEE two-column regular-paper format; figures and tables inline.
 - [x] PDF is self-contained, unencrypted, and below 20 MB.
 - [x] Author biographies/photos omitted from the review manuscript.
-- [x] No undefined citation, label, overfull box, or red placeholder.
-- [x] All 31 cited references verified and no unused BibTeX entry remains.
+- [x] No undefined citation or label, and no red placeholder. One 1.6-pt overfull in the ablation table was removed by tightening column spacing.
+- [x] All 35 cited references are in `refs.bib` with no unused entry. DOIs were checked against the published records; four proceedings entries without a DOI (NeurIPS, MIDL) were checked by venue, volume and pages.
 - [x] `tools/verify_manuscript.py` passes.
 - [x] Scope explicitly states translation/displacement, not learned absolute SE(3).
 - [ ] Replace held-out exploratory numbers with prospective pooled results.

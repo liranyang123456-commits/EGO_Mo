@@ -215,8 +215,10 @@ def twin_protocol():
     phys = zs["physnet_pre_realistic"]["err_mm"] + zs["physnet_pre_realistic_bal"]["err_mm"]
     close("PhysNet direct transfer min", min(phys), 37.5, 0.06)
     close("PhysNet direct transfer max", max(phys), 38.8, 0.06)
-    table = {"pause_4": (72, 35.3, 34.7, 30.0, 57.5, 33.3), "pause_8": (50, 42.2, 39.7, 36.7),
-             "pause_12.5": (43, 43.2, 42.5, 40.3, 55.3, 46.5), "pause_20": (31, 46.5, 44.5, 41.8),
+    table = {"pause_4": (72, 35.3, 34.7, 30.0, 57.5, 33.3),
+             "pause_8": (50, 42.2, 39.7, 36.7, 55.7, 43.2),
+             "pause_12.5": (43, 43.2, 42.5, 40.3, 55.3, 46.5),
+             "pause_20": (31, 46.5, 44.5, 41.8, 54.2, 47.8),
              "pause_inf": (15, 48.6, 44.2, 44.1, 55.5, 55.3)}
     p = s["protocol"]
     for c, row in table.items():

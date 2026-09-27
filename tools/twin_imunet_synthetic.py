@@ -86,6 +86,8 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=25)
     ap.add_argument("--patience", type=int, default=8)
     ap.add_argument("--tag", default="", help="checkpoint name suffix, e.g. _e50")
+    ap.add_argument("--max-span", type=float, default=None,
+                    help="use this switching threshold instead of selecting one on validation")
     ap.add_argument("--output", type=Path, default=DATA / "twin_imunet_synthetic.json")
     args = ap.parse_args()
     api.LABELS, api.TARGET_S = "pose_gt_raw", 3.0
@@ -109,7 +111,7 @@ def main() -> None:
         test[c] = _scored(c, "test", nets, device)
     from tools.stop_anchor_check import pooled_err
     curve = {s: round(pooled_err(list(val.values()), s), 2) for s in SPANS}
-    best = min(curve, key=curve.get)
+    best = args.max_span if args.max_span is not None else min(curve, key=curve.get)
     report["val_pooled_err_by_max_span"] = curve
     report["chosen_max_span_s"] = best
     for c, P in test.items():

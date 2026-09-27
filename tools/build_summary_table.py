@@ -215,9 +215,12 @@ def to_latex(rows):
             lines.append("\\midrule")
     lines += [
         "\\bottomrule",
-        "\\multicolumn{13}{p{0.97\\textwidth}}{\\footnotesize $^{\\dagger}$Single fixed-split model (fine-tuned from the "
-        "twin where applicable). $^{\\S}$Five-seed ensemble trained with the rigidity recordings as "
-        "extra data; 29.91~mm without the gate on the same data.}",
+        "\\multicolumn{13}{p{0.97\\textwidth}}{\\footnotesize An em dash is a column that was not "
+        "evaluated, not a zero. Blends and the stillness gate are built from the real "
+        "cross-validation models, so they have no synthetic-only column; RoNIN-LSTM matched "
+        "zero motion and was not carried further. $^{\\dagger}$Single fixed-split model. "
+        "$^{\\S}$Five-seed ensemble with the rigidity recordings; 29.91~mm without the gate "
+        "on the same data.}",
         "\\end{tabular}", "\\end{table*}", ""]
     return "\n".join(lines)
 

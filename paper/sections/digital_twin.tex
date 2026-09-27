@@ -83,11 +83,9 @@ translation and angular rate (median 5.6--6.3 versus 4.3~$^\circ$/s).
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{domain_gap.pdf}
-\caption{Implemented twin and its domain audit. (a) The PySide6 workbench
-shows the synchronized stereo preview, 3-D camera path and all-axis 200-Hz
-IMU stream; the same interface also exposes method benchmarking and dataset
-audits. (b),(c) Percentiles over complete training streams. The initial twin
-contained too much rotation and too little translational acceleration; the
-tuned twin matches the measured operating domain more closely.}
+\caption{Digital twin and its domain audit. (a) Stereo preview, camera path
+and 200-Hz IMU. (b), (c) Percentiles over the training streams: the initial
+twin rotated too fast and accelerated too little; the tuned twin matches the
+measured domain.}
 \label{fig:domain}
 \end{figure}

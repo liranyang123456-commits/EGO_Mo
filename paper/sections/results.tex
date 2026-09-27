@@ -76,7 +76,7 @@ The last two rows are five-model ensembles. $^\dagger$Run with weight decay
 \label{tab:ablation}
 \scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{lr@{\hspace{5pt}}lr}
+\begin{tabular}{lr@{\hspace{3pt}}lr}
 \toprule
 \multicolumn{4}{l}{\textbf{A. Capacity, loss, augmentation, pretraining, data}} \\
 \midrule
@@ -144,13 +144,10 @@ $\alpha=1.5$). Averaging gated and non-gated models lowered the CV error from
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{observability.pdf}
-\caption{Observability and the empirical error floor of the 3-s protocol, on
-validation. (a) Horizon ablation of the earlier body-frame Conv--BiGRU (one
-seed). (b) Predictions of the fixed-split PhysNet ensemble against the
-reference displacement per axis; the dashed line is the identity. (c) Error
-removed by an affine correction with a reference velocity proxy, fitted and
-scored on the same pairs or fitted on the other validation recording; the
-window mean includes the target interval, the context proxy excludes it.}
+\caption{Observability of the 3-s protocol on validation. The horizon saturates
+at 3~s (a). Predictions shrink toward zero; the dashed line is the identity
+(b). A velocity proxy removes error only when it includes the target interval
+(c).}
 \label{fig:limit}
 \end{figure}
 
@@ -192,16 +189,11 @@ the learned model is unchanged (29.44 against 29.43~mm).
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{zupt_uncertainty.pdf}
-\caption{(a) Displacement error of zero-velocity-aided strapdown integration
-between detected pauses, using inertial acceleration with reference attitude,
-gyroscope attitude after session-level bias removal, or the raw gyroscope
-rate, pooled over the training, validation and rigidity
-recordings ($n$ = intervals available). The sub-2-s point contains one
-interval; error grows sharply with span under the present attitude solution.
-The horizontal line marks the 43.6-mm held-out-test error of the gated learned
-3-s window. (b) Coverage of the predicted uncertainty of the fixed-split NLL
-ensemble on validation before and after one scale factor fitted on the same
-data.}
+\caption{(a) Zero-velocity-aided integration between detected pauses, pooled
+over the training, validation and rigidity recordings. The sub-2-s point is one
+interval. The horizontal line is the 43.6-mm held-out error of the gated 3-s
+window. (b) Uncertainty coverage on validation, before and after one scale
+fitted on the same data.}
 \label{fig:zupt}
 \end{figure}
 
@@ -247,9 +239,9 @@ stop-anchored switching.}
 Interval & In win. & PhysNet & Raw & Raw+sw. & IMUNet & IMUNet+sw. \\
 \midrule
 4~s    & 72\% & 35.3 & 34.7 & \textbf{30.0} & 57.5 & 33.3 \\
-8~s    & 50\% & 42.2 & 39.7 & \textbf{36.7} & --   & --   \\
+8~s    & 50\% & 42.2 & 39.7 & \textbf{36.7} & 55.7 & 43.2 \\
 12.5~s & 43\% & 43.2 & 42.5 & \textbf{40.3} & 55.3 & 46.5 \\
-20~s   & 31\% & 46.5 & 44.5 & \textbf{41.8} & --   & --   \\
+20~s   & 31\% & 46.5 & 44.5 & \textbf{41.8} & 54.2 & 47.8 \\
 None   & 15\% & 48.6 & 44.2 & \textbf{44.1} & 55.5 & 55.3 \\
 \bottomrule
 \end{tabular}
@@ -297,13 +289,9 @@ against 30.63~mm).
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{trajectory_results.pdf}
-\caption{Pose-graph translation on the held-out real recording, using the
-reference orientation to isolate translation. (a)--(c) Three orthographic
-trajectory projections, with ATE in the legend of (a); (d),(e) two temporal
-components, which expose correlated drift; (f) the empirical position-error
-CDF. The comparison includes Ridge, adapted IMUNet, PhysNet and their blend.
-PhysNet and the blend use the non-gated trajectory operating point selected
-by ATE, not the gated local-displacement operating point.}
+\caption{Pose-graph translation on the held-out recording. The reference
+orientation isolates translation. PhysNet and the blend use the non-gated
+trajectory operating point.}
 \label{fig:trajectories}
 \end{figure}
 
@@ -311,18 +299,13 @@ by ATE, not the gated local-displacement operating point.}
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{estimators.pdf}
-\caption{Estimators under one protocol; architectures are adapted and
-retrained, and values are not copied from the pedestrian benchmarks.
-(a) Error reduction relative to zero motion, $100(1-e/e_{\rm zero})$, for every
-column of Table~\ref{tab:summary}; dots mark columns not evaluated, and the
-colour scale is clipped at $-60\%$. (b) Paired error reduction on the held-out
-test with 95\% block-bootstrap intervals, against zero motion (top) and against
-IMUNet (bottom); filled markers denote intervals that exclude zero. Every learned
-model beats zero motion, but no method differs significantly from IMUNet.
-(c) Leave-one-session-out errors per recording, sorted by zero-motion error
-(single-model means, two seeds per fold); learned displacement helps only
-where motion is large, and on the three near-static recordings no model
-improves on zero motion.}
+\caption{Estimators under one protocol. Architectures are retrained here;
+values are not taken from the pedestrian benchmarks. (a) Error reduction
+relative to zero motion; a dot is a column that was not evaluated, and the
+scale is clipped at $-60\%$. (b) Paired differences on the held-out test with
+95\% block-bootstrap intervals. Filled markers exclude zero: every learned
+model beats zero motion, and none differs significantly from IMUNet.
+(c) Leave-one-session-out error, sorted by the zero-motion error.}
 \label{fig:benchmark}
 \end{figure*}
 

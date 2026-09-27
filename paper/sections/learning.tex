@@ -4,14 +4,9 @@
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{architecture.pdf}
-\caption{PhysNet. The gyroscope and extrinsic rotation are applied
-analytically, and the valid-sample window mean removes the constant
-gravity-plus-mean-acceleration component before the network sees the data, so the
-trunk only has to supply what is not deterministic. The three heads produce a
-velocity stream, a stillness probability that gates that stream,
-and a variance; the displacement stream is the integral of the gated velocity
-plus the lever-arm term and is anchored at $t_a$ by construction. Supervision is dense: every usable chessboard frame
-inside the window contributes, not only the 3-s target.}
+\caption{PhysNet. Pre-integration, the stillness gate and the lever arm are
+analytic, so the trunk estimates only the residual velocity. Green stems mark
+the reference displacement at every usable frame inside the window.}
 \label{fig:architecture}
 \end{figure}
 
@@ -34,7 +29,9 @@ For a pair $(t_a,t_b)$ the input window is $[t_a-c,\,t_b+c]$ resampled to
 $f_s=200$~Hz, with $c=2$~s. Gyroscope increments are integrated from the
 anchor $t_a$ in both directions after subtracting the mean gyroscope output over
 all samples with $\|\tilde{\boldsymbol\omega}_I\|<3^\circ$/s, giving
-$\hat{\bf R}_{I_aI_k}$ for every sample $k$. With the convention of
+$\hat{\bf R}_{I_aI_k}$ for every sample $k$. This mean also includes slow
+rotation; omitting it changes the learned validation error by less than
+0.1~mm (Section~\ref{sec:pause}). With the convention of
 Section~\ref{sec:framework}, the relative camera rotation used below is
 ${\bf R}_{a\leftarrow k}\equiv{\bf R}_{C_aC_k}
 ={\bf R}_{CI}\hat{\bf R}_{I_aI_k}{\bf R}_{CI}^{\top}$. The start camera
