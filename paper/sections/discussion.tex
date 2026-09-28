@@ -8,12 +8,16 @@ and neither longer context nor session-level fusion supplied it. Measuring its
 share needs a higher-rate or independent velocity reference, because the
 differentiated 10-fps reference is dominated by PnP noise. A confirmed pause
 supplies it only over short spans; beyond about 2~s time-varying attitude
-error and nonconstant bias dominate. In the twin, one firm stop every 4~s lowers the error by 32\% relative
-to pause-free motion, against 9\% for the frozen 10--15-s spacing, whereas an
-ideal IMU, a longer look-back or a 30-fps label rate change it by at most
-2~mm; the present recordings contain too few stops to show this. Attitude
-accuracy is the second factor, because it limits how long a zero-velocity
-interval remains useful.
+error and nonconstant bias dominate. Real windows that already contain a stop
+are at 13.7~mm against 21.7~mm for zero motion, compared with 36.5 against
+50.8~mm when none is nearby, but such stops occur only 0.5--2.3 times per
+minute, so they do not move the session mean. The dose is therefore measured
+in a twin matched to the recorded travel, angular rate and sensor noise: one
+full stop every 4~s lowers the error by 32\% relative to pause-free motion,
+against 9\% for a stop every 10--15~s, whereas an ideal IMU, a longer look-back
+or a 30-fps label rate changes it by at most 2~mm. Attitude accuracy is the
+second factor, because it limits how long a zero-velocity interval remains
+useful.
 
 \emph{Reference (RQ2).} The board is highly repeatable when static, but its
 dynamic quality depends on frame rate and axis. A small reprojection residual
