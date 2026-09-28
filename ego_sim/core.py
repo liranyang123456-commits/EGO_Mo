@@ -67,6 +67,8 @@ class SimConfig:
     # perturb: a few millimetres on top of a camera that still looks at the board.
     # independent: the board has its own SE(3), and the camera does not follow it.
     board_motion_mode: str = "perturb"
+    # Static point features behind the board so optical flow carries metric motion.
+    scene_texture: bool = False
     board_rotation_deg: float = 3.0
     baseline_mm: float = 46.5
     square_mm: float = 3.0
@@ -570,6 +572,7 @@ class StereoRenderer:
         self.K0, self.d0 = _load_camera("cam0", config.width, config.height)
         self.K1, self.d1 = _load_camera("cam1", config.width, config.height)
         self.texture = self._checker_texture()
+        self._ground_tex = self._textured_ground(self.config.seed + 500)
         self._maps = {
             "cam0": self._distortion_map(self.K0, self.d0),
             "cam1": self._distortion_map(self.K1, self.d1),
@@ -602,7 +605,89 @@ class StereoRenderer:
         base[:, :, 0] = 42 + 35 * smooth
         base[:, :, 1] = 48 + 28 * smooth
         base[:, :, 2] = 78 + 55 * smooth
+        if self.config.scene_texture:
+            # Static point features in the world, so optical flow carries
+            # metric motion. Without them the background is a smooth gradient
+            # and vision has nothing to track.
+            pts = self._scene_points(seed + 1000)
+            for x, y, z, s in pts:
+                px = int(x * self.config.width)
+                py = int(y * self.config.height)
+                if 0 <= px < self.config.width and 0 <= py < self.config.height:
+                    cv2.circle(base, (px, py), int(s), (200, 200, 200), -1)
         return base
+
+    def _scene_points(self, seed: int, n: int = 400):
+        """Random static points on a plane behind the board, in normalized image coords."""
+        rng = np.random.default_rng(seed)
+        pts = []
+        for _ in range(n):
+            x = float(rng.uniform(-0.5, 0.5))
+            y = float(rng.uniform(-0.3, 0.3))
+            z = float(rng.uniform(-2.0, -0.5))  # behind the board (camera looks at -z)
+            s = float(rng.uniform(1.5, 4.0))  # radius in px at 720p
+            pts.append((x, y, z, s))
+        return pts
+
+    def _textured_ground(self, seed: int) -> np.ndarray:
+        """A textured ground plane behind the board, rendered once per sequence.
+
+        The camera looks along -z; the ground is the plane z = -d in world
+        coordinates. Random tiles give dense optical flow a gradient everywhere,
+        so stillness and motion separate. Returns an image rendered at the
+        first pose; per-frame motion is applied by _render_ground.
+        """
+        rng = np.random.default_rng(seed)
+        tex = rng.integers(0, 255, (64, 64, 3), dtype=np.uint8)
+        tex = cv2.resize(tex, (512, 512), interpolation=cv2.INTER_NEAREST)
+        return tex
+
+    def _render_ground(self, R_W_C: np.ndarray, p_W_C: np.ndarray,
+                       right: bool) -> np.ndarray:
+        """Project the textured ground plane into the current camera view."""
+        K, dist = (self.K1, self.d1) if right else (self.K0, self.d0)
+        if right:
+            p_W_C = p_W_C + R_W_C @ np.array([self.config.baseline_mm / 1000.0, 0.0, 0.0])
+        R_C_W = R_W_C.T
+        t_C_W = -R_C_W @ p_W_C
+        rvec, _ = cv2.Rodrigues(R_C_W)
+        # Ground plane z = -1.2 m in world coordinates, extending x,y.
+        d = 1.2
+        half = 2.0
+        corners_W = np.array([
+            [-half, -half, -d], [half, -half, -d],
+            [half, half, -d], [-half, half, -d],
+        ])
+        projected, _ = cv2.projectPoints(corners_W, rvec, t_C_W, K, np.zeros(5))
+        dst = projected.reshape(4, 2).astype(np.float32)
+        tex = self._ground_tex
+        th, tw = tex.shape[:2]
+        src = np.array([[0, 0], [tw - 1, 0], [tw - 1, th - 1], [0, th - 1]], np.float32)
+        H = cv2.getPerspectiveTransform(src, dst)
+        img = cv2.warpPerspective(tex, H, (self.config.width, self.config.height))
+        return img.astype(np.float32)
+
+    def _render_background(self, R_W_C: np.ndarray, p_W_C: np.ndarray,
+                           right: bool) -> np.ndarray:
+        """Project static scene points into the current camera view."""
+        if not self.config.scene_texture:
+            return self._background(self.config.seed + (17 if right else 0))
+        K, dist = (self.K1, self.d1) if right else (self.K0, self.d0)
+        if right:
+            p_W_C = p_W_C + R_W_C @ np.array([self.config.baseline_mm / 1000.0, 0.0, 0.0])
+        R_C_W = R_W_C.T
+        t_C_W = -R_C_W @ p_W_C
+        rvec, _ = cv2.Rodrigues(R_C_W)
+        # Points live on a plane z = z0 in world coordinates, behind the board.
+        pts = self._scene_points(self.config.seed + (17 if right else 0))
+        world = np.array([[x * 2.0 - 1.0, y * 2.0 - 1.0, z] for x, y, z, _ in pts])
+        proj, _ = cv2.projectPoints(world, rvec, t_C_W, K, np.zeros(5))
+        proj = proj.reshape(-1, 2)
+        img = self._background(self.config.seed + (17 if right else 0))
+        for (x, y, z, s), (px, py) in zip(pts, proj):
+            if 0 <= px < self.config.width and 0 <= py < self.config.height:
+                cv2.circle(img, (int(px), int(py)), int(s), (200, 200, 200), -1)
+        return img
 
     def render(
         self,
@@ -637,7 +722,7 @@ class StereoRenderer:
         H = cv2.getPerspectiveTransform(src, dst)
         warped = cv2.warpPerspective(self.texture, H, (self.config.width, self.config.height))
         mask = cv2.warpPerspective(np.full((tex_h, tex_w), 255, np.uint8), H, (self.config.width, self.config.height))
-        background = self._background(self.config.seed + index // 12 + (17 if right else 0))
+        background = self._render_ground(R_W_C, p_W_C, right)
 
         yy, xx = np.mgrid[0:self.config.height, 0:self.config.width]
         gradient = (

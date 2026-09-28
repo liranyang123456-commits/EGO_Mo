@@ -694,7 +694,7 @@ def sample_stream(d: torch.Tensor, tau: torch.Tensor) -> torch.Tensor:
 
 TENSOR_KEYS = ("acc", "gyro", "quat", "valid", "interval", "tau_b", "y", "dense_tau",
                "dense_y", "dense_valid", "dense_v", "dense_v_valid",
-               "cacc", "cgyro", "cquat", "cvalid", "cinterval")
+               "cacc", "cgyro", "cquat", "cvalid", "cinterval", "flow", "v0")
 
 
 def to_device(data: dict, device):

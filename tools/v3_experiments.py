@@ -40,7 +40,7 @@ CONFIGS = {
     "base_0924": BASE + ["--split-file", "trajectory_split_0924only.json"],
 }
 TWIN = DATA / "synthetic_realistic"
-for _mix in ("realistic", "handheld", "replay", "periodic_twin"):
+for _mix in ("realistic", "handheld", "replay", "periodic_twin", "rich"):
     CONFIGS[f"pre_{_mix}"] = BASE + ["--pretrain-corpus", str(TWIN / f"mix_{_mix}")]
 CONFIGS["pre_realistic_bal"] = CONFIGS["pre_realistic"] + ["--pretrain-balance", "class"]
 CONFIGS["bias_none"] = BASE + ["--bias-mode", "none"]
