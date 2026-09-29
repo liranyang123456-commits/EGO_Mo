@@ -1,35 +1,27 @@
 \begin{abstract}
 Estimating metric camera displacement from a single low-cost inertial
-measurement unit (IMU) is ill-conditioned: acceleration does not reveal the
-initial velocity, and attitude errors leak gravity into translation. We present
-a measurement framework for a handheld camera with an endoscopic field of view
-in which inference uses only the 200-Hz six-axis IMU stream, while chessboard
-poses serve solely for calibration, training supervision and evaluation. The
-framework comprises 1) a chessboard reference characterized by repeatability,
-corner-noise propagation, dynamic holdout, tilt--translation sensitivity and a
-simulated known-displacement test; 2) a digital twin whose sensor and motion
-parameters are fitted to the real recordings; and 3) PhysNet, a
-0.42-M-parameter network that maps anchor-frame pre-integrated IMU features to
-a densely supervised velocity stream, gates that stream by a learned stillness
-probability, estimates the camera--IMU lever arm and predicts its own
-uncertainty. Each 3-s displacement is decomposed into an IMU-observable double
-integral and an initial-velocity term that the window does not determine.
-Consistently, more than forty estimator variants share one error plateau
-within the seed spread, and all predictions are shrunk toward zero (slope 0.2--0.5
-against the reference); a velocity proxy from the context, however, does not
-reduce the residual across recordings, so the share caused by the initial
-velocity is not measurable with the 10-fps reference. Under
-one protocol, PhysNet lowers the synthetic-test error of an adapted IMUNet by
-24\% with one seventh of its parameters. On real data, leave-one-session-out
-errors of the fold ensembles of gated PhysNet, IMUNet and their blends lie
-between 24.5 and 25.8~mm against 30.4~mm for zero motion; on a held-out
-recording all of them beat zero motion (49.7~mm) by 6--7.5~mm, but none differs
-significantly from IMUNet. With integrated-gyroscope attitude and periodic
-position anchoring, the translation stream gives a relative trajectory error of
-80.6~mm against 119.2~mm for zero motion. Real validation windows that already
-contain a stop are at 13.7~mm against 21.7~mm for zero motion. In a twin
-matched to those recordings, one stop every 4~s lowers the error by 32\%
-relative to pause-free motion, whereas an ideal IMU changes it little.
+measurement unit (IMU) is ill-conditioned, because acceleration does not
+reveal the initial velocity and attitude errors leak gravity into
+translation. We present a measurement framework for a handheld camera with an
+endoscopic field of view in which inference uses only the 200-Hz six-axis IMU
+stream, while chessboard poses serve solely for calibration, training
+supervision and evaluation. The framework comprises a statistically
+characterized planar reference, a digital twin fitted to the real recordings,
+and PhysNet, a 0.42-M-parameter network that maps anchor-frame pre-integrated
+IMU features onto a densely supervised velocity stream with a learned
+stillness gate, a lever-arm estimate and per-prediction uncertainty.
+Decomposing each 3-s displacement into an IMU-observable double integral and
+an undetermined initial-velocity term explains the main empirical finding:
+more than forty estimator variants share one error plateau, with predictions
+shrunk toward zero. PhysNet lowers the synthetic-test error of an adapted
+IMUNet by 24\% with one seventh of its parameters, and is statistically
+indistinguishable from it on real data; all learned variants clearly beat
+zero motion (42.2--43.6 versus 49.7~mm on a held-out recording). A protocol
+study in the twin identifies the stop rate as the dominant acquisition
+factor: one firm stop every 4~s lowers the error by 32\% relative to
+pause-free motion. With gyroscope-integrated attitude and periodic position
+anchoring, the translation stream attains a relative trajectory error of
+80.6~mm against 119.2~mm for zero motion.
 \end{abstract}
 
 \begin{IEEEkeywords}

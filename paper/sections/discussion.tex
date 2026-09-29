@@ -44,7 +44,11 @@ Mount rigidity must be tested over increments long enough to exceed PnP noise,
 and the input sensor must not be used to correct its own labels. Local and
 trajectory metrics can disagree: the stillness gate improved every local
 statistic while worsening trajectory error, so both are needed to select an
-operating point.
+operating point. A plausible cause is that the gate also suppresses small true
+motion between confirmed stops, which averages out in a windowed error but
+accumulates along a trajectory; we did not isolate the mechanism, so the gated
+ensemble is reported as the displacement pseudo-measurement and the non-gated
+one as the trajectory estimator.
 
 \subsection{Limitations and Next Measurements}
 Board flatness, rolling shutter and the true intrinsic error are not part of a
@@ -55,5 +59,8 @@ also used for post-selection diagnostics, and four rigidity recordings.
 Collecting further sessions in which the board stays fully visible is
 impractical, so the effect of stop rate is measured in a twin whose travel,
 angular rate, sensor noise and board-frame gravity match these recordings.
-That twin is not a substitute for the real estimator comparison above. A
-complete inertial pose stream must also propagate its covariance.
+That twin is not a substitute for the real estimator comparison above. The
+calibrated uncertainty intervals are narrower than nominal on the faster
+held-out recording (63\% and 85\% against 68\% and 95\%), so under
+distribution shift the reported uncertainty should be read as a lower bound.
+A complete inertial pose stream must also propagate its covariance.

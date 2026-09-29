@@ -28,7 +28,8 @@ measurand is the time-varying camera pose
 \end{equation}
 where ${\bf p}_{BC}$ is the camera-center position expressed in $B$. For two
 times $t_a<t_b$ with $\Delta t_{ab}=t_b-t_a$ between $0.6h$ and $1.5h$ around
-the nominal horizon $h=3$~s, the learning target is the translation increment
+the nominal horizon $h=3$~s (the sweep that selects $h$ is reported in
+Section~\ref{sec:limit}), the learning target is the translation increment
 expressed in the start camera frame,
 \begin{equation}
  \Delta{\bf p}_{ab}={\bf R}_{BC}^{\top}(t_a)

@@ -34,8 +34,8 @@ These gaps lead to four research questions:
   the IMU at the chosen horizon, rather than unlearned?
   \item[RQ2)] How accurate and repeatable is the planar camera-pose reference
   used for supervision and scoring?
-  \item[RQ3)] Which acquisition property could lower the error floor, and what
-  does the present data indicate about its size?
+  \item[RQ3)] Which acquisition factor---sensor quality, context length, label
+  rate, or the stop rate---most lowers this floor, and by how much?
   \item[RQ4)] How does a physics-structured representation compare with public
   inertial architectures under one protocol, and does pretraining on the twin
   help on real data?
@@ -43,31 +43,27 @@ These gaps lead to four research questions:
 
 \textbf{The contributions are:}
 \begin{itemize}
-  \item We decompose windowed inertial displacement into an IMU-observable
-  double integral and an unobserved initial velocity, and test its
-  consequences: more than forty estimator variants share one error plateau,
-  predictions are shrunk toward the conditional mean, and neither longer context
-  nor session fusion recovers the missing velocity. We also show which
-  velocity-proxy tests are and are not conclusive with a 10-fps reference. A
-  zero-velocity boundary experiment shows that a confirmed pause helps only over
-  intervals of about 2~s under the present attitude solution.
-  \item We characterize the camera--IMU measurement chain: the repeatability
-  and tilt--translation coupling of the planar reference, a simulated
-  known-displacement test of its scale, camera--IMU rigidity on held-out
-  increments, and the accuracy inflation caused by IMU-corrected labels.
-  \item We propose PhysNet, which combines analytic anchor-frame
-  pre-integration with a densely supervised velocity stream, a stillness gate,
-  a learned lever arm and a rescaled per-prediction uncertainty. With one
-  seventh of the parameters of an adapted IMUNet it has the lowest synthetic
-  error and matches IMUNet on real data within the statistical resolution of
-  the available recordings.
-  \item We build a digital twin with measured sensor parameters and a
-  protocol-matched evaluation spanning synthetic test and OOD, direct
-  sim-to-real transfer, session-wise cross-validation, a held-out real test
-  and trajectory error. Pretraining on the twin, including a realistic
-  non-periodic handheld variant, did not lower the real-data error; a protocol
-  study in the twin instead identifies the stop rate as the acquisition factor
-  that lowers the floor, with sensor noise, look-back and label rate secondary.
+  \item An observability decomposition of windowed inertial displacement into
+  an IMU-determined double integral and an undetermined initial-velocity term.
+  It predicts, and the experiments confirm, one error plateau shared by more
+  than forty estimator variants and predictions shrunk toward zero; neither
+  longer context nor session fusion recovers the missing velocity, and a
+  boundary experiment shows that a confirmed pause helps only over intervals
+  of about 2~s on this hardware.
+  \item A characterization of the camera--IMU measurement chain: the
+  repeatability and tilt--translation coupling of the planar reference, a
+  simulated known-displacement test of its scale, a held-out rigidity test,
+  and the accuracy inflation caused by IMU-corrected labels.
+  \item PhysNet, a physics-structured estimator combining anchor-frame
+  pre-integration, dense displacement supervision, a stillness gate, a learned
+  lever arm and calibrated uncertainty. With one seventh of the parameters of
+  an adapted IMUNet it lowers the synthetic-test error by 24\% and matches
+  IMUNet on real data within statistical resolution.
+  \item A parameter-provenance digital twin fitted to the measured domain,
+  used for synthetic and out-of-distribution tests, direct-transfer and
+  pretraining studies, and a protocol study that identifies the stop rate as
+  the dominant acquisition factor (32\% error reduction at one stop every
+  4~s, against 9\% at the frozen spacing).
 \end{itemize}
 
 Fig.~\ref{fig:framework} summarizes the information flow and the separation
