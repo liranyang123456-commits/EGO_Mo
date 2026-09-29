@@ -17,19 +17,23 @@ We submit the regular paper ``Pure-Inertial Camera Motion Estimation from
 Continuous IMU Streams'' for consideration in the \emph{IEEE Transactions on
 Instrumentation and Measurement}.
 
-The paper addresses an instrumentation question: which part of a camera
-displacement is observable from a continuous low-cost IMU stream, and which
-part requires an acquisition constraint. We provide a leakage-controlled
-reference and calibration chain with a simulated known-displacement test, a
-digital twin with measured sensor parameters, and a compact physics-structured
-IMU-only estimator. The experiments include protocol-matched reimplementations
-of public inertial architectures, session-wise cross-validation, uncertainty
-coverage, and translation trajectory error. Images are used for calibration,
-training supervision and evaluation only; deployment inference is based solely
-on the IMU stream. We report the real-data comparison as it stands: all learned
-models beat zero motion, while the proposed network matches the larger public
-architectures with one seventh of their parameters rather than outperforming
-them significantly.
+The paper is a metrological characterization of inertial camera-motion
+measurement: it defines the measurand, quantifies which part of a 3-s
+displacement is observable from a continuous low-cost IMU stream and which
+part requires an acquisition constraint, and compares the estimators under
+one protocol. We provide a leakage-controlled reference and calibration chain
+with an operational uncertainty budget and a simulated known-displacement
+test, a digital twin with measured sensor parameters, and a compact
+physics-structured IMU-only estimator with per-prediction uncertainty. The
+experiments include protocol-matched reimplementations of public inertial
+architectures, session-wise cross-validation, uncertainty coverage, and
+translation trajectory error. Images are used for calibration, training
+supervision and evaluation only; deployment inference is based solely on the
+IMU stream. On synthetic data the proposed estimator lowers the error of the
+strongest public architecture by 24\% with one seventh of its parameters; on
+real data it matches that architecture within statistical resolution, and all
+learned models clearly beat zero motion. We report this comparison as it
+stands rather than claiming a significant accuracy win.
 
 We make the following limitation explicit. The historical real-test recording
 was excluded from gradient fitting and the initial fixed-split architecture
