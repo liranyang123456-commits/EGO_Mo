@@ -5,9 +5,10 @@ reveal the initial velocity and attitude errors leak gravity into
 translation. We present a measurement framework for a handheld camera with an
 endoscopic field of view in which inference uses only the 200-Hz six-axis IMU
 stream, while chessboard poses serve solely for calibration, training
-supervision and evaluation. The framework comprises a statistically
-characterized planar reference, a digital twin fitted to the real recordings,
-and PhysNet, a 0.42-M-parameter network that maps anchor-frame pre-integrated
+supervision and evaluation. The framework treats the learned estimator as a
+measuring instrument: it comprises a planar reference with an operational
+uncertainty budget, a digital twin fitted to the real recordings, and
+PhysNet, a 0.42-M-parameter network that maps anchor-frame pre-integrated
 IMU features onto a densely supervised velocity stream with a learned
 stillness gate, a lever-arm estimate and per-prediction uncertainty.
 Decomposing each 3-s displacement into an IMU-observable double integral and

@@ -70,4 +70,8 @@ Fig.~\ref{fig:framework} summarizes the information flow and the separation
 between reference, calibration, learning and held-out evaluation. The analysis
 first determines which part of the measurand is observable from the sensor and
 which part requires an acquisition constraint; the network comparison is then
-interpreted relative to that floor.
+interpreted relative to that floor. This organization follows the metrological
+characterization expected of location-estimation
+algorithms~\cite{carbone2015navigation}: define the measurand and its
+uncertainty, calibrate the measurement chain against a reference, and compare
+estimators under one protocol.
