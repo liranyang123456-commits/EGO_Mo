@@ -16,11 +16,15 @@ import numpy as np
 
 from .affinity import describe_plan
 from .cameras import Grabber, LiveStats, calibrate_from_corners, open_camera
+from .global_cam import G4K_HEIGHT, G4K_WIDTH, GlobalGrabber
 from .imu import ImuWorker, list_serial_candidates, pick_usb_port, scan_ble
 from .calib import solve_step, summarize
 from .session import (
+    BOARD2_NAME,
     BOARD_NAME,
     INNER,
+    INNER2,
+    SQUARE2_MM,
     SQUARE_MM,
     SQUARES,
     LEGACY_THEMES,
@@ -36,6 +40,7 @@ from .session import (
     rig_banner,
     session_prefix,
     write_checkerboard_yaml,
+    write_checkerboard2_yaml,
     write_json,
 )
 
@@ -53,9 +58,11 @@ RIG_STATE = os.path.join(DATA_ROOT, "rig_state.json")
 USB_BAUD = 921600
 BT_SPP_BAUD = 115200
 RECORD_STEPS = {"imu_static", "imu_dyn", "intrinsics", "board_bt", "ego",
-                "recon", "rigid", "traj", "stage_ref", "stereo_ext"}
+                "recon", "rigid", "traj", "stage_ref", "stereo_ext",
+                "g4k_intrinsics", "g4k_rig", "global_traj"}
 BOARD_STEPS = {"intrinsics", "board_bt", "rigid", "traj", "stage_ref",
-               "stereo_ext"}
+               "stereo_ext", "g4k_rig", "global_traj"}
+GLOBAL_STEPS = {"g4k_intrinsics", "g4k_rig", "global_traj"}
 COLLECTION_LOG = os.path.join(DATA_ROOT, "collection_log.csv")
 LOG_FIELDS = [
     "session", "time", "resolution", "fps", "theme", "split", "seconds", "frames",
@@ -117,6 +124,29 @@ def _split_for(code: str, index: int) -> str:
     return plan[index] if index < len(plan) else "train"
 
 
+def _cam2_board_coverage(session: str) -> Optional[dict[str, Any]]:
+    """Read cam2/boards.csv and report per-board detection coverage."""
+    path = os.path.join(session, "cam2", "boards.csv")
+    if not os.path.isfile(path):
+        return None
+    import csv as _csv
+
+    frames = 0
+    hit_a = 0
+    hit_b = 0
+    try:
+        with open(path, newline="", encoding="utf-8") as handle:
+            for row in _csv.DictReader(handle):
+                frames += 1
+                hit_a += int(row.get("boardA_found") or 0)
+                hit_b += int(row.get("boardB_found") or 0)
+    except Exception:
+        return None
+    if not frames:
+        return None
+    return {"frames": frames, "A": hit_a / frames, "B": hit_b / frames}
+
+
 def _font(size: int, bold: bool = False):
     return ("Microsoft YaHei UI", size, "bold" if bold else "normal")
 
@@ -156,6 +186,8 @@ class CaptureApp(tk.Tk):
         self.imu_usb = ImuWorker("usb")
         self.imu_bt = ImuWorker("bt")
         self.grabber = Grabber(self.imu_usb, self.imu_bt)
+        self.grabber_4k = GlobalGrabber()
+        self.photo_g = None
         self.step = "scan"
         self.done: set[str] = set()
         self.gate_pass = False
@@ -347,7 +379,9 @@ class CaptureApp(tk.Tk):
         self.lbl_l = tk.Label(prev, text="左目\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
         self.lbl_l.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 6))
         self.lbl_r = tk.Label(prev, text="右目\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
-        self.lbl_r.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(6, 0))
+        self.lbl_r.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=6)
+        self.lbl_g = tk.Label(prev, text="4K 全局\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
+        self.lbl_g.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(6, 0))
 
         self.thumbs = tk.Frame(right, bg="#1b2030")
         self.thumbs.pack(fill=tk.X, padx=12)
@@ -433,6 +467,11 @@ class CaptureApp(tk.Tk):
             self.theme_var.set(_theme_label(code))
             if "rigid" not in self.done:
                 self._log("今天还没通过 IMU 刚性检查（第 9 步）。建议先录一段刚性检查。")
+        if key in GLOBAL_STEPS:
+            self._log(
+                "4K 全局相机：确认变焦/对焦已锁定、机位固定，全程不要触碰；"
+                "两块棋盘（刚体上的 7×5×5mm 与 GP050）都要在 4K 画面里完整可见。"
+            )
         self._update_theme_info()
         self._refresh_step_styles()
 
@@ -542,16 +581,22 @@ class CaptureApp(tk.Tk):
             tk.Label(box, text=f"相机 {idx}", bg="#243049", fg="white", font=_font(10)).pack()
             tk.Button(box, text="设为左目", command=lambda i=idx: self._set_cam("l", i), bg="#1c7ed6", fg="white", bd=0).pack(fill=tk.X)
             tk.Button(box, text="设为右目", command=lambda i=idx: self._set_cam("r", i), bg="#ae3ec9", fg="white", bd=0).pack(fill=tk.X)
+            tk.Button(box, text="设为4K全局", command=lambda i=idx: self._set_cam("g", i), bg="#0b7285", fg="white", bd=0).pack(fill=tk.X)
 
     def _set_cam(self, side: str, index: int) -> None:
         if side == "l":
             self.grabber.id_l = index
             self._log(f"左目 = 相机 {index}")
-        else:
+        elif side == "r":
             self.grabber.id_r = index
             self._log(f"右目 = 相机 {index}")
+        else:
+            self.grabber_4k.cam_id = index
+            self._log(f"4K 全局 = 相机 {index}（确认变焦/对焦已锁定）")
         if self.grabber.id_l == self.grabber.id_r and self.grabber.id_l >= 0:
             messagebox.showwarning("相机冲突", "左右目不能是同一路。")
+        if self.grabber_4k.cam_id >= 0 and self.grabber_4k.cam_id in (self.grabber.id_l, self.grabber.id_r):
+            messagebox.showwarning("相机冲突", "4K 全局相机不能与左/右目同一路。")
 
     def _usb_port(self) -> str:
         raw = self.usb_var.get().strip()
@@ -595,6 +640,8 @@ class CaptureApp(tk.Tk):
                     else:
                         self.imu_bt.start_ble(ble_id)
                 self.grabber.open(self.grabber.id_l, self.grabber.id_r, w, h, fps)
+                if self.grabber_4k.cam_id >= 0:
+                    self.grabber_4k.open(self.grabber_4k.cam_id, fps)
             except Exception as exc:  # noqa: BLE001
                 err = exc
 
@@ -633,6 +680,13 @@ class CaptureApp(tk.Tk):
         kind = session_prefix(self.step)
         if self.step not in RECORD_STEPS:
             return
+        if self.step in GLOBAL_STEPS and self.grabber_4k.cap is None:
+            messagebox.showerror(
+                "缺少 4K 相机",
+                "全局采集需要 4K 全局相机。请先「扫描设备」并点缩略图「设为4K全局」，"
+                "再点「打开相机+双IMU」。",
+            )
+            return
         if (self.step == "traj" and self._current_theme()[0] == "T"
                 and (self.grabber.width, self.grabber.height) != (1280, 720)):
             messagebox.showerror(
@@ -641,12 +695,15 @@ class CaptureApp(tk.Tk):
                 "（实际约 10 fps 属正常）。请在上方分辨率选 1280x720，"
                 "再点「打开相机+双IMU」重新打开后再录。")
             return
-        if disk_free_gb(DATA_ROOT) < 2.0:
-            messagebox.showerror("磁盘空间不足", "数据盘剩余 < 2 GB，先清出空间再录。")
+        need_gb = 15.0 if self.step in GLOBAL_STEPS else 2.0
+        if disk_free_gb(DATA_ROOT) < need_gb:
+            messagebox.showerror("磁盘空间不足", f"数据盘剩余 < {need_gb:.0f} GB，先清出空间再录。")
             return
         session = os.path.join(DATA_ROOT, f"{kind}_{now_id()}")
         os.makedirs(session, exist_ok=True)
         write_checkerboard_yaml(os.path.join(session, "checkerboard.yaml"))
+        if self.step in GLOBAL_STEPS:
+            write_checkerboard2_yaml(os.path.join(session, "checkerboard_rig.yaml"))
         ble_kind, ble_id = self._ble_target()
         meta = {
             "rig": "stereo_endoscope_plus_dual_imu",
@@ -682,6 +739,13 @@ class CaptureApp(tk.Tk):
             meta["theme"], meta["split"] = "S", "reference_validation"
         elif self.step == "stereo_ext":
             meta["theme"], meta["split"] = "E", "calibration"
+        if self.step in GLOBAL_STEPS:
+            meta["board2"] = BOARD2_NAME
+            meta["inner2_corners"] = list(INNER2)
+            meta["square2_mm"] = SQUARE2_MM
+            meta["cam_4k_id"] = self.grabber_4k.cam_id
+            meta["cam_4k_resolution"] = [self.grabber_4k.width, self.grabber_4k.height]
+            meta["global_frame"] = "cam2_fixed"
         write_json(os.path.join(session, "session_meta.json"), meta)
         self.grabber.need_board = self.step in BOARD_STEPS
         if self.step == "traj":
@@ -689,6 +753,9 @@ class CaptureApp(tk.Tk):
             if (self.grabber.width, self.grabber.height) != (1280, 720):
                 self._log(f"当前相机是 {self.grabber.width}×{self.grabber.height}。v2 轨迹统一 1280×720，当天不要混用分辨率。")
         self.grabber.start_recording(session, float(self.fps_var.get()), save_jpeg=True)
+        if self.step in GLOBAL_STEPS:
+            self.grabber_4k.start_recording(session, float(self.fps_var.get()), save_jpeg=True)
+            self._log("4K 全局相机同步开始录制（cam2）。")
         self._log(f"开始录制 {session}")
         self.start_btn.config(state=tk.DISABLED)
 
@@ -758,6 +825,14 @@ class CaptureApp(tk.Tk):
         if not self.grabber.recording:
             return
         summary = self.grabber.stop_recording()
+        if self.step in GLOBAL_STEPS and self.grabber_4k.recording:
+            summary["cam2"] = self.grabber_4k.stop_recording()
+            self._log(
+                f"4K 全局：{summary['cam2']['frames']} 帧 / "
+                f"{summary['cam2']['seconds']:.1f}s，"
+                f"{summary['cam2']['resolution'][0]}×{summary['cam2']['resolution'][1]}，"
+                f"丢帧 {summary['cam2']['drops']}。"
+            )
         self.start_btn.config(state=tk.NORMAL)
         session = summary.get("session_dir") or ""
         if session:
@@ -797,11 +872,17 @@ class CaptureApp(tk.Tk):
             })
         if self.step == "intrinsics" and session:
             self._finish_intrinsics(session, summary)
+        elif self.step == "g4k_intrinsics" and session:
+            self._finish_g4k_intrinsics(session)
+        elif self.step == "g4k_rig" and session:
+            self.done.add("g4k_rig")
+            self._log("双视外参数据已保存。运行 tools/calibrate_global_rig.py 解算「新棋盘→左目」固定外参。")
+            self._refresh_step_styles()
         elif self.step in {"imu_static", "imu_dyn", "board_bt"} and session:
             self._solve_after_record(session, self.step, summary)
         elif self.step in {"ego", "recon"}:
             self.done.add(self.step)
-        elif self.step in {"rigid", "traj", "stage_ref"} and session:
+        elif self.step in {"rigid", "traj", "stage_ref", "global_traj"} and session:
             self._qc_after_record(session, self.step, summary)
         self._refresh_step_styles()
 
@@ -900,6 +981,13 @@ class CaptureApp(tk.Tk):
                     f"棋盘可用帧 {still}/{frames}（{frac:.0%}），重投影中位数 {p50_txt} px\n"
                     f"陀螺与棋盘相关系数：{corr}\n\n{verdict}"
                 )
+                if step in GLOBAL_STEPS:
+                    cov = _cam2_board_coverage(session)
+                    if cov is not None:
+                        text += (
+                            f"\n4K 全局棋盘覆盖：刚体板 {cov['A']:.0%}，GP050 板 {cov['B']:.0%}"
+                            f"（共 {cov['frames']} 帧）"
+                        )
                 self._log(text.replace("\n", " | "))
                 if step == "rigid" and rigid_ok:
                     self.done.add("rigid")
@@ -969,6 +1057,32 @@ class CaptureApp(tk.Tk):
         self.done.add("compose")
         self._refresh_step_styles()
         messagebox.showinfo("三系投影", text + f"\n\n已写 {RIG_STATE}")
+
+    def _finish_g4k_intrinsics(self, session: str) -> None:
+        """Calibrate the fixed-focus 4K camera from the GP050 corners it saw."""
+        samples = self.grabber_4k.calib
+        size = (self.grabber_4k.width, self.grabber_4k.height)
+        payload = calibrate_from_corners(samples, size)
+        if payload is None:
+            self._log(f"4K 内参样本不足（{len(samples)}）。把 GP050 放进全局视野多换姿态再录一条。")
+            messagebox.showwarning("4K 内参不够", "样本不足。GP050 要在 4K 画面里多角度、多位置出现。")
+            return
+        payload["camera"] = "global_4k"
+        payload["focus_locked"] = True
+        path = os.path.join(session, "camera_calibration_4k.json")
+        write_json(path, payload)
+        self.done.add("g4k_intrinsics")
+        self._refresh_step_styles()
+        self._log(
+            f"4K 内参 RMS {payload['reprojection_error_pixels']:.3f} px，"
+            f"fx {payload['parameters']['fx']:.0f}，样本 {payload['num_images']} → {path}"
+        )
+        messagebox.showinfo(
+            "4K 内参完成",
+            f"RMS {payload['reprojection_error_pixels']:.3f} px，样本 {payload['num_images']}。\n"
+            "下一步：全局双视外参（第 14 步）。",
+        )
+        self._goto("g4k_rig")
 
     def _finish_intrinsics(self, session: str, summary: dict[str, Any]) -> None:
         with self.grabber._lock:
@@ -1070,6 +1184,10 @@ class CaptureApp(tk.Tk):
         if f_r is not None:
             self.photo_r = bgr_to_photo(f_r, 700, 400, *self._overlay_args("r"))
             self.lbl_r.config(image=self.photo_r, text="")
+        f_g = self.grabber_4k.preview_frame()
+        if f_g is not None:
+            self.photo_g = bgr_to_photo(f_g, 700, 400)
+            self.lbl_g.config(image=self.photo_g, text="")
         delay = {"低": 150, "中": 100, "高": 60}.get(self.preview_var.get(), 120)
         self.after(delay, self._tick)
 
@@ -1082,6 +1200,7 @@ class CaptureApp(tk.Tk):
     def _on_close(self) -> None:
         try:
             self.grabber.close()
+            self.grabber_4k.close()
             self.imu_usb.stop()
             self.imu_bt.stop()
         finally:

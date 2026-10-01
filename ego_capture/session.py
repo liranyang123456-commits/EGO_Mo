@@ -18,6 +18,15 @@ INNER = (11, 8)
 SQUARE_MM = 3.0
 SQUARE_M = SQUARE_MM / 1000.0
 
+# 第二块棋盘：刚性绑在 双目+USB-IMU 刚体上，供固定的 4K 全局相机观察。
+# 7×5 格、每格 5 mm（内角点 6×4），板面约 35×25 mm。
+# 注意：7×5 格（奇×奇）存在 180° 旋转歧义，离线解算时用时间连续性消除。
+BOARD2_NAME = "RIG-7x5-5mm"
+SQUARES2 = (7, 5)
+INNER2 = (6, 4)
+SQUARE2_MM = 5.0
+SQUARE2_M = SQUARE2_MM / 1000.0
+
 FRAMES_COLUMNS = [
     "frame_idx", "frame_timestamp",
     "imu_latest_idx", "imu_latest_timestamp", "imu_time_diff",
@@ -70,6 +79,20 @@ STEPS = [
      "采集至少 25 个姿态、总时长 60–90 秒。两相机没有硬件同步，只有静止保持才能保证"
      "最近时间戳图像对应同一姿态。停止后运行 tools/calibrate_stereo_extrinsic.py，"
      "必须通过留出外极线、旋转和平移误差门限后才可替换名义 46.5-mm 外参。"),
+    ("g4k_intrinsics", "13 4K 全局相机内参",
+     "4K 相机固定在全局机位，变焦/对焦已锁定（锁定后全程不要再碰，否则内参作废）。"
+     "手持 GP050 棋盘在全局视野里、与实际工作距离一致的位置，远近、四角、倾斜慢慢变换，约 90 秒。"
+     "4K 分辨率下小棋盘可稳定检测；若检测率太低，把棋盘移近一些再录一条。"),
+    ("g4k_rig", "14 全局双视外参",
+     "解算「新棋盘(7×5×5mm) → 双目左目」的固定外参。新棋盘已刚性绑在 双目+IMU 刚体上。"
+     "把刚体放进全局视野，使 4K 相机同时看到刚体上的新棋盘和 GP050 棋盘，且双目左目也看到 GP050；"
+     "每个姿态静止保持 2 秒再换，采 25 个以上姿态。程序用共享的 GP050 把两台相机联系起来，"
+     "解出固定外参并做留出一致性检查。停止后运行 tools/calibrate_global_rig.py。"),
+    ("global_traj", "15 全局运动采集",
+     "4K 相机固定不动、焦距锁定。刚体 A（双目+USB-IMU+新棋盘）与刚体 B（蓝牙IMU+GP050）"
+     "在全局视野里相互运动，两块棋盘都要始终完整可见（这是全局真值）。每段约 3 分钟：先静止 8 秒，"
+     "连续动作并每 10–15 秒明显停 1–2 秒，最后静止 10 秒；运动幅度尽量大。"
+     "4K 视频很大，确认数据盘剩余 ≥ 15 GB。停止后自动做时刻同步与棋盘覆盖率检查。"),
 ]
 
 # v2 动作主题（2026-09-25 起）。每段约 3 分钟，强调大幅度、多样化、明显停顿。
@@ -117,6 +140,7 @@ PHASES = [
     ("A 接通", ("scan", "gate")),
     ("B 几何三系", ("imu_static", "imu_dyn", "intrinsics", "board_bt", "compose")),
     ("C 应用采集", ("ego", "recon", "rigid", "traj", "stage_ref", "stereo_ext")),
+    ("D 全局视角", ("g4k_intrinsics", "g4k_rig", "global_traj")),
 ]
 
 
@@ -162,7 +186,23 @@ def session_prefix(step: str) -> str:
         "rigid": "rigid",
         "stage_ref": "stage",
         "stereo_ext": "stereo_ext",
+        "g4k_intrinsics": "calib_g4k",
+        "g4k_rig": "calib_grig",
+        "global_traj": "gtraj",
     }.get(step, "seq")
+
+
+def write_checkerboard2_yaml(path: str) -> None:
+    text = (
+        f"# {BOARD2_NAME}\n"
+        "target_type: 'checkerboard'\n"
+        f"targetCols: {INNER2[0]}   # inner corners\n"
+        f"targetRows: {INNER2[1]}\n"
+        f"rowSpacingMeters: {SQUARE2_M:.6f}\n"
+        f"colSpacingMeters: {SQUARE2_M:.6f}\n"
+    )
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(text)
 
 
 def disk_free_gb(path: str) -> float:

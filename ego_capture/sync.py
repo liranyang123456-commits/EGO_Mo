@@ -204,7 +204,7 @@ def align_session(session_dir: str | Path) -> dict[str, Any]:
     usb_g = _gyro_norm(usb_y) if len(usb_t) else np.zeros(0)
     bt_g = _gyro_norm(bt_y) if len(bt_t) else np.zeros(0)
     report: dict[str, Any] = {"cameras": {}}
-    for side, folder in (("cam0", "cam0"), ("cam1", "cam1")):
+    for side, folder in (("cam0", "cam0"), ("cam1", "cam1"), ("cam2", "cam2")):
         times_path = root / folder / "times.txt"
         video = root / folder / "video.avi"
         if not times_path.exists():
