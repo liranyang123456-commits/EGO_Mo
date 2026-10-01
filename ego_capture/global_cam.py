@@ -313,6 +313,18 @@ class GlobalGrabber:
                 age = stamp - float(state["stamp"])
                 board_a = bool(state["A"].get("found")) and 0.0 <= age < 1.5
                 board_b = bool(state["B"].get("found")) and 0.0 <= age < 1.5
+                boards = {
+                    "A": {
+                        "found": board_a,
+                        "pattern": state["A"].get("pattern", INNER2),
+                        "bbox": state["A"].get("bbox"),
+                    },
+                    "B": {
+                        "found": board_b,
+                        "pattern": state["B"].get("pattern", INNER),
+                        "bbox": state["B"].get("bbox"),
+                    },
+                }
                 self.frame = frame
                 self.stats.fps = fps
                 self.stats.size = f"{frame.shape[1]}x{frame.shape[0]}"
@@ -323,7 +335,7 @@ class GlobalGrabber:
                     self.stats.rec_frames = self._n
                     self.stats.rec_seconds = stamp - self._t0
             if self.recording:
-                self._enqueue(_RecItem(frame, stamp, {"A": board_a, "B": board_b}))
+                self._enqueue(_RecItem(frame, stamp, boards))
 
     def _reopen(self) -> None:
         old = self.cap

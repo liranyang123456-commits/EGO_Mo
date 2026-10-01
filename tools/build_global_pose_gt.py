@@ -73,7 +73,8 @@ def _rt_to_row(T: np.ndarray) -> list[float]:
     return [float(v) for v in R.reshape(-1)] + [float(v) for v in t]
 
 
-def evaluate(session: str, write_images: bool = False) -> dict[str, Any]:
+def evaluate(session: str, write_images: bool = False,
+             only_segments: bool = False) -> dict[str, Any]:
     root = Path(session)
     cam2 = root / "cam2"
     times_path = cam2 / "times.txt"
@@ -81,8 +82,18 @@ def evaluate(session: str, write_images: bool = False) -> dict[str, Any]:
         raise SystemExit(f"缺少 {times_path}（该段不含 4K 通道）")
     K4_path = _latest_file(ROOT / "datasets", "calib_g4k_", "camera_calibration_4k.json")
     if K4_path is None:
-        raise SystemExit("找不到 4K 内参（先完成第 13 步）。")
+        raise SystemExit("找不到 4K 内参（先完成第 13 步或运行 tools/selfcalib_4k.py）。")
     K4, dist4 = load_intrinsics(K4_path)
+
+    # Optionally restrict to the usable (both-boards-visible) segments.
+    keep: Optional[set[int]] = None
+    cov_path = root / "coverage_summary.json"
+    if only_segments and cov_path.is_file():
+        cov = json.loads(cov_path.read_text(encoding="utf-8"))
+        keep = set()
+        for seg in cov.get("segments_ge_min", []):
+            keep.update(range(int(seg["start_frame"]), int(seg["end_frame"]) + 1))
+        print(f"只处理 {len(keep)} 帧（{len(cov.get('segments_ge_min', []))} 个可用片段）")
 
     rig_state_path = ROOT / "datasets" / "global_rig_state.json"
     T_C0_A: Optional[np.ndarray] = None
@@ -112,6 +123,8 @@ def evaluate(session: str, write_images: bool = False) -> dict[str, Any]:
 
     n_frames = len(times)
     for idx in range(n_frames):
+        if keep is not None and idx not in keep:
+            continue
         if use_video:
             ok, frame = cap.read()
             if not ok or frame is None:
@@ -180,8 +193,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Global-pose ground truth for a 4K session")
     parser.add_argument("session", help="gtraj_ 会话目录")
     parser.add_argument("--write-images", action="store_true", help="（保留，无操作）")
+    parser.add_argument("--only-segments", action="store_true",
+                        help="只处理 coverage_summary.json 里两板同见的可用片段")
     args = parser.parse_args()
-    summary = evaluate(args.session, write_images=args.write_images)
+    summary = evaluate(args.session, write_images=args.write_images,
+                       only_segments=args.only_segments)
     print(f"帧数 {summary['frames']}")
     print(f"棋盘覆盖：刚体板 {summary['boardA_coverage']:.0%}，GP050 {summary['boardB_coverage']:.0%}")
     print(f"重投影中位数 (px)：A {summary['boardA_reproj_px_median']}, B {summary['boardB_reproj_px_median']}")

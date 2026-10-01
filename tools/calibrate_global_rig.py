@@ -71,6 +71,14 @@ def detect_full(gray: np.ndarray, inner: tuple[int, int]) -> Optional[np.ndarray
         )
     found = _find(small, inner)
     if found is None:
+        # Second pass with local contrast for dim or low-contrast frames.
+        try:
+            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(small)
+        except Exception:
+            clahe = None
+        if clahe is not None:
+            found = _find(clahe, inner)
+    if found is None:
         return None
     corners, _pattern = found
     pts = corners.reshape(-1, 1, 2).astype(np.float32).copy()
