@@ -1,0 +1,79 @@
+{
+  "round": "A (zero-velocity) + B (cross-window velocity state) + C (heteroscedastic uncertainty), 2026-09-25",
+  "code": {
+    "tools/train_physnet.py": "stillness head (--still-weight), structural ZUPT gate (--gate), two-pass ZUPT re-anchoring (--zupt), heteroscedastic log-variance head (--nll-weight), predict_streams",
+    "tools/fuse_trajectory.py": "session-level least squares over node positions with displacement, velocity and zero-velocity edges; reference or gyroscope attitude; re-reads the 3-s displacements from the fused trajectory",
+    "tools/zupt_bound.py": "physical accuracy of zero-velocity-aided strapdown integration between detected still phases",
+    "tools/eval_uncertainty.py": "coverage, sharpness, discrimination and recalibration of the predicted uncertainty",
+    "tools/eval_session_cv.py": "--baseline-tag so a new PhysNet fold set can be compared against existing baseline folds"
+  },
+  "A_zero_velocity": {
+    "stillness_labels": "still < 3 mm/s, moving > 8 mm/s, the band between is not supervised; 27 % of supervised training frames are still, 61 % of training windows and 16.5 % of validation windows contain at least one still frame",
+    "validation_err_mm_mean_over_seeds": {
+      "reference (5 seeds)": 30.68, "stillness loss only (2)": 30.96, "structural gate (5)": 30.42,
+      "two-pass ZUPT (2)": 30.55, "gate + ZUPT (2)": 30.92, "gate, still-weight 0.3 (2)": 30.23,
+      "gate, still-weight 3 (2)": 31.12, "gate + velocity loss (2)": 30.42,
+      "gate + NLL (2)": 30.09, "gate + NLL 0.3 (2)": 30.34
+    },
+    "seed_spread_mm": {"reference": [29.80, 31.40], "gate": [29.86, 30.85]},
+    "validation_5_seed_ensemble_err_mm": {"reference": 29.91, "gate": 29.67},
+    "stillness_detector_on_validation": {"recall_on_still": [0.944, 1.0], "false_alarm_on_moving": [0.0, 0.023]},
+    "verdict": "the gate improves the mean by 0.26 mm (within the 1.6 mm seed spread of the reference) but halves that spread and clearly improves the sealed-test metrics; the two-pass re-anchoring is not adopted because it does not combine with the gate"
+  },
+  "data_hygiene": {
+    "note": "excluding the two rigidity recordings that fail the mount test (done by tools/prepare_trajectory_data.py) is worth more than any architecture change in this round",
+    "validation_err_mm": {"6 rigid sessions incl. 2 non-rigid": 31.89, "4 verified rigid sessions": 30.68}
+  },
+  "B_cross_window_velocity": {
+    "pose_graph_with_velocity_and_zupt_edges": {
+      "result": "no effect: re-read validation error 29.67 -> 29.7-29.9 mm and ATE 78-80 mm for every weight combination",
+      "reason": "tens of thousands of displacement edges dominate a few hundred neighbour edges, and the velocity stream is not identified in absolute terms unless it is supervised"
+    },
+    "zupt_aided_strapdown_bound": {
+      "source": "datasets/zupt_bound.json",
+      "err_mm_by_span_reference_attitude": {"0.8-2 s": 0.7, "2-4 s": 18.4, "4-8 s": 4104, "8-30 s": 14709},
+      "err_mm_by_span_gyro_attitude": {"0.8-2 s": 1.2, "2-4 s": 14.7, "4-8 s": 887, "8-30 s": 4939},
+      "solved_bias_mg": [2.9, 6.1],
+      "still_segments_per_minute": {"train": 2.3, "val": 1.38, "rigid": 1.75, "test": 0.52},
+      "verdict": "zero-velocity-aided integration is accurate only below about 2 s (about 1 mm) and diverges beyond 4 s because attitude error leaks gravity (1 deg gives 0.17 m/s2, i.e. 0.77 m over 3 s); the 3-s protocol cannot be rescued this way, and the present recordings contain too few pauses (the sealed test session has one still segment)"
+    }
+  },
+  "C_uncertainty": {
+    "source": "datasets/uncertainty_val.json",
+    "accuracy_cost": "none: gate+NLL 30.09 mm versus gate 30.42 mm on validation",
+    "raw_coverage": {"1sigma": 0.325, "2sigma": 0.545, "rms_z": 4.56},
+    "after_single_validation_scale_4.56": {"1sigma": 0.814, "2sigma": 0.945, "rms_z": 1.0},
+    "discrimination": {"spearman_sigma_vs_error": 0.253,
+                       "err_mm_most_confident_decile": 6.86, "err_mm_least_confident_decile": 29.72},
+    "variance_weighted_fusion": "no effect on ATE (68.0 -> 68.2 and 86.7 -> 85.6 mm)"
+  },
+  "final_protocol_cvg": {
+    "source": "datasets/session_cv_gate_benchmark.json",
+    "config": "PhysNet, weight decay 0.1, dense supervision, still-weight 1, structural gate, extra_train = 4 verified rigid sessions, 8 folds x 2 seeds",
+    "cv_err_mm_pairs": {"zero_motion": 30.42, "imunet": 26.38, "physnet": 25.56,
+                        "equal_blend": 24.58, "calibrated_blend": 24.51},
+    "calibration": {"blend_weight_physnet": 0.65, "shrink": 1.05},
+    "real_test": {
+      "zero_motion": {"err_mm": 49.67, "fast_mm": 90.27, "r2": -0.016, "ate_rmse_mm": 119.24},
+      "imunet_cv16": {"err_mm": 42.93, "fast_mm": 74.20, "r2": 0.250, "ate_rmse_mm": 82.21},
+      "physnet_cv16_gate": {"err_mm": 43.55, "fast_mm": 72.67, "r2": 0.252, "ate_rmse_mm": 109.82},
+      "equal_blend": {"err_mm": 42.21, "fast_mm": 72.97, "r2": 0.276, "ate_rmse_mm": 90.78},
+      "cv_calibrated_blend": {"err_mm": 42.29, "fast_mm": 72.10, "r2": 0.279}
+    },
+    "ci_mm": {"physnet_vs_imunet": [-3.18, 1.84], "blend_vs_imunet": [-1.17, 2.45]},
+    "trade_off": "the gate improves every local metric (test 44.39 -> 43.55 mm, fast third 75.15 -> 72.67 mm, R2 0.215 -> 0.252, blend 42.60 -> 42.21 mm and R2 0.256 -> 0.276) but degrades trajectory ATE (87.8 -> 109.8 mm, blend 81.1 -> 90.8 mm) because suppressing motion increases shrinkage, which the mean local error rewards and the accumulated error penalizes; the non-gated fold ensemble remains the best trajectory estimator (80.7 mm)"
+  },
+  "records": {
+    "best_sealed_test_local_err_mm": {"value": 42.21, "method": "PhysNet(gate)+IMUNet equal blend, CV fold ensembles", "previous": 42.60},
+    "best_sealed_test_r2": {"value": 0.279, "method": "CV-calibrated blend (gate)", "previous": 0.257},
+    "best_sealed_test_fast_third_mm": {"value": 72.10, "method": "CV-calibrated blend (gate)", "previous": 73.67},
+    "best_sealed_test_ate_mm": {"value": 80.70, "method": "CV-calibrated blend without the gate", "previous": 80.70}
+  },
+  "conclusions": [
+    "Zero-velocity information is the only mechanism found so far that moves the sealed-test metrics beyond seed noise, and the detector itself is reliable (recall 0.94-1.0, false alarm 0-0.02).",
+    "Its benefit is bounded by how often the camera actually stops: the present recordings contain 0.5-2.3 still segments per minute, which is why the gain is 1 mm rather than the 15 mm the physics allows.",
+    "Classical ZUPT-aided integration is accurate to about 1 mm below 2 s but diverges beyond 4 s from gravity leakage, so it cannot replace the learned estimator at the 3-s horizon; this quantifies the boundary between the model-based and learned regimes.",
+    "Heteroscedastic uncertainty is free in accuracy, needs one scale factor, and then provides usable per-prediction intervals with a 4.3x error separation between the most and least confident deciles.",
+    "Mean local error and accumulated trajectory error select different operating points; both must be reported."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "frames": 967,
+  "seconds": 90.10420250892639,
+  "calib_left": 197,
+  "calib_right": 0,
+  "session_dir": "E:\\EGO_Mo\\datasets\\traj_20261108_163523",
+  "drops": 0,
+  "focus_state": {
+    "autofocus": 2.0,
+    "focus": 749.0,
+    "t": 1794127012.384992,
+    "reapplied": 0
+  },
+  "focus_reapplied": 0,
+  "sync": {
+    "cameras": {
+      "cam0": {
+        "delay_usb_s": 0.22500000000000034,
+        "delay_usb_corr": 0.7158398093463247,
+        "delay_usb_reliable": true,
+        "delay_bt_s": 0.0,
+        "delay_bt_corr": 0.09761486506386326,
+        "delay_bt_reliable": false,
+        "frames": 968,
+        "usb_ok": 964,
+        "bt_ok": 966
+      }
+    }
+  },
+  "usb_hz": 200.75053155738487,
+  "bt_hz": 185.80213877144988,
+  "usb_samples": 18086,
+  "bt_samples": 16883,
+  "usb_reconnects": 0,
+  "bt_reconnects": 0
+}

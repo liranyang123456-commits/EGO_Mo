@@ -1,0 +1,29 @@
+{
+  "session": "traj_20261109_024257",
+  "frames": 1183,
+  "usable": 1178,
+  "usable_frac": 0.9957734573119188,
+  "reproj_p50": 0.054552750661969185,
+  "size": [
+    1280,
+    720
+  ],
+  "delay_usb_ms": 303.0,
+  "stop_events": {
+    "label": "C2",
+    "condition": "C",
+    "stops": 0,
+    "stops_per_min": 0.0,
+    "beats": null,
+    "beats_matched": null,
+    "compliance": null,
+    "median_moving_speed_mm_s": 22.3
+  },
+  "camera_motion": {
+    "camera_p95_dps": 11.340309511626272,
+    "board_p95_dps": 0.13647840900669966
+  },
+  "problems": [],
+  "warnings": [],
+  "ok": true
+}

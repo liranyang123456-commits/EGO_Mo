@@ -1,0 +1,39 @@
+{
+  "common_windows": 1370,
+  "definition": "validation windows admissible at c = 4 s",
+  "contexts": {
+    "2 s": {
+      "own_windows": 1436,
+      "own_err_mm": 32.55,
+      "own_zero_mm": 42.23,
+      "common_err_mm": 33.15,
+      "common_err_mm_seeds": [
+        32.83,
+        33.48
+      ],
+      "common_zero_mm": 42.99
+    },
+    "3 s": {
+      "own_windows": 1400,
+      "own_err_mm": 32.87,
+      "own_zero_mm": 42.55,
+      "common_err_mm": 33.27,
+      "common_err_mm_seeds": [
+        33.03,
+        33.5
+      ],
+      "common_zero_mm": 42.99
+    },
+    "4 s": {
+      "own_windows": 1370,
+      "own_err_mm": 33.11,
+      "own_zero_mm": 42.99,
+      "common_err_mm": 33.11,
+      "common_err_mm_seeds": [
+        32.8,
+        33.42
+      ],
+      "common_zero_mm": 42.99
+    }
+  }
+}

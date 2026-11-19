@@ -1,0 +1,79 @@
+{
+  "position_sigma_mm": 0.75,
+  "rotation_sigma_deg": 0.21,
+  "nominal_fraction": 0.018,
+  "axis_scale_fraction_xyz": [
+    0.05340091903139361,
+    0.04816093364185971,
+    0.0077968970872978015
+  ],
+  "delay_sigma_ms": [
+    5,
+    10
+  ],
+  "coverage_factor": 2,
+  "counts": {
+    "traj_20260923_023241": 339,
+    "traj_20260924_144019": 1097,
+    "traj_20260923_023422": 647
+  },
+  "medians_mm": {
+    "val": {
+      "end_mm": 1.0700404245578348,
+      "cal_nominal_mm": 0.6942919390063234,
+      "cal_perturbed_mm": 1.3826756619901541,
+      "time_5ms_mm": 0.26788770424682445,
+      "U_nominal_5ms_mm": 2.6691001297321906,
+      "U_perturbed_5ms_mm": 3.5704211478535774,
+      "time_10ms_mm": 0.5357754084936489,
+      "U_nominal_10ms_mm": 2.892525258798452,
+      "U_perturbed_10ms_mm": 3.8132239353147055
+    },
+    "test": {
+      "end_mm": 1.0719985750183694,
+      "cal_nominal_mm": 0.7636818621047881,
+      "cal_perturbed_mm": 1.2637705782087643,
+      "time_5ms_mm": 0.2522738272105701,
+      "U_nominal_5ms_mm": 2.739118756261995,
+      "U_perturbed_5ms_mm": 3.4017026513788533,
+      "time_10ms_mm": 0.5045476544211402,
+      "U_nominal_10ms_mm": 3.0541471695140845,
+      "U_perturbed_10ms_mm": 3.6153398497218783
+    }
+  },
+  "ranges_of_medians_mm": {
+    "end": [
+      1.0700404245578348,
+      1.0719985750183694
+    ],
+    "time": [
+      0.2522738272105701,
+      0.5357754084936489
+    ],
+    "cal_nominal": [
+      0.6942919390063234,
+      0.7636818621047881
+    ],
+    "cal_perturbed": [
+      1.2637705782087643,
+      1.3826756619901541
+    ],
+    "U_nominal": [
+      2.6691001297321906,
+      3.0541471695140845
+    ],
+    "U_perturbed": [
+      3.4017026513788533,
+      3.8132239353147055
+    ]
+  },
+  "inputs_sha256": {
+    "physnet_v1/eval_wd1.npz": "93f42f9b2032745018c4be721b4bd6abcd21c4cfe2814d69963f50c4ec8be8c0",
+    "trajectory_split_paper.json": "2b06b71b8e4f8f8c6daf29f12a4aac9c45230489b0b23fbd23ed4349fabaf6e6",
+    "sim_reference_validation_psf.json": "0e9aea68aab1768b86bf202751ccddabe198a37918909bd7273894a2c415db0d",
+    "pose_gt_raw/traj_20260923_023241.npz": "53f53aa67a2b0cc7caa3f77f9168bec329936e2674d98b06f8e0cc683acc47f2",
+    "pose_gt_raw/traj_20260924_144019.npz": "e8f163bde897a0a3d10fd0e8f1fa546320aef0d71a868cd7d924e5a977dbdc9c",
+    "pose_gt_raw/traj_20260923_023422.npz": "fe4751f9c288b6627a07fa347992970c638b53f1aeb9738b8df0876ab49ddedb"
+  },
+  "windows_csv_sha256": "c45c8a34815b62b6ea727ebf0008856597ab6e91686a553e5c7e7e099bd4a306"
+}

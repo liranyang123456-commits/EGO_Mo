@@ -1,0 +1,8 @@
+opencv-python>=4.8
+pyserial>=3.5
+Pillow>=10.0
+numpy>=1.24
+bleak>=0.22
+matplotlib>=3.7
+scipy>=1.10
+PySide6>=6.5

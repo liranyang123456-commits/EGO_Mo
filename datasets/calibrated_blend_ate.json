@@ -1,0 +1,132 @@
+{
+  "held_out": {
+    "recording": "traj_20260923_023422",
+    "cvx": {
+      "edges": 647,
+      "physnet": {
+        "err_mm": 44.39,
+        "nodes": 678,
+        "ate_rmse_mm": 87.79,
+        "ate_mean_mm": 72.77,
+        "ate_p90_mm": 144.57
+      },
+      "imunet": {
+        "err_mm": 42.93,
+        "nodes": 678,
+        "ate_rmse_mm": 82.21,
+        "ate_mean_mm": 68.74,
+        "ate_p90_mm": 134.34
+      },
+      "equal_blend": {
+        "err_mm": 42.6,
+        "nodes": 678,
+        "ate_rmse_mm": 81.06,
+        "ate_mean_mm": 66.7,
+        "ate_p90_mm": 138.42
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 42.68,
+        "nodes": 678,
+        "ate_rmse_mm": 80.7,
+        "ate_mean_mm": 65.98,
+        "ate_p90_mm": 138.33
+      }
+    },
+    "cvg": {
+      "edges": 647,
+      "physnet": {
+        "err_mm": 43.55,
+        "nodes": 678,
+        "ate_rmse_mm": 109.82,
+        "ate_mean_mm": 93.56,
+        "ate_p90_mm": 161.72
+      },
+      "imunet": {
+        "err_mm": 42.93,
+        "nodes": 678,
+        "ate_rmse_mm": 82.21,
+        "ate_mean_mm": 68.74,
+        "ate_p90_mm": 134.34
+      },
+      "equal_blend": {
+        "err_mm": 42.21,
+        "nodes": 678,
+        "ate_rmse_mm": 90.78,
+        "ate_mean_mm": 76.12,
+        "ate_p90_mm": 147.99
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 42.29,
+        "nodes": 678,
+        "ate_rmse_mm": 95.2,
+        "ate_mean_mm": 80.07,
+        "ate_p90_mm": 150.3
+      }
+    }
+  },
+  "t1": {
+    "recording": "traj_20260926_143837",
+    "cvx": {
+      "edges": 1054,
+      "physnet": {
+        "err_mm": 32.1,
+        "nodes": 1083,
+        "ate_rmse_mm": 132.97,
+        "ate_mean_mm": 116.38,
+        "ate_p90_mm": 198.31
+      },
+      "imunet": {
+        "err_mm": 32.44,
+        "nodes": 1083,
+        "ate_rmse_mm": 78.0,
+        "ate_mean_mm": 66.18,
+        "ate_p90_mm": 125.08
+      },
+      "equal_blend": {
+        "err_mm": 31.69,
+        "nodes": 1083,
+        "ate_rmse_mm": 102.3,
+        "ate_mean_mm": 88.93,
+        "ate_p90_mm": 157.78
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 31.42,
+        "nodes": 1083,
+        "ate_rmse_mm": 108.24,
+        "ate_mean_mm": 94.3,
+        "ate_p90_mm": 165.47
+      }
+    },
+    "cvg": {
+      "edges": 1054,
+      "physnet": {
+        "err_mm": 31.02,
+        "nodes": 1083,
+        "ate_rmse_mm": 162.73,
+        "ate_mean_mm": 140.38,
+        "ate_p90_mm": 241.22
+      },
+      "imunet": {
+        "err_mm": 32.44,
+        "nodes": 1083,
+        "ate_rmse_mm": 78.0,
+        "ate_mean_mm": 66.18,
+        "ate_p90_mm": 125.08
+      },
+      "equal_blend": {
+        "err_mm": 31.19,
+        "nodes": 1083,
+        "ate_rmse_mm": 115.84,
+        "ate_mean_mm": 100.74,
+        "ate_p90_mm": 178.27
+      },
+      "cv_calibrated_blend": {
+        "err_mm": 30.75,
+        "nodes": 1083,
+        "ate_rmse_mm": 130.71,
+        "ate_mean_mm": 113.41,
+        "ate_p90_mm": 199.12
+      }
+    }
+  }
+}

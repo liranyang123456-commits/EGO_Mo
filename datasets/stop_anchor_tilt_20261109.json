@@ -1,0 +1,182 @@
+{
+  "note": "Exploratory and not pre-specified. Mean 3-s error in mm on the windows of the paused tripod recordings that the published rule switches to stop anchoring (S <= 2 s). tilt_corrected rotates the anchor-frame specific force so that every detected stop agrees on one gravity direction, interpolating the correction between stops. stop_gyro_bias instead removes the mean gyroscope rate of the detected stops.",
+  "rigid": "rigid_20261109_023120",
+  "pooled": {
+    "n": 1426,
+    "zero": 31.85,
+    "published_anchor": 44.27,
+    "stop_gyro_bias": 46.48,
+    "tilt_corrected": 27.14,
+    "frozen_physnet": 25.56,
+    "bins": [
+      {
+        "deg": [
+          0,
+          3
+        ],
+        "n": 209,
+        "zero": 11.03,
+        "published_anchor": 10.05,
+        "stop_gyro_bias": 13.96,
+        "tilt_corrected": 8.96,
+        "frozen_physnet": 14.77
+      },
+      {
+        "deg": [
+          3,
+          8
+        ],
+        "n": 303,
+        "zero": 18.08,
+        "published_anchor": 20.78,
+        "stop_gyro_bias": 25.24,
+        "tilt_corrected": 15.61,
+        "frozen_physnet": 15.29
+      },
+      {
+        "deg": [
+          8,
+          15
+        ],
+        "n": 466,
+        "zero": 38.77,
+        "published_anchor": 39.7,
+        "stop_gyro_bias": 42.27,
+        "tilt_corrected": 26.09,
+        "frozen_physnet": 30.94
+      },
+      {
+        "deg": [
+          15,
+          45
+        ],
+        "n": 448,
+        "zero": 43.67,
+        "published_anchor": 80.86,
+        "stop_gyro_bias": 80.38,
+        "tilt_corrected": 44.51,
+        "frozen_physnet": 31.95
+      }
+    ]
+  },
+  "per_session": [
+    {
+      "session": "traj_20261109_022758",
+      "n": 744,
+      "zero": 38.3,
+      "published_anchor": 46.07,
+      "stop_gyro_bias": 47.76,
+      "tilt_corrected": 28.7,
+      "frozen_physnet": 30.86,
+      "bins": [
+        {
+          "deg": [
+            0,
+            3
+          ],
+          "n": 86,
+          "zero": 14.34,
+          "published_anchor": 12.65,
+          "stop_gyro_bias": 13.78,
+          "tilt_corrected": 11.56,
+          "frozen_physnet": 17.85
+        },
+        {
+          "deg": [
+            3,
+            8
+          ],
+          "n": 131,
+          "zero": 18.46,
+          "published_anchor": 22.64,
+          "stop_gyro_bias": 24.45,
+          "tilt_corrected": 15.23,
+          "frozen_physnet": 18.54
+        },
+        {
+          "deg": [
+            8,
+            15
+          ],
+          "n": 258,
+          "zero": 45.05,
+          "published_anchor": 39.61,
+          "stop_gyro_bias": 42.22,
+          "tilt_corrected": 27.64,
+          "frozen_physnet": 36.02
+        },
+        {
+          "deg": [
+            15,
+            45
+          ],
+          "n": 269,
+          "zero": 49.15,
+          "published_anchor": 74.36,
+          "stop_gyro_bias": 75.3,
+          "tilt_corrected": 41.77,
+          "frozen_physnet": 36.06
+        }
+      ]
+    },
+    {
+      "session": "traj_20261109_023932",
+      "n": 682,
+      "zero": 24.81,
+      "published_anchor": 42.3,
+      "stop_gyro_bias": 45.07,
+      "tilt_corrected": 25.44,
+      "frozen_physnet": 19.78,
+      "bins": [
+        {
+          "deg": [
+            0,
+            3
+          ],
+          "n": 123,
+          "zero": 8.71,
+          "published_anchor": 8.22,
+          "stop_gyro_bias": 14.09,
+          "tilt_corrected": 7.14,
+          "frozen_physnet": 12.61
+        },
+        {
+          "deg": [
+            3,
+            8
+          ],
+          "n": 172,
+          "zero": 17.8,
+          "published_anchor": 19.37,
+          "stop_gyro_bias": 25.85,
+          "tilt_corrected": 15.91,
+          "frozen_physnet": 12.81
+        },
+        {
+          "deg": [
+            8,
+            15
+          ],
+          "n": 208,
+          "zero": 30.99,
+          "published_anchor": 39.82,
+          "stop_gyro_bias": 42.33,
+          "tilt_corrected": 24.18,
+          "frozen_physnet": 24.62
+        },
+        {
+          "deg": [
+            15,
+            45
+          ],
+          "n": 179,
+          "zero": 35.42,
+          "published_anchor": 90.62,
+          "stop_gyro_bias": 88.02,
+          "tilt_corrected": 48.62,
+          "frozen_physnet": 25.78
+        }
+      ]
+    }
+  ]
+}

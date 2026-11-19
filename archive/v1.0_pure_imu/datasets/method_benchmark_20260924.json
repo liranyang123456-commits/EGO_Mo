@@ -1,0 +1,270 @@
+{
+  "protocol": {
+    "horizon_s": 3.0,
+    "context_each_side_s": 2.0,
+    "real_test_sealed_during_selection": true,
+    "public_model_note": "RoNIN/TLIO published numbers are not inserted as direct scores: their public weights target pedestrian motion and incompatible frames. synthetic_zero_shot is the direct-run comparison under this sensor protocol."
+  },
+  "datasets": {
+    "synthetic_test": {
+      "zero_motion": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 58.46,
+        "fast_mm": 101.66,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 0.0,
+        "r2": -0.001
+      },
+      "strapdown_zero_velocity": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 882.44,
+        "fast_mm": 1034.09,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 816.7,
+        "r2": -211.81
+      },
+      "ridge_real_fitted": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 56.29,
+        "fast_mm": 97.51,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 6.06,
+        "r2": 0.074
+      },
+      "synthetic_zero_shot": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 26.16,
+        "fast_mm": 40.42,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 42.01,
+        "r2": 0.74
+      },
+      "real_only_network": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 58.99,
+        "fast_mm": 100.64,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 3.24,
+        "r2": -0.004
+      },
+      "synthetic_pretrain_real_finetune": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 55.76,
+        "fast_mm": 95.9,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 5.76,
+        "r2": 0.094
+      },
+      "validation_blend": {
+        "n": 2400,
+        "zero_mm": 58.46,
+        "err_mm": 56.21,
+        "fast_mm": 96.78,
+        "fast_zero_mm": 101.66,
+        "pred_med_mm": 4.61,
+        "r2": 0.079
+      }
+    },
+    "synthetic_ood": {
+      "zero_motion": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 67.31,
+        "fast_mm": 109.56,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 0.0,
+        "r2": -0.001
+      },
+      "strapdown_zero_velocity": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 1255.62,
+        "fast_mm": 1272.18,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 685.42,
+        "r2": -612.716
+      },
+      "ridge_real_fitted": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 72.42,
+        "fast_mm": 111.84,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 6.61,
+        "r2": -0.157
+      },
+      "synthetic_zero_shot": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 43.72,
+        "fast_mm": 51.84,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 34.83,
+        "r2": 0.53
+      },
+      "real_only_network": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 68.79,
+        "fast_mm": 109.6,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 11.48,
+        "r2": -0.01
+      },
+      "synthetic_pretrain_real_finetune": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 64.03,
+        "fast_mm": 101.31,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 12.43,
+        "r2": 0.116
+      },
+      "validation_blend": {
+        "n": 800,
+        "zero_mm": 67.31,
+        "err_mm": 64.23,
+        "fast_mm": 102.78,
+        "fast_zero_mm": 109.56,
+        "pred_med_mm": 10.42,
+        "r2": 0.101
+      }
+    },
+    "real_validation": {
+      "zero_motion": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 42.23,
+        "fast_mm": 75.04,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 0.0,
+        "r2": -0.015
+      },
+      "strapdown_zero_velocity": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 2938.32,
+        "fast_mm": 3556.39,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 2402.03,
+        "r2": -6002.638
+      },
+      "ridge_real_fitted": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 33.98,
+        "fast_mm": 56.74,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 16.02,
+        "r2": 0.343
+      },
+      "synthetic_zero_shot": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 78.71,
+        "fast_mm": 93.34,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 77.14,
+        "r2": -2.311
+      },
+      "real_only_network": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 32.59,
+        "fast_mm": 54.82,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 16.03,
+        "r2": 0.378
+      },
+      "synthetic_pretrain_real_finetune": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 30.58,
+        "fast_mm": 47.06,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 20.44,
+        "r2": 0.479
+      },
+      "validation_blend": {
+        "n": 1436,
+        "zero_mm": 42.23,
+        "err_mm": 30.45,
+        "fast_mm": 48.07,
+        "fast_zero_mm": 75.04,
+        "pred_med_mm": 19.29,
+        "r2": 0.477
+      }
+    },
+    "real_test": {
+      "zero_motion": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 49.67,
+        "fast_mm": 90.27,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 0.0,
+        "r2": -0.016
+      },
+      "strapdown_zero_velocity": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 4924.54,
+        "fast_mm": 4793.95,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 3500.69,
+        "r2": -11907.213
+      },
+      "ridge_real_fitted": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 50.16,
+        "fast_mm": 79.34,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 21.23,
+        "r2": 0.04
+      },
+      "synthetic_zero_shot": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 90.8,
+        "fast_mm": 104.23,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 81.71,
+        "r2": -2.097
+      },
+      "real_only_network": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 46.34,
+        "fast_mm": 80.71,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 16.37,
+        "r2": 0.126
+      },
+      "synthetic_pretrain_real_finetune": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 46.27,
+        "fast_mm": 77.86,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 16.54,
+        "r2": 0.148
+      },
+      "validation_blend": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 45.45,
+        "fast_mm": 78.14,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 15.26,
+        "r2": 0.166
+      }
+    }
+  }
+}

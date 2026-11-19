@@ -1,0 +1,87 @@
+{
+  "pause_4": {
+    "imu": {
+      "n": 229,
+      "median_mm": 0.68,
+      "mean_mm": 26.43
+    },
+    "flow": {
+      "n": 217,
+      "median_mm": 3.87,
+      "mean_mm": 16.86
+    },
+    "true": {
+      "n": 232,
+      "median_mm": 7.66,
+      "mean_mm": 23.83
+    }
+  },
+  "pause_8": {
+    "imu": {
+      "n": 144,
+      "median_mm": 0.7,
+      "mean_mm": 40.81
+    },
+    "flow": {
+      "n": 130,
+      "median_mm": 3.77,
+      "mean_mm": 22.22
+    },
+    "true": {
+      "n": 142,
+      "median_mm": 8.44,
+      "mean_mm": 25.7
+    }
+  },
+  "pause_12.5": {
+    "imu": {
+      "n": 134,
+      "median_mm": 17.22,
+      "mean_mm": 67.51
+    },
+    "flow": {
+      "n": 92,
+      "median_mm": 2.29,
+      "mean_mm": 18.69
+    },
+    "true": {
+      "n": 97,
+      "median_mm": 8.3,
+      "mean_mm": 20.93
+    }
+  },
+  "pause_20": {
+    "imu": {
+      "n": 104,
+      "median_mm": 27.53,
+      "mean_mm": 67.08
+    },
+    "flow": {
+      "n": 63,
+      "median_mm": 7.28,
+      "mean_mm": 33.29
+    },
+    "true": {
+      "n": 70,
+      "median_mm": 9.12,
+      "mean_mm": 34.39
+    }
+  },
+  "pause_inf": {
+    "imu": {
+      "n": 99,
+      "median_mm": 74.99,
+      "mean_mm": 97.43
+    },
+    "flow": {
+      "n": 1,
+      "median_mm": 493.53,
+      "mean_mm": 493.53
+    },
+    "true": {
+      "n": 14,
+      "median_mm": 16.63,
+      "mean_mm": 48.03
+    }
+  }
+}

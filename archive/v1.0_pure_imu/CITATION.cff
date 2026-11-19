@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use EGO_Mo, please cite the software and the accompanying paper."
+title: "EGO_Mo: Pure-Inertial Camera Motion Estimation from Continuous IMU Streams"
+type: software
+authors:
+  - family-names: Li
+    given-names: Ranyang
+    email: lry@haut.edu.cn
+  - family-names: Wei
+    given-names: Nan
+  - family-names: Lin
+    given-names: Zhipeng
+  - family-names: Liu
+    given-names: Wufeng
+  - family-names: Fan
+    given-names: Chao
+version: 1.0.0
+date-released: 2026-09-26
+license: MIT
+repository-code: "https://github.com/liranyang123456-commits/EGO_Mo"
+# doi: TO_BE_ASSIGNED (Zenodo reserved DOI)
+abstract: >-
+  Acquisition, calibration, digital-twin, physics-structured learning, and
+  evaluation tools for estimating camera displacement and relative trajectory
+  from continuous IMU streams. Images are used only for calibration, training
+  supervision, and evaluation; inference is IMU-only.
+keywords:
+  - inertial odometry
+  - camera motion
+  - IMU
+  - digital twin
+  - measurement uncertainty
+  - observability

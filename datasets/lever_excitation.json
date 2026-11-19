@@ -1,0 +1,87 @@
+{
+  "lever_mm": {
+    "cvx": {
+      "models": 16,
+      "mean": [
+        -22.6,
+        -5.2,
+        -29.7
+      ],
+      "sd": [
+        3.8,
+        1.9,
+        7.0
+      ]
+    },
+    "cvg": {
+      "models": 16,
+      "mean": [
+        -20.9,
+        -4.1,
+        -17.8
+      ],
+      "sd": [
+        3.7,
+        1.8,
+        5.6
+      ]
+    }
+  },
+  "shift_gated_minus_nongated_mm": [
+    1.7,
+    1.1,
+    11.9
+  ],
+  "windows": {
+    "recordings": {
+      "traj_20260923_015507": 1236,
+      "traj_20260923_015629": 1302,
+      "traj_20260923_015918": 250,
+      "traj_20260923_020132": 1080,
+      "traj_20260923_020407": 1565,
+      "traj_20260924_143156": 1321,
+      "traj_20260923_023241": 339,
+      "traj_20260924_144019": 1097,
+      "rigid_20260924_123958": 812,
+      "rigid_20260924_124243": 530,
+      "rigid_20260924_140510": 738,
+      "rigid_20260924_142902": 643
+    },
+    "trajectory": 8190,
+    "rigidity": 2723,
+    "total": 10913
+  },
+  "rotation_deg": {
+    "median": 7.2,
+    "p90": 35.6
+  },
+  "column_rms_norm_xyz": [
+    0.355,
+    0.345,
+    0.151
+  ],
+  "lambda_z_shift_effect_mm": {
+    "per_axis_rms_xyz": [
+      1.43,
+      1.06,
+      0.28
+    ],
+    "vector_rms": 1.8
+  },
+  "nongated_ensemble_with_lambda_z_moved": {
+    "held_out": {
+      "recording": "traj_20260923_023422",
+      "windows": 647,
+      "err_stored_mm": 44.39,
+      "err_lambda_z_moved_mm": 44.56,
+      "prediction_change_rms_mm": 2.42
+    },
+    "t1": {
+      "recording": "traj_20260926_143837",
+      "windows": 1054,
+      "err_stored_mm": 32.1,
+      "err_lambda_z_moved_mm": 32.72,
+      "prediction_change_rms_mm": 1.89
+    }
+  }
+}

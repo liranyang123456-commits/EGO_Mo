@@ -1,0 +1,447 @@
+{
+  "kind": "independent_caliper_validation_no_scale_fit",
+  "plan": "datasets\\pilot_caliper_20261108\\selfcal\\reference_caliper_plan_onedir.csv",
+  "passed": false,
+  "passed_camera_centre": false,
+  "thresholds": {
+    "heldout_rmse_mm_max": 1.0,
+    "heldout_max_mm_max": 2.0,
+    "axis_scale_error_percent_max_abs": 1.0,
+    "cross_axis_rmse_mm_max": 0.5,
+    "repeatability_p95_mm_max": 0.5
+  },
+  "segmentation": {
+    "source": [
+      "caliper_events.json"
+    ],
+    "fallback_median_step_mm_max": 0.2,
+    "fallback_min_duration_s": 1.5
+  },
+  "summary": {
+    "n_recordings": 8,
+    "quantity": "board centre in camera coordinates",
+    "working_distance_mm": 252.7,
+    "n_points": 64,
+    "heldout_rmse_mm": 0.2846737492863513,
+    "heldout_max_mm": 0.5479443762737283,
+    "repeatability_p95_mm": 0.26640229613270583,
+    "axes": {
+      "X": {
+        "trials": 8,
+        "points": 72,
+        "heldout_rmse_mm": 0.2846737492863513,
+        "heldout_max_mm": 0.5479443762737283,
+        "scale": 0.9959795148191242,
+        "scale_error_percent": -0.40204851808758324,
+        "cross_axis_rmse_mm": 0.1211643047732053,
+        "direction": [
+          0.9059247389184545,
+          -0.3872388922480357,
+          -0.17130793252515902
+        ]
+      }
+    },
+    "camera_centre": {
+      "n_points": 64,
+      "heldout_rmse_mm": 0.5798047230649834,
+      "heldout_max_mm": 1.2071370129752712,
+      "repeatability_p95_mm": 0.580465997388526,
+      "axes": {
+        "X": {
+          "trials": 8,
+          "points": 72,
+          "heldout_rmse_mm": 0.5798047230649834,
+          "heldout_max_mm": 1.2071370129752712,
+          "scale": 1.0128751969635519,
+          "scale_error_percent": 1.2875196963551883,
+          "cross_axis_rmse_mm": 0.513400743595697,
+          "direction": [
+            0.9959786915283086,
+            -0.0894704176673501,
+            -0.004635772210571522
+          ]
+        }
+      }
+    },
+    "tilt_check": {
+      "assumption": "the board lies flat in the X mounting and the camera does not move",
+      "camera_orientation_change_deg": 0.029,
+      "imu_tilt_max_deg": 0.337,
+      "pnp_tilt_max_deg": 0.278,
+      "rms_diff_deg": 0.071,
+      "corr": 0.816,
+      "per_trial": {
+        "X1": {
+          "imu_tilt_max_deg": 0.331,
+          "pnp_tilt_max_deg": 0.155,
+          "rms_diff_deg": 0.084
+        },
+        "X2": {
+          "imu_tilt_max_deg": 0.33,
+          "pnp_tilt_max_deg": 0.169,
+          "rms_diff_deg": 0.077
+        },
+        "X3": {
+          "imu_tilt_max_deg": 0.269,
+          "pnp_tilt_max_deg": 0.224,
+          "rms_diff_deg": 0.068
+        },
+        "X4": {
+          "imu_tilt_max_deg": 0.325,
+          "pnp_tilt_max_deg": 0.278,
+          "rms_diff_deg": 0.057
+        },
+        "X5": {
+          "imu_tilt_max_deg": 0.246,
+          "pnp_tilt_max_deg": 0.163,
+          "rms_diff_deg": 0.065
+        },
+        "X6": {
+          "imu_tilt_max_deg": 0.206,
+          "pnp_tilt_max_deg": 0.143,
+          "rms_diff_deg": 0.061
+        },
+        "X7": {
+          "imu_tilt_max_deg": 0.337,
+          "pnp_tilt_max_deg": 0.266,
+          "rms_diff_deg": 0.085
+        },
+        "X8": {
+          "imu_tilt_max_deg": 0.295,
+          "pnp_tilt_max_deg": 0.229,
+          "rms_diff_deg": 0.069
+        }
+      },
+      "camera_centre_term_mm": 1.49
+    }
+  },
+  "recordings": {
+    "caliper_20261108_011220": {
+      "axis": "X",
+      "trial": 1,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        40.0,
+        30.0,
+        20.0,
+        10.0,
+        5.0,
+        3.0,
+        2.0,
+        1.0,
+        0.0
+      ],
+      "working_distance_mm": 252.8,
+      "static_p95_mm": [
+        0.3331618412510669,
+        0.18848976669441048,
+        0.2690105123347963,
+        0.16636340114208018,
+        0.14778385133705435,
+        0.17756498728771908,
+        0.13224831225623326,
+        0.1404234546689594,
+        0.16010894209268856
+      ],
+      "frames": [
+        80,
+        79,
+        79,
+        80,
+        80,
+        79,
+        80,
+        80,
+        80
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_012410": {
+      "axis": "X",
+      "trial": 2,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0
+      ],
+      "working_distance_mm": 253.0,
+      "static_p95_mm": [
+        0.23844911295976373,
+        0.1727398149803968,
+        0.10177832581121178,
+        0.10164521119599285,
+        0.10784281182533192,
+        0.17144404156513812,
+        0.10943549350724795,
+        0.2458051626992639,
+        0.16898821905194228
+      ],
+      "frames": [
+        79,
+        80,
+        80,
+        79,
+        80,
+        80,
+        80,
+        79,
+        79
+      ],
+      "rejected_holds": 1
+    },
+    "caliper_20261108_013758": {
+      "axis": "X",
+      "trial": 3,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0
+      ],
+      "working_distance_mm": 253.0,
+      "static_p95_mm": [
+        0.10708564452701828,
+        0.12823080019573266,
+        0.1255468130937205,
+        0.13367022898530764,
+        0.18916151306697157,
+        0.10716173754852679,
+        0.3163155444414975,
+        0.1191979731105569,
+        0.15923093399011568
+      ],
+      "frames": [
+        80,
+        80,
+        80,
+        79,
+        80,
+        80,
+        80,
+        79,
+        80
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_014734": {
+      "axis": "X",
+      "trial": 4,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        40.0,
+        30.0,
+        20.0,
+        10.0,
+        5.0,
+        3.0,
+        2.0,
+        1.0,
+        0.0
+      ],
+      "working_distance_mm": 252.7,
+      "static_p95_mm": [
+        0.1253076735042352,
+        0.18123870211472065,
+        0.12276356499296653,
+        0.10501770884354883,
+        0.1582481377263318,
+        0.11553458354423048,
+        0.10636987655876705,
+        0.15185479953131314,
+        0.11331646417338866
+      ],
+      "frames": [
+        79,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        79,
+        79
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_015359": {
+      "axis": "X",
+      "trial": 5,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0
+      ],
+      "working_distance_mm": 252.7,
+      "static_p95_mm": [
+        0.1157940347609864,
+        0.13251348498494775,
+        0.10212190112298591,
+        0.11144059635650123,
+        0.11838435203803149,
+        0.09297545855280062,
+        0.09482061652349766,
+        0.17170635902283785,
+        0.4474975482898064
+      ],
+      "frames": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        79,
+        80,
+        80
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_020118": {
+      "axis": "X",
+      "trial": 6,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0
+      ],
+      "working_distance_mm": 252.7,
+      "static_p95_mm": [
+        0.09932346093842971,
+        0.11155513045703669,
+        0.10777345233337927,
+        0.12031850896191378,
+        0.15904405176487207,
+        0.09790827960495176,
+        0.2320524607891199,
+        0.2059751155213611,
+        0.39369079900032583
+      ],
+      "frames": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        79,
+        81,
+        80
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_020730": {
+      "axis": "X",
+      "trial": 7,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        40.0,
+        30.0,
+        20.0,
+        10.0,
+        5.0,
+        3.0,
+        2.0,
+        1.0,
+        0.0
+      ],
+      "working_distance_mm": 252.7,
+      "static_p95_mm": [
+        0.09987294445029632,
+        0.15614846228780654,
+        0.2596018704704919,
+        0.12403082819925164,
+        0.1066331763500391,
+        0.10856844354159507,
+        0.135001158064888,
+        0.0940202652620958,
+        0.1379769060413413
+      ],
+      "frames": [
+        80,
+        79,
+        79,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "rejected_holds": 0
+    },
+    "caliper_20261108_021349": {
+      "axis": "X",
+      "trial": 8,
+      "pause_source": "caliper_events.json",
+      "readings_mm": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0
+      ],
+      "working_distance_mm": 252.7,
+      "static_p95_mm": [
+        0.16110522921273554,
+        0.11818206596451451,
+        0.12057053626521026,
+        0.12789692601446276,
+        0.11755226619515242,
+        0.10857484478445094,
+        0.1318172134295497,
+        0.11647975272263816,
+        0.35504480084771994
+      ],
+      "frames": [
+        79,
+        80,
+        80,
+        79,
+        79,
+        80,
+        80,
+        79,
+        79
+      ],
+      "rejected_holds": 0
+    }
+  },
+  "limitations": [
+    "The caliper is a hand-read vernier without a calibration certificate; its stated maximum permissible error and the operator's reading resolution bound the standard, which is therefore not SI-traceable.",
+    "One-dimensional per axis; axes are separate mountings, so absolute orthogonality between axes is not tested.",
+    "Readings were typed by the operator before each hold and never inferred from camera data.",
+    "The caliper sets the translation of the sliding jaw, not its tilt. A tilt of the jaw moves the camera centre in board coordinates by the working distance times the tilt, so the primary comparison uses the board centre in camera coordinates and the camera-centre comparison is reported alongside; the IMU on the jaw measures the tilt.",
+    "The jaw tilt also moves the board centre by its offset from the caliper's measuring line times the tilt (Abbe); this remains in the residuals."
+  ]
+}

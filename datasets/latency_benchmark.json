@@ -1,0 +1,28 @@
+{
+  "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "batch": 16,
+  "warmup": 20,
+  "timed_passes": 200,
+  "models": {
+    "physnet": {
+      "parameters": 424039,
+      "ms_per_window": 0.1551697500053706
+    },
+    "ronin_resnet": {
+      "parameters": 3847683,
+      "ms_per_window": 0.1319073437480256
+    },
+    "ronin_lstm": {
+      "parameters": 211459,
+      "ms_per_window": 0.15013359375188884
+    },
+    "tlio_resnet": {
+      "parameters": 3849222,
+      "ms_per_window": 0.13852887500434008
+    },
+    "imunet": {
+      "parameters": 2826179,
+      "ms_per_window": 0.13886018749872164
+    }
+  }
+}

@@ -1,0 +1,660 @@
+{
+  "kind": "caliper_label_and_motion_scoring",
+  "plan": "datasets\\pilot_caliper_20261108\\selfcal\\reference_caliper_plan_onedir.csv",
+  "quantity": "board",
+  "U_thresholds_mm": [
+    2.6691001297321906,
+    3.8132239353147055
+  ],
+  "label_dt_s": [
+    0.0,
+    1000000000.0
+  ],
+  "frame_step_in_holds": 3,
+  "axes": {
+    "X": {
+      "trials": 8,
+      "label_error": {
+        "n": 209952,
+        "median_mm": 0.167,
+        "mean_mm": 0.198,
+        "p90_mm": 0.354,
+        "p95_mm": 0.406,
+        "rmse_mm": 0.239
+      },
+      "label_error_by_displacement": {
+        "0-10 mm": {
+          "n": 81648,
+          "median_mm": 0.135,
+          "mean_mm": 0.161,
+          "p90_mm": 0.303,
+          "p95_mm": 0.336,
+          "rmse_mm": 0.191
+        },
+        "10-20 mm": {
+          "n": 46656,
+          "median_mm": 0.158,
+          "mean_mm": 0.188,
+          "p90_mm": 0.341,
+          "p95_mm": 0.384,
+          "rmse_mm": 0.223
+        },
+        "20-45 mm": {
+          "n": 81648,
+          "median_mm": 0.218,
+          "mean_mm": 0.241,
+          "p90_mm": 0.418,
+          "p95_mm": 0.469,
+          "rmse_mm": 0.287
+        }
+      },
+      "label_scale": 0.996,
+      "label_mean_true_mm": 16.11,
+      "hold_pair_displacement": {
+        "n": 288,
+        "median_mm": 0.158,
+        "mean_mm": 0.188,
+        "p90_mm": 0.34,
+        "p95_mm": 0.391,
+        "rmse_mm": 0.218,
+        "by_step_mm": {
+          "1": {
+            "n": 24,
+            "median_mm": 0.121,
+            "mean_mm": 0.145,
+            "p90_mm": 0.301,
+            "p95_mm": 0.309,
+            "rmse_mm": 0.171
+          },
+          "2": {
+            "n": 24,
+            "median_mm": 0.14,
+            "mean_mm": 0.161,
+            "p90_mm": 0.278,
+            "p95_mm": 0.3,
+            "rmse_mm": 0.188
+          },
+          "3": {
+            "n": 16,
+            "median_mm": 0.145,
+            "mean_mm": 0.17,
+            "p90_mm": 0.278,
+            "p95_mm": 0.312,
+            "rmse_mm": 0.19
+          },
+          "4": {
+            "n": 8,
+            "median_mm": 0.13,
+            "mean_mm": 0.154,
+            "p90_mm": 0.248,
+            "p95_mm": 0.282,
+            "rmse_mm": 0.174
+          },
+          "5": {
+            "n": 16,
+            "median_mm": 0.175,
+            "mean_mm": 0.191,
+            "p90_mm": 0.334,
+            "p95_mm": 0.366,
+            "rmse_mm": 0.218
+          },
+          "7": {
+            "n": 8,
+            "median_mm": 0.105,
+            "mean_mm": 0.119,
+            "p90_mm": 0.209,
+            "p95_mm": 0.243,
+            "rmse_mm": 0.141
+          },
+          "8": {
+            "n": 8,
+            "median_mm": 0.104,
+            "mean_mm": 0.11,
+            "p90_mm": 0.154,
+            "p95_mm": 0.157,
+            "rmse_mm": 0.116
+          },
+          "9": {
+            "n": 8,
+            "median_mm": 0.094,
+            "mean_mm": 0.119,
+            "p90_mm": 0.187,
+            "p95_mm": 0.253,
+            "rmse_mm": 0.144
+          },
+          "10": {
+            "n": 32,
+            "median_mm": 0.176,
+            "mean_mm": 0.195,
+            "p90_mm": 0.335,
+            "p95_mm": 0.369,
+            "rmse_mm": 0.22
+          },
+          "15": {
+            "n": 8,
+            "median_mm": 0.153,
+            "mean_mm": 0.165,
+            "p90_mm": 0.245,
+            "p95_mm": 0.284,
+            "rmse_mm": 0.181
+          },
+          "17": {
+            "n": 8,
+            "median_mm": 0.123,
+            "mean_mm": 0.157,
+            "p90_mm": 0.252,
+            "p95_mm": 0.322,
+            "rmse_mm": 0.185
+          },
+          "18": {
+            "n": 8,
+            "median_mm": 0.121,
+            "mean_mm": 0.16,
+            "p90_mm": 0.286,
+            "p95_mm": 0.293,
+            "rmse_mm": 0.178
+          },
+          "19": {
+            "n": 8,
+            "median_mm": 0.119,
+            "mean_mm": 0.176,
+            "p90_mm": 0.318,
+            "p95_mm": 0.346,
+            "rmse_mm": 0.208
+          },
+          "20": {
+            "n": 24,
+            "median_mm": 0.192,
+            "mean_mm": 0.21,
+            "p90_mm": 0.317,
+            "p95_mm": 0.404,
+            "rmse_mm": 0.236
+          },
+          "25": {
+            "n": 8,
+            "median_mm": 0.096,
+            "mean_mm": 0.15,
+            "p90_mm": 0.298,
+            "p95_mm": 0.385,
+            "rmse_mm": 0.201
+          },
+          "27": {
+            "n": 8,
+            "median_mm": 0.144,
+            "mean_mm": 0.193,
+            "p90_mm": 0.407,
+            "p95_mm": 0.427,
+            "rmse_mm": 0.236
+          },
+          "28": {
+            "n": 8,
+            "median_mm": 0.175,
+            "mean_mm": 0.182,
+            "p90_mm": 0.283,
+            "p95_mm": 0.334,
+            "rmse_mm": 0.206
+          },
+          "29": {
+            "n": 8,
+            "median_mm": 0.224,
+            "mean_mm": 0.233,
+            "p90_mm": 0.364,
+            "p95_mm": 0.403,
+            "rmse_mm": 0.261
+          },
+          "30": {
+            "n": 16,
+            "median_mm": 0.259,
+            "mean_mm": 0.259,
+            "p90_mm": 0.414,
+            "p95_mm": 0.46,
+            "rmse_mm": 0.284
+          },
+          "35": {
+            "n": 8,
+            "median_mm": 0.203,
+            "mean_mm": 0.214,
+            "p90_mm": 0.347,
+            "p95_mm": 0.36,
+            "rmse_mm": 0.243
+          },
+          "37": {
+            "n": 8,
+            "median_mm": 0.215,
+            "mean_mm": 0.221,
+            "p90_mm": 0.352,
+            "p95_mm": 0.359,
+            "rmse_mm": 0.246
+          },
+          "38": {
+            "n": 8,
+            "median_mm": 0.184,
+            "mean_mm": 0.206,
+            "p90_mm": 0.322,
+            "p95_mm": 0.358,
+            "rmse_mm": 0.228
+          },
+          "39": {
+            "n": 8,
+            "median_mm": 0.276,
+            "mean_mm": 0.255,
+            "p90_mm": 0.381,
+            "p95_mm": 0.424,
+            "rmse_mm": 0.279
+          },
+          "40": {
+            "n": 8,
+            "median_mm": 0.364,
+            "mean_mm": 0.372,
+            "p90_mm": 0.494,
+            "p95_mm": 0.521,
+            "rmse_mm": 0.384
+          }
+        }
+      },
+      "adjacent_moves": {
+        "n": 64,
+        "median_mm": 0.119,
+        "mean_mm": 0.145,
+        "p90_mm": 0.287,
+        "p95_mm": 0.309,
+        "rmse_mm": 0.169,
+        "by_step_mm": {
+          "1": {
+            "n": 24,
+            "median_mm": 0.121,
+            "mean_mm": 0.145,
+            "p90_mm": 0.301,
+            "p95_mm": 0.309,
+            "rmse_mm": 0.171
+          },
+          "2": {
+            "n": 8,
+            "median_mm": 0.103,
+            "mean_mm": 0.114,
+            "p90_mm": 0.221,
+            "p95_mm": 0.249,
+            "rmse_mm": 0.14
+          },
+          "5": {
+            "n": 8,
+            "median_mm": 0.131,
+            "mean_mm": 0.121,
+            "p90_mm": 0.183,
+            "p95_mm": 0.191,
+            "rmse_mm": 0.134
+          },
+          "10": {
+            "n": 24,
+            "median_mm": 0.13,
+            "mean_mm": 0.163,
+            "p90_mm": 0.297,
+            "p95_mm": 0.308,
+            "rmse_mm": 0.185
+          }
+        }
+      },
+      "off_axis_static": {
+        "n": 5740,
+        "median_mm": 0.064,
+        "mean_mm": 0.091,
+        "p90_mm": 0.226,
+        "p95_mm": 0.257,
+        "rmse_mm": 0.131
+      },
+      "off_axis_moving": {
+        "n": 10329,
+        "median_mm": 0.11,
+        "mean_mm": 0.162,
+        "p90_mm": 0.363,
+        "p95_mm": 0.493,
+        "rmse_mm": 0.223
+      },
+      "off_axis_moving_by_speed": {
+        "0-5 mm/s": {
+          "n": 10200,
+          "median_mm": 0.109,
+          "mean_mm": 0.161,
+          "p90_mm": 0.364,
+          "p95_mm": 0.497,
+          "rmse_mm": 0.223
+        },
+        "5-15 mm/s": {
+          "n": 129,
+          "median_mm": 0.214,
+          "mean_mm": 0.218,
+          "p90_mm": 0.348,
+          "p95_mm": 0.391,
+          "rmse_mm": 0.239
+        },
+        ">15 mm/s": {
+          "n": 0
+        }
+      }
+    }
+  },
+  "overall": {
+    "label_error": {
+      "n": 209952,
+      "median_mm": 0.167,
+      "mean_mm": 0.198,
+      "p90_mm": 0.354,
+      "p95_mm": 0.406,
+      "rmse_mm": 0.239
+    },
+    "label_error_by_displacement": {
+      "0-10 mm": {
+        "n": 81648,
+        "median_mm": 0.135,
+        "mean_mm": 0.161,
+        "p90_mm": 0.303,
+        "p95_mm": 0.336,
+        "rmse_mm": 0.191
+      },
+      "10-20 mm": {
+        "n": 46656,
+        "median_mm": 0.158,
+        "mean_mm": 0.188,
+        "p90_mm": 0.341,
+        "p95_mm": 0.384,
+        "rmse_mm": 0.223
+      },
+      "20-45 mm": {
+        "n": 81648,
+        "median_mm": 0.218,
+        "mean_mm": 0.241,
+        "p90_mm": 0.418,
+        "p95_mm": 0.469,
+        "rmse_mm": 0.287
+      }
+    },
+    "label_error_within_U_label_nominal": 1.0,
+    "label_error_within_U_label_perturbed": 1.0,
+    "hold_pair_displacement": {
+      "n": 288,
+      "median_mm": 0.158,
+      "mean_mm": 0.188,
+      "p90_mm": 0.34,
+      "p95_mm": 0.391,
+      "rmse_mm": 0.218,
+      "by_step_mm": {
+        "1": {
+          "n": 24,
+          "median_mm": 0.121,
+          "mean_mm": 0.145,
+          "p90_mm": 0.301,
+          "p95_mm": 0.309,
+          "rmse_mm": 0.171
+        },
+        "2": {
+          "n": 24,
+          "median_mm": 0.14,
+          "mean_mm": 0.161,
+          "p90_mm": 0.278,
+          "p95_mm": 0.3,
+          "rmse_mm": 0.188
+        },
+        "3": {
+          "n": 16,
+          "median_mm": 0.145,
+          "mean_mm": 0.17,
+          "p90_mm": 0.278,
+          "p95_mm": 0.312,
+          "rmse_mm": 0.19
+        },
+        "4": {
+          "n": 8,
+          "median_mm": 0.13,
+          "mean_mm": 0.154,
+          "p90_mm": 0.248,
+          "p95_mm": 0.282,
+          "rmse_mm": 0.174
+        },
+        "5": {
+          "n": 16,
+          "median_mm": 0.175,
+          "mean_mm": 0.191,
+          "p90_mm": 0.334,
+          "p95_mm": 0.366,
+          "rmse_mm": 0.218
+        },
+        "7": {
+          "n": 8,
+          "median_mm": 0.105,
+          "mean_mm": 0.119,
+          "p90_mm": 0.209,
+          "p95_mm": 0.243,
+          "rmse_mm": 0.141
+        },
+        "8": {
+          "n": 8,
+          "median_mm": 0.104,
+          "mean_mm": 0.11,
+          "p90_mm": 0.154,
+          "p95_mm": 0.157,
+          "rmse_mm": 0.116
+        },
+        "9": {
+          "n": 8,
+          "median_mm": 0.094,
+          "mean_mm": 0.119,
+          "p90_mm": 0.187,
+          "p95_mm": 0.253,
+          "rmse_mm": 0.144
+        },
+        "10": {
+          "n": 32,
+          "median_mm": 0.176,
+          "mean_mm": 0.195,
+          "p90_mm": 0.335,
+          "p95_mm": 0.369,
+          "rmse_mm": 0.22
+        },
+        "15": {
+          "n": 8,
+          "median_mm": 0.153,
+          "mean_mm": 0.165,
+          "p90_mm": 0.245,
+          "p95_mm": 0.284,
+          "rmse_mm": 0.181
+        },
+        "17": {
+          "n": 8,
+          "median_mm": 0.123,
+          "mean_mm": 0.157,
+          "p90_mm": 0.252,
+          "p95_mm": 0.322,
+          "rmse_mm": 0.185
+        },
+        "18": {
+          "n": 8,
+          "median_mm": 0.121,
+          "mean_mm": 0.16,
+          "p90_mm": 0.286,
+          "p95_mm": 0.293,
+          "rmse_mm": 0.178
+        },
+        "19": {
+          "n": 8,
+          "median_mm": 0.119,
+          "mean_mm": 0.176,
+          "p90_mm": 0.318,
+          "p95_mm": 0.346,
+          "rmse_mm": 0.208
+        },
+        "20": {
+          "n": 24,
+          "median_mm": 0.192,
+          "mean_mm": 0.21,
+          "p90_mm": 0.317,
+          "p95_mm": 0.404,
+          "rmse_mm": 0.236
+        },
+        "25": {
+          "n": 8,
+          "median_mm": 0.096,
+          "mean_mm": 0.15,
+          "p90_mm": 0.298,
+          "p95_mm": 0.385,
+          "rmse_mm": 0.201
+        },
+        "27": {
+          "n": 8,
+          "median_mm": 0.144,
+          "mean_mm": 0.193,
+          "p90_mm": 0.407,
+          "p95_mm": 0.427,
+          "rmse_mm": 0.236
+        },
+        "28": {
+          "n": 8,
+          "median_mm": 0.175,
+          "mean_mm": 0.182,
+          "p90_mm": 0.283,
+          "p95_mm": 0.334,
+          "rmse_mm": 0.206
+        },
+        "29": {
+          "n": 8,
+          "median_mm": 0.224,
+          "mean_mm": 0.233,
+          "p90_mm": 0.364,
+          "p95_mm": 0.403,
+          "rmse_mm": 0.261
+        },
+        "30": {
+          "n": 16,
+          "median_mm": 0.259,
+          "mean_mm": 0.259,
+          "p90_mm": 0.414,
+          "p95_mm": 0.46,
+          "rmse_mm": 0.284
+        },
+        "35": {
+          "n": 8,
+          "median_mm": 0.203,
+          "mean_mm": 0.214,
+          "p90_mm": 0.347,
+          "p95_mm": 0.36,
+          "rmse_mm": 0.243
+        },
+        "37": {
+          "n": 8,
+          "median_mm": 0.215,
+          "mean_mm": 0.221,
+          "p90_mm": 0.352,
+          "p95_mm": 0.359,
+          "rmse_mm": 0.246
+        },
+        "38": {
+          "n": 8,
+          "median_mm": 0.184,
+          "mean_mm": 0.206,
+          "p90_mm": 0.322,
+          "p95_mm": 0.358,
+          "rmse_mm": 0.228
+        },
+        "39": {
+          "n": 8,
+          "median_mm": 0.276,
+          "mean_mm": 0.255,
+          "p90_mm": 0.381,
+          "p95_mm": 0.424,
+          "rmse_mm": 0.279
+        },
+        "40": {
+          "n": 8,
+          "median_mm": 0.364,
+          "mean_mm": 0.372,
+          "p90_mm": 0.494,
+          "p95_mm": 0.521,
+          "rmse_mm": 0.384
+        }
+      }
+    },
+    "adjacent_moves": {
+      "n": 64,
+      "median_mm": 0.119,
+      "mean_mm": 0.145,
+      "p90_mm": 0.287,
+      "p95_mm": 0.309,
+      "rmse_mm": 0.169,
+      "by_step_mm": {
+        "1": {
+          "n": 24,
+          "median_mm": 0.121,
+          "mean_mm": 0.145,
+          "p90_mm": 0.301,
+          "p95_mm": 0.309,
+          "rmse_mm": 0.171
+        },
+        "2": {
+          "n": 8,
+          "median_mm": 0.103,
+          "mean_mm": 0.114,
+          "p90_mm": 0.221,
+          "p95_mm": 0.249,
+          "rmse_mm": 0.14
+        },
+        "5": {
+          "n": 8,
+          "median_mm": 0.131,
+          "mean_mm": 0.121,
+          "p90_mm": 0.183,
+          "p95_mm": 0.191,
+          "rmse_mm": 0.134
+        },
+        "10": {
+          "n": 24,
+          "median_mm": 0.13,
+          "mean_mm": 0.163,
+          "p90_mm": 0.297,
+          "p95_mm": 0.308,
+          "rmse_mm": 0.185
+        }
+      }
+    },
+    "off_axis_static": {
+      "n": 5740,
+      "median_mm": 0.064,
+      "mean_mm": 0.091,
+      "p90_mm": 0.226,
+      "p95_mm": 0.257,
+      "rmse_mm": 0.131
+    },
+    "off_axis_moving": {
+      "n": 10329,
+      "median_mm": 0.11,
+      "mean_mm": 0.162,
+      "p90_mm": 0.363,
+      "p95_mm": 0.493,
+      "rmse_mm": 0.223
+    },
+    "off_axis_moving_by_speed": {
+      "0-5 mm/s": {
+        "n": 10200,
+        "median_mm": 0.109,
+        "mean_mm": 0.161,
+        "p90_mm": 0.364,
+        "p95_mm": 0.497,
+        "rmse_mm": 0.223
+      },
+      "5-15 mm/s": {
+        "n": 129,
+        "median_mm": 0.214,
+        "mean_mm": 0.218,
+        "p90_mm": 0.348,
+        "p95_mm": 0.391,
+        "rmse_mm": 0.239
+      },
+      ">15 mm/s": {
+        "n": 0
+      }
+    }
+  },
+  "limitations": [
+    "The caliper readings give independent start-to-end displacement truth for each actual move; the instantaneous along-axis jaw position during the transition is not recorded.",
+    "Endpoints lie in holds, so blur at the endpoints is not tested; while moving, only the off-axis component is scored frame by frame.",
+    "Board flatness and the caliper's own calibration are not part of this analysis."
+  ]
+}

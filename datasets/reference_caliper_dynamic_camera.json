@@ -1,0 +1,660 @@
+{
+  "kind": "caliper_label_and_motion_scoring",
+  "plan": "datasets\\pilot_caliper_20261108\\selfcal\\reference_caliper_plan_onedir.csv",
+  "quantity": "camera",
+  "U_thresholds_mm": [
+    2.6691001297321906,
+    3.8132239353147055
+  ],
+  "label_dt_s": [
+    0.0,
+    1000000000.0
+  ],
+  "frame_step_in_holds": 3,
+  "axes": {
+    "X": {
+      "trials": 8,
+      "label_error": {
+        "n": 209952,
+        "median_mm": 0.494,
+        "mean_mm": 0.556,
+        "p90_mm": 0.997,
+        "p95_mm": 1.125,
+        "rmse_mm": 0.695
+      },
+      "label_error_by_displacement": {
+        "0-10 mm": {
+          "n": 93312,
+          "median_mm": 0.345,
+          "mean_mm": 0.388,
+          "p90_mm": 0.657,
+          "p95_mm": 0.803,
+          "rmse_mm": 0.475
+        },
+        "10-20 mm": {
+          "n": 43740,
+          "median_mm": 0.546,
+          "mean_mm": 0.596,
+          "p90_mm": 1.032,
+          "p95_mm": 1.15,
+          "rmse_mm": 0.745
+        },
+        "20-45 mm": {
+          "n": 72900,
+          "median_mm": 0.668,
+          "mean_mm": 0.746,
+          "p90_mm": 1.114,
+          "p95_mm": 1.237,
+          "rmse_mm": 0.878
+        }
+      },
+      "label_scale": 1.0128,
+      "label_mean_true_mm": 16.11,
+      "hold_pair_displacement": {
+        "n": 288,
+        "median_mm": 0.495,
+        "mean_mm": 0.517,
+        "p90_mm": 0.956,
+        "p95_mm": 1.082,
+        "rmse_mm": 0.595,
+        "by_step_mm": {
+          "1": {
+            "n": 24,
+            "median_mm": 0.259,
+            "mean_mm": 0.26,
+            "p90_mm": 0.457,
+            "p95_mm": 0.511,
+            "rmse_mm": 0.298
+          },
+          "2": {
+            "n": 24,
+            "median_mm": 0.293,
+            "mean_mm": 0.299,
+            "p90_mm": 0.49,
+            "p95_mm": 0.535,
+            "rmse_mm": 0.342
+          },
+          "3": {
+            "n": 16,
+            "median_mm": 0.349,
+            "mean_mm": 0.356,
+            "p90_mm": 0.588,
+            "p95_mm": 0.593,
+            "rmse_mm": 0.388
+          },
+          "4": {
+            "n": 8,
+            "median_mm": 0.358,
+            "mean_mm": 0.385,
+            "p90_mm": 0.579,
+            "p95_mm": 0.581,
+            "rmse_mm": 0.405
+          },
+          "5": {
+            "n": 16,
+            "median_mm": 0.43,
+            "mean_mm": 0.442,
+            "p90_mm": 0.658,
+            "p95_mm": 0.694,
+            "rmse_mm": 0.481
+          },
+          "7": {
+            "n": 8,
+            "median_mm": 0.361,
+            "mean_mm": 0.342,
+            "p90_mm": 0.484,
+            "p95_mm": 0.51,
+            "rmse_mm": 0.365
+          },
+          "8": {
+            "n": 8,
+            "median_mm": 0.269,
+            "mean_mm": 0.336,
+            "p90_mm": 0.559,
+            "p95_mm": 0.597,
+            "rmse_mm": 0.379
+          },
+          "9": {
+            "n": 8,
+            "median_mm": 0.291,
+            "mean_mm": 0.387,
+            "p90_mm": 0.769,
+            "p95_mm": 0.91,
+            "rmse_mm": 0.486
+          },
+          "10": {
+            "n": 32,
+            "median_mm": 0.522,
+            "mean_mm": 0.583,
+            "p90_mm": 0.976,
+            "p95_mm": 1.109,
+            "rmse_mm": 0.651
+          },
+          "15": {
+            "n": 8,
+            "median_mm": 0.441,
+            "mean_mm": 0.408,
+            "p90_mm": 0.609,
+            "p95_mm": 0.63,
+            "rmse_mm": 0.452
+          },
+          "17": {
+            "n": 8,
+            "median_mm": 0.364,
+            "mean_mm": 0.396,
+            "p90_mm": 0.654,
+            "p95_mm": 0.661,
+            "rmse_mm": 0.445
+          },
+          "18": {
+            "n": 8,
+            "median_mm": 0.473,
+            "mean_mm": 0.45,
+            "p90_mm": 0.753,
+            "p95_mm": 0.826,
+            "rmse_mm": 0.516
+          },
+          "19": {
+            "n": 8,
+            "median_mm": 0.415,
+            "mean_mm": 0.472,
+            "p90_mm": 0.864,
+            "p95_mm": 0.867,
+            "rmse_mm": 0.55
+          },
+          "20": {
+            "n": 24,
+            "median_mm": 0.691,
+            "mean_mm": 0.687,
+            "p90_mm": 1.089,
+            "p95_mm": 1.125,
+            "rmse_mm": 0.747
+          },
+          "25": {
+            "n": 8,
+            "median_mm": 0.544,
+            "mean_mm": 0.524,
+            "p90_mm": 0.66,
+            "p95_mm": 0.753,
+            "rmse_mm": 0.547
+          },
+          "27": {
+            "n": 8,
+            "median_mm": 0.46,
+            "mean_mm": 0.491,
+            "p90_mm": 0.701,
+            "p95_mm": 0.845,
+            "rmse_mm": 0.544
+          },
+          "28": {
+            "n": 8,
+            "median_mm": 0.567,
+            "mean_mm": 0.609,
+            "p90_mm": 1.032,
+            "p95_mm": 1.039,
+            "rmse_mm": 0.676
+          },
+          "29": {
+            "n": 8,
+            "median_mm": 0.656,
+            "mean_mm": 0.66,
+            "p90_mm": 1.026,
+            "p95_mm": 1.097,
+            "rmse_mm": 0.731
+          },
+          "30": {
+            "n": 16,
+            "median_mm": 0.849,
+            "mean_mm": 0.863,
+            "p90_mm": 1.225,
+            "p95_mm": 1.349,
+            "rmse_mm": 0.913
+          },
+          "35": {
+            "n": 8,
+            "median_mm": 0.891,
+            "mean_mm": 0.887,
+            "p90_mm": 1.045,
+            "p95_mm": 1.063,
+            "rmse_mm": 0.898
+          },
+          "37": {
+            "n": 8,
+            "median_mm": 0.728,
+            "mean_mm": 0.765,
+            "p90_mm": 0.972,
+            "p95_mm": 1.008,
+            "rmse_mm": 0.782
+          },
+          "38": {
+            "n": 8,
+            "median_mm": 0.745,
+            "mean_mm": 0.824,
+            "p90_mm": 1.163,
+            "p95_mm": 1.164,
+            "rmse_mm": 0.854
+          },
+          "39": {
+            "n": 8,
+            "median_mm": 0.72,
+            "mean_mm": 0.757,
+            "p90_mm": 0.997,
+            "p95_mm": 1.163,
+            "rmse_mm": 0.799
+          },
+          "40": {
+            "n": 8,
+            "median_mm": 0.483,
+            "mean_mm": 0.527,
+            "p90_mm": 0.736,
+            "p95_mm": 0.898,
+            "rmse_mm": 0.573
+          }
+        }
+      },
+      "adjacent_moves": {
+        "n": 64,
+        "median_mm": 0.313,
+        "mean_mm": 0.371,
+        "p90_mm": 0.711,
+        "p95_mm": 0.944,
+        "rmse_mm": 0.454,
+        "by_step_mm": {
+          "1": {
+            "n": 24,
+            "median_mm": 0.259,
+            "mean_mm": 0.26,
+            "p90_mm": 0.457,
+            "p95_mm": 0.511,
+            "rmse_mm": 0.298
+          },
+          "2": {
+            "n": 8,
+            "median_mm": 0.177,
+            "mean_mm": 0.174,
+            "p90_mm": 0.273,
+            "p95_mm": 0.288,
+            "rmse_mm": 0.195
+          },
+          "5": {
+            "n": 8,
+            "median_mm": 0.324,
+            "mean_mm": 0.333,
+            "p90_mm": 0.519,
+            "p95_mm": 0.531,
+            "rmse_mm": 0.36
+          },
+          "10": {
+            "n": 24,
+            "median_mm": 0.507,
+            "mean_mm": 0.562,
+            "p90_mm": 0.972,
+            "p95_mm": 1.087,
+            "rmse_mm": 0.636
+          }
+        }
+      },
+      "off_axis_static": {
+        "n": 5740,
+        "median_mm": 0.362,
+        "mean_mm": 0.412,
+        "p90_mm": 0.789,
+        "p95_mm": 0.996,
+        "rmse_mm": 0.527
+      },
+      "off_axis_moving": {
+        "n": 10329,
+        "median_mm": 0.43,
+        "mean_mm": 0.617,
+        "p90_mm": 1.146,
+        "p95_mm": 1.932,
+        "rmse_mm": 0.92
+      },
+      "off_axis_moving_by_speed": {
+        "0-5 mm/s": {
+          "n": 10064,
+          "median_mm": 0.428,
+          "mean_mm": 0.611,
+          "p90_mm": 1.138,
+          "p95_mm": 1.908,
+          "rmse_mm": 0.915
+        },
+        "5-15 mm/s": {
+          "n": 265,
+          "median_mm": 0.651,
+          "mean_mm": 0.824,
+          "p90_mm": 1.748,
+          "p95_mm": 2.142,
+          "rmse_mm": 1.095
+        },
+        ">15 mm/s": {
+          "n": 0
+        }
+      }
+    }
+  },
+  "overall": {
+    "label_error": {
+      "n": 209952,
+      "median_mm": 0.494,
+      "mean_mm": 0.556,
+      "p90_mm": 0.997,
+      "p95_mm": 1.125,
+      "rmse_mm": 0.695
+    },
+    "label_error_by_displacement": {
+      "0-10 mm": {
+        "n": 93312,
+        "median_mm": 0.345,
+        "mean_mm": 0.388,
+        "p90_mm": 0.657,
+        "p95_mm": 0.803,
+        "rmse_mm": 0.475
+      },
+      "10-20 mm": {
+        "n": 43740,
+        "median_mm": 0.546,
+        "mean_mm": 0.596,
+        "p90_mm": 1.032,
+        "p95_mm": 1.15,
+        "rmse_mm": 0.745
+      },
+      "20-45 mm": {
+        "n": 72900,
+        "median_mm": 0.668,
+        "mean_mm": 0.746,
+        "p90_mm": 1.114,
+        "p95_mm": 1.237,
+        "rmse_mm": 0.878
+      }
+    },
+    "label_error_within_U_label_nominal": 0.994,
+    "label_error_within_U_label_perturbed": 0.995,
+    "hold_pair_displacement": {
+      "n": 288,
+      "median_mm": 0.495,
+      "mean_mm": 0.517,
+      "p90_mm": 0.956,
+      "p95_mm": 1.082,
+      "rmse_mm": 0.595,
+      "by_step_mm": {
+        "1": {
+          "n": 24,
+          "median_mm": 0.259,
+          "mean_mm": 0.26,
+          "p90_mm": 0.457,
+          "p95_mm": 0.511,
+          "rmse_mm": 0.298
+        },
+        "2": {
+          "n": 24,
+          "median_mm": 0.293,
+          "mean_mm": 0.299,
+          "p90_mm": 0.49,
+          "p95_mm": 0.535,
+          "rmse_mm": 0.342
+        },
+        "3": {
+          "n": 16,
+          "median_mm": 0.349,
+          "mean_mm": 0.356,
+          "p90_mm": 0.588,
+          "p95_mm": 0.593,
+          "rmse_mm": 0.388
+        },
+        "4": {
+          "n": 8,
+          "median_mm": 0.358,
+          "mean_mm": 0.385,
+          "p90_mm": 0.579,
+          "p95_mm": 0.581,
+          "rmse_mm": 0.405
+        },
+        "5": {
+          "n": 16,
+          "median_mm": 0.43,
+          "mean_mm": 0.442,
+          "p90_mm": 0.658,
+          "p95_mm": 0.694,
+          "rmse_mm": 0.481
+        },
+        "7": {
+          "n": 8,
+          "median_mm": 0.361,
+          "mean_mm": 0.342,
+          "p90_mm": 0.484,
+          "p95_mm": 0.51,
+          "rmse_mm": 0.365
+        },
+        "8": {
+          "n": 8,
+          "median_mm": 0.269,
+          "mean_mm": 0.336,
+          "p90_mm": 0.559,
+          "p95_mm": 0.597,
+          "rmse_mm": 0.379
+        },
+        "9": {
+          "n": 8,
+          "median_mm": 0.291,
+          "mean_mm": 0.387,
+          "p90_mm": 0.769,
+          "p95_mm": 0.91,
+          "rmse_mm": 0.486
+        },
+        "10": {
+          "n": 32,
+          "median_mm": 0.522,
+          "mean_mm": 0.583,
+          "p90_mm": 0.976,
+          "p95_mm": 1.109,
+          "rmse_mm": 0.651
+        },
+        "15": {
+          "n": 8,
+          "median_mm": 0.441,
+          "mean_mm": 0.408,
+          "p90_mm": 0.609,
+          "p95_mm": 0.63,
+          "rmse_mm": 0.452
+        },
+        "17": {
+          "n": 8,
+          "median_mm": 0.364,
+          "mean_mm": 0.396,
+          "p90_mm": 0.654,
+          "p95_mm": 0.661,
+          "rmse_mm": 0.445
+        },
+        "18": {
+          "n": 8,
+          "median_mm": 0.473,
+          "mean_mm": 0.45,
+          "p90_mm": 0.753,
+          "p95_mm": 0.826,
+          "rmse_mm": 0.516
+        },
+        "19": {
+          "n": 8,
+          "median_mm": 0.415,
+          "mean_mm": 0.472,
+          "p90_mm": 0.864,
+          "p95_mm": 0.867,
+          "rmse_mm": 0.55
+        },
+        "20": {
+          "n": 24,
+          "median_mm": 0.691,
+          "mean_mm": 0.687,
+          "p90_mm": 1.089,
+          "p95_mm": 1.125,
+          "rmse_mm": 0.747
+        },
+        "25": {
+          "n": 8,
+          "median_mm": 0.544,
+          "mean_mm": 0.524,
+          "p90_mm": 0.66,
+          "p95_mm": 0.753,
+          "rmse_mm": 0.547
+        },
+        "27": {
+          "n": 8,
+          "median_mm": 0.46,
+          "mean_mm": 0.491,
+          "p90_mm": 0.701,
+          "p95_mm": 0.845,
+          "rmse_mm": 0.544
+        },
+        "28": {
+          "n": 8,
+          "median_mm": 0.567,
+          "mean_mm": 0.609,
+          "p90_mm": 1.032,
+          "p95_mm": 1.039,
+          "rmse_mm": 0.676
+        },
+        "29": {
+          "n": 8,
+          "median_mm": 0.656,
+          "mean_mm": 0.66,
+          "p90_mm": 1.026,
+          "p95_mm": 1.097,
+          "rmse_mm": 0.731
+        },
+        "30": {
+          "n": 16,
+          "median_mm": 0.849,
+          "mean_mm": 0.863,
+          "p90_mm": 1.225,
+          "p95_mm": 1.349,
+          "rmse_mm": 0.913
+        },
+        "35": {
+          "n": 8,
+          "median_mm": 0.891,
+          "mean_mm": 0.887,
+          "p90_mm": 1.045,
+          "p95_mm": 1.063,
+          "rmse_mm": 0.898
+        },
+        "37": {
+          "n": 8,
+          "median_mm": 0.728,
+          "mean_mm": 0.765,
+          "p90_mm": 0.972,
+          "p95_mm": 1.008,
+          "rmse_mm": 0.782
+        },
+        "38": {
+          "n": 8,
+          "median_mm": 0.745,
+          "mean_mm": 0.824,
+          "p90_mm": 1.163,
+          "p95_mm": 1.164,
+          "rmse_mm": 0.854
+        },
+        "39": {
+          "n": 8,
+          "median_mm": 0.72,
+          "mean_mm": 0.757,
+          "p90_mm": 0.997,
+          "p95_mm": 1.163,
+          "rmse_mm": 0.799
+        },
+        "40": {
+          "n": 8,
+          "median_mm": 0.483,
+          "mean_mm": 0.527,
+          "p90_mm": 0.736,
+          "p95_mm": 0.898,
+          "rmse_mm": 0.573
+        }
+      }
+    },
+    "adjacent_moves": {
+      "n": 64,
+      "median_mm": 0.313,
+      "mean_mm": 0.371,
+      "p90_mm": 0.711,
+      "p95_mm": 0.944,
+      "rmse_mm": 0.454,
+      "by_step_mm": {
+        "1": {
+          "n": 24,
+          "median_mm": 0.259,
+          "mean_mm": 0.26,
+          "p90_mm": 0.457,
+          "p95_mm": 0.511,
+          "rmse_mm": 0.298
+        },
+        "2": {
+          "n": 8,
+          "median_mm": 0.177,
+          "mean_mm": 0.174,
+          "p90_mm": 0.273,
+          "p95_mm": 0.288,
+          "rmse_mm": 0.195
+        },
+        "5": {
+          "n": 8,
+          "median_mm": 0.324,
+          "mean_mm": 0.333,
+          "p90_mm": 0.519,
+          "p95_mm": 0.531,
+          "rmse_mm": 0.36
+        },
+        "10": {
+          "n": 24,
+          "median_mm": 0.507,
+          "mean_mm": 0.562,
+          "p90_mm": 0.972,
+          "p95_mm": 1.087,
+          "rmse_mm": 0.636
+        }
+      }
+    },
+    "off_axis_static": {
+      "n": 5740,
+      "median_mm": 0.362,
+      "mean_mm": 0.412,
+      "p90_mm": 0.789,
+      "p95_mm": 0.996,
+      "rmse_mm": 0.527
+    },
+    "off_axis_moving": {
+      "n": 10329,
+      "median_mm": 0.43,
+      "mean_mm": 0.617,
+      "p90_mm": 1.146,
+      "p95_mm": 1.932,
+      "rmse_mm": 0.92
+    },
+    "off_axis_moving_by_speed": {
+      "0-5 mm/s": {
+        "n": 10064,
+        "median_mm": 0.428,
+        "mean_mm": 0.611,
+        "p90_mm": 1.138,
+        "p95_mm": 1.908,
+        "rmse_mm": 0.915
+      },
+      "5-15 mm/s": {
+        "n": 265,
+        "median_mm": 0.651,
+        "mean_mm": 0.824,
+        "p90_mm": 1.748,
+        "p95_mm": 2.142,
+        "rmse_mm": 1.095
+      },
+      ">15 mm/s": {
+        "n": 0
+      }
+    }
+  },
+  "limitations": [
+    "The caliper readings give independent start-to-end displacement truth for each actual move; the instantaneous along-axis jaw position during the transition is not recorded.",
+    "Endpoints lie in holds, so blur at the endpoints is not tested; while moving, only the off-axis component is scored frame by frame.",
+    "Board flatness and the caliper's own calibration are not part of this analysis."
+  ]
+}

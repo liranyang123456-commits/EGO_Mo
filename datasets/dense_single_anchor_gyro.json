@@ -1,0 +1,16 @@
+{
+  "session": "traj_20260923_023422",
+  "nodes": 713,
+  "dense_edges": 29885,
+  "connected_components": 1,
+  "position_anchors": 1,
+  "reference_orientation": {
+    "dense_physnet_ate_mm": 81.08,
+    "dense_blend_ate_mm": 80.22
+  },
+  "gyroscope_orientation_from_first_node": {
+    "dense_physnet_ate_mm": 80.77,
+    "dense_blend_ate_mm": 80.51
+  },
+  "zero_motion_ate_mm": 118.33
+}

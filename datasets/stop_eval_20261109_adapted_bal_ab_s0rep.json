@@ -1,0 +1,109 @@
+{
+  "models": [
+    "physnet_cvg_traj_20260923_015507_s0.pt",
+    "physnet_cvg_traj_20260923_015507_s1.pt",
+    "physnet_cvg_traj_20260923_015629_s0.pt",
+    "physnet_cvg_traj_20260923_015629_s1.pt",
+    "physnet_cvg_traj_20260923_015918_s0.pt",
+    "physnet_cvg_traj_20260923_015918_s1.pt",
+    "physnet_cvg_traj_20260923_020132_s0.pt",
+    "physnet_cvg_traj_20260923_020132_s1.pt",
+    "physnet_cvg_traj_20260923_020407_s0.pt",
+    "physnet_cvg_traj_20260923_020407_s1.pt",
+    "physnet_cvg_traj_20260923_023241_s0.pt",
+    "physnet_cvg_traj_20260923_023241_s1.pt",
+    "physnet_cvg_traj_20260924_143156_s0.pt",
+    "physnet_cvg_traj_20260924_143156_s1.pt",
+    "physnet_cvg_traj_20260924_144019_s0.pt",
+    "physnet_cvg_traj_20260924_144019_s1.pt"
+  ],
+  "trained_on": [
+    "traj_20261109_012026",
+    "traj_20261109_022758"
+  ],
+  "tested_on": {
+    "continuous": [
+      "traj_20261109_024257"
+    ],
+    "paused": [
+      "traj_20261109_023932"
+    ]
+  },
+  "rigid": "rigid_20261109_023120",
+  "epochs": 8,
+  "lr": 0.0001,
+  "seed": 0,
+  "n_boot": 2000,
+  "physnet_switch": {
+    "continuous": {
+      "err_mm": 35.58,
+      "zero_mm": 52.16,
+      "reduction_vs_zero": 0.318
+    },
+    "paused": {
+      "err_mm": 38.34,
+      "zero_mm": 29.73,
+      "reduction_vs_zero": -0.289
+    },
+    "reduction_gain": -0.607,
+    "reduction_gain_ci95": [
+      -0.903,
+      -0.362
+    ],
+    "matched_diff_mm": 10.34,
+    "matched_continuous_err_mm": 29.37,
+    "matched_diff_ci95_mm": [
+      0.826,
+      20.125
+    ]
+  },
+  "physnet": {
+    "continuous": {
+      "err_mm": 35.58,
+      "zero_mm": 52.16,
+      "reduction_vs_zero": 0.318
+    },
+    "paused": {
+      "err_mm": 15.94,
+      "zero_mm": 29.73,
+      "reduction_vs_zero": 0.464
+    },
+    "reduction_gain": 0.146,
+    "reduction_gain_ci95": [
+      -0.002,
+      0.294
+    ],
+    "matched_diff_mm": -12.96,
+    "matched_continuous_err_mm": 29.37,
+    "matched_diff_ci95_mm": [
+      -21.117,
+      -5.617
+    ]
+  },
+  "per_session": {
+    "traj_20261109_024257": {
+      "condition": "continuous",
+      "zero_mm": 52.16,
+      "physnet": {
+        "err_mm": 35.58,
+        "reduction_vs_zero": 0.318
+      },
+      "physnet_switch": {
+        "err_mm": 35.58,
+        "reduction_vs_zero": 0.318
+      }
+    },
+    "traj_20261109_023932": {
+      "condition": "paused",
+      "zero_mm": 29.73,
+      "physnet": {
+        "err_mm": 15.94,
+        "reduction_vs_zero": 0.464
+      },
+      "physnet_switch": {
+        "err_mm": 38.34,
+        "reduction_vs_zero": -0.289
+      }
+    }
+  }
+}

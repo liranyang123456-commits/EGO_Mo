@@ -1,0 +1,360 @@
+{
+  "sessions": {
+    "continuous": [
+      "traj_20261109_012026",
+      "traj_20261109_024257"
+    ],
+    "paused": [
+      "traj_20261109_022758",
+      "traj_20261109_023932"
+    ],
+    "recording_order": [
+      "traj_20261109_012026",
+      "traj_20261109_022758",
+      "traj_20261109_023932",
+      "traj_20261109_024257"
+    ]
+  },
+  "per_session": {
+    "traj_20261109_012026": {
+      "condition": "continuous",
+      "windows": 949,
+      "stops_per_min": 0.0,
+      "stop_durations_s": [],
+      "windows_with_stop_inside_pct": 0.0,
+      "switched_pct": 0.0,
+      "acc_rest_norm_g": 1.0086,
+      "skip_s": [
+        7.0,
+        7.0
+      ],
+      "imu_mount": {
+        "source": "rigid_20261109_023120",
+        "angle_to_nominal_deg": 26.23
+      },
+      "protocol": {
+        "label": "C1",
+        "condition": "C",
+        "order": 1,
+        "stops": 1,
+        "stops_per_min": 0.75,
+        "beats": null,
+        "beats_matched": null,
+        "compliance": null,
+        "median_moving_speed_mm_s": 18.6
+      },
+      "errors": {
+        "zero_mm": 38.8,
+        "physnet_switch": {
+          "err_mm": 33.45,
+          "reduction_vs_zero": 0.138
+        },
+        "physnet": {
+          "err_mm": 33.45,
+          "reduction_vs_zero": 0.138
+        },
+        "imunet": {
+          "err_mm": 31.52,
+          "reduction_vs_zero": 0.188
+        }
+      }
+    },
+    "traj_20261109_024257": {
+      "condition": "continuous",
+      "windows": 954,
+      "stops_per_min": 0.0,
+      "stop_durations_s": [],
+      "windows_with_stop_inside_pct": 0.0,
+      "switched_pct": 0.0,
+      "acc_rest_norm_g": 1.0089,
+      "skip_s": [
+        7.0,
+        7.0
+      ],
+      "imu_mount": {
+        "source": "rigid_20261109_023120",
+        "angle_to_nominal_deg": 26.23
+      },
+      "protocol": {
+        "label": "C2",
+        "condition": "C",
+        "order": 4,
+        "stops": 0,
+        "stops_per_min": 0.0,
+        "beats": null,
+        "beats_matched": null,
+        "compliance": null,
+        "median_moving_speed_mm_s": 22.3
+      },
+      "errors": {
+        "zero_mm": 52.16,
+        "physnet_switch": {
+          "err_mm": 45.33,
+          "reduction_vs_zero": 0.131
+        },
+        "physnet": {
+          "err_mm": 45.33,
+          "reduction_vs_zero": 0.131
+        },
+        "imunet": {
+          "err_mm": 40.92,
+          "reduction_vs_zero": 0.216
+        }
+      }
+    },
+    "traj_20261109_022758": {
+      "condition": "paused",
+      "windows": 943,
+      "stops_per_min": 15.0,
+      "stop_durations_s": [
+        1.9,
+        0.46,
+        1.9,
+        1.97,
+        1.9,
+        0.44,
+        1.3,
+        2.27,
+        2.05,
+        2.37,
+        1.46,
+        1.28,
+        0.91,
+        2.21,
+        2.82,
+        0.91,
+        1.14,
+        1.76,
+        1.44
+      ],
+      "windows_with_stop_inside_pct": 36.2,
+      "switched_pct": 78.9,
+      "acc_rest_norm_g": 1.0088,
+      "skip_s": [
+        7.0,
+        7.0
+      ],
+      "imu_mount": {
+        "source": "rigid_20261109_023120",
+        "angle_to_nominal_deg": 26.23
+      },
+      "protocol": {
+        "label": "P1",
+        "condition": "P",
+        "order": 2,
+        "stops": 20,
+        "stops_per_min": 15.0,
+        "beats": 19,
+        "beats_matched": 16,
+        "compliance": 0.8421052631578947,
+        "median_moving_speed_mm_s": 21.5
+      },
+      "errors": {
+        "zero_mm": 39.18,
+        "physnet_switch": {
+          "err_mm": 43.43,
+          "reduction_vs_zero": -0.108
+        },
+        "physnet": {
+          "err_mm": 31.41,
+          "reduction_vs_zero": 0.198
+        },
+        "imunet": {
+          "err_mm": 35.67,
+          "reduction_vs_zero": 0.09
+        }
+      }
+    },
+    "traj_20261109_023932": {
+      "condition": "paused",
+      "windows": 899,
+      "stops_per_min": 14.2,
+      "stop_durations_s": [
+        1.22,
+        0.54,
+        0.46,
+        2.51,
+        2.51,
+        1.38,
+        2.05,
+        2.29,
+        1.22,
+        2.35,
+        2.37,
+        0.99,
+        1.9,
+        1.58,
+        1.74,
+        1.46,
+        1.44,
+        1.3
+      ],
+      "windows_with_stop_inside_pct": 30.8,
+      "switched_pct": 79.3,
+      "acc_rest_norm_g": 1.0087,
+      "skip_s": [
+        7.0,
+        7.0
+      ],
+      "imu_mount": {
+        "source": "rigid_20261109_023120",
+        "angle_to_nominal_deg": 26.23
+      },
+      "protocol": {
+        "label": "P2",
+        "condition": "P",
+        "order": 3,
+        "stops": 23,
+        "stops_per_min": 17.25,
+        "beats": 19,
+        "beats_matched": 17,
+        "compliance": 0.8947368421052632,
+        "median_moving_speed_mm_s": 20.2
+      },
+      "errors": {
+        "zero_mm": 29.73,
+        "physnet_switch": {
+          "err_mm": 40.96,
+          "reduction_vs_zero": -0.377
+        },
+        "physnet": {
+          "err_mm": 23.23,
+          "reduction_vs_zero": 0.219
+        },
+        "imunet": {
+          "err_mm": 28.59,
+          "reduction_vs_zero": 0.038
+        }
+      }
+    }
+  },
+  "primary_endpoint": "reduction_gain of physnet_switch",
+  "estimators": {
+    "physnet_switch": {
+      "continuous": {
+        "err_mm": 39.41,
+        "zero_mm": 45.5,
+        "reduction_vs_zero": 0.134
+      },
+      "paused": {
+        "err_mm": 42.22,
+        "zero_mm": 34.57,
+        "reduction_vs_zero": -0.221
+      },
+      "reduction_gain": -0.355,
+      "reduction_gain_ci95": [
+        -0.545,
+        -0.191
+      ],
+      "matched_diff_mm": 12.01,
+      "matched_continuous_err_mm": 30.92,
+      "matched_diff_ci95_mm": [
+        6.799,
+        17.336
+      ]
+    },
+    "physnet": {
+      "continuous": {
+        "err_mm": 39.41,
+        "zero_mm": 45.5,
+        "reduction_vs_zero": 0.134
+      },
+      "paused": {
+        "err_mm": 27.42,
+        "zero_mm": 34.57,
+        "reduction_vs_zero": 0.207
+      },
+      "reduction_gain": 0.073,
+      "reduction_gain_ci95": [
+        0.023,
+        0.124
+      ],
+      "matched_diff_mm": -3.93,
+      "matched_continuous_err_mm": 30.92,
+      "matched_diff_ci95_mm": [
+        -5.873,
+        -2.086
+      ]
+    },
+    "imunet": {
+      "continuous": {
+        "err_mm": 36.23,
+        "zero_mm": 45.5,
+        "reduction_vs_zero": 0.204
+      },
+      "paused": {
+        "err_mm": 32.21,
+        "zero_mm": 34.57,
+        "reduction_vs_zero": 0.068
+      },
+      "reduction_gain": -0.136,
+      "reduction_gain_ci95": [
+        -0.183,
+        -0.087
+      ],
+      "matched_diff_mm": 3.74,
+      "matched_continuous_err_mm": 28.56,
+      "matched_diff_ci95_mm": [
+        2.15,
+        5.288
+      ]
+    },
+    "imunet_switch": {
+      "continuous": {
+        "err_mm": 36.23,
+        "zero_mm": 45.5,
+        "reduction_vs_zero": 0.204
+      },
+      "paused": {
+        "err_mm": 43.37,
+        "zero_mm": 34.57,
+        "reduction_vs_zero": -0.255
+      },
+      "reduction_gain": -0.458,
+      "reduction_gain_ci95": [
+        -0.662,
+        -0.29
+      ],
+      "matched_diff_mm": 15.72,
+      "matched_continuous_err_mm": 28.56,
+      "matched_diff_ci95_mm": [
+        10.634,
+        21.352
+      ]
+    },
+    "calibrated_blend": {
+      "continuous": {
+        "err_mm": 37.63,
+        "zero_mm": 45.5,
+        "reduction_vs_zero": 0.173
+      },
+      "paused": {
+        "err_mm": 28.41,
+        "zero_mm": 34.57,
+        "reduction_vs_zero": 0.178
+      },
+      "reduction_gain": 0.005,
+      "reduction_gain_ci95": [
+        -0.037,
+        0.048
+      ],
+      "matched_diff_mm": -1.38,
+      "matched_continuous_err_mm": 29.53,
+      "matched_diff_ci95_mm": [
+        -3.062,
+        0.25
+      ]
+    }
+  },
+  "recording_level": {
+    "physnet_switch_reduction": {
+      "traj_20261109_012026": 0.138,
+      "traj_20261109_024257": 0.131,
+      "traj_20261109_022758": -0.108,
+      "traj_20261109_023932": -0.377
+    },
+    "every_paused_above_every_continuous": false,
+    "note": "with m continuous and n paused recordings, complete separation has probability 1/C(m+n, n) under exchangeability (1/6 for 2+2, 1/20 for 3+3, 1/70 for 4+4)"
+  },
+  "twin_prediction": "Table IV: 4-s stop interval vs pause-free, PhysNet raw rate + switching 30.0 vs 44.1 mm at 55-57 mm zero motion; cross-protocol rehearsal in datasets/revision_rehearsal/stop_power.json"
+}

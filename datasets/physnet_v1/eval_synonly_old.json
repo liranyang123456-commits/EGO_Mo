@@ -1,0 +1,477 @@
+{
+  "models": [
+    "datasets\\physnet_v1\\physnet_synonly_old_s0.pt",
+    "datasets\\physnet_v1\\physnet_synonly_old_s1.pt"
+  ],
+  "seeds": 2,
+  "tta_shifts_s": [],
+  "lever_arm_mm": [
+    [
+      0.18,
+      0.17,
+      -0.05
+    ],
+    [
+      0.74,
+      0.26,
+      -0.36
+    ]
+  ],
+  "val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 45.22,
+    "fast_mm": 68.02,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 26.22,
+    "r2": -0.018
+  },
+  "val_single_seed": [
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 46.78,
+      "fast_mm": 68.73,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 30.76,
+      "r2": -0.101
+    },
+    {
+      "n": 1436,
+      "zero_mm": 42.23,
+      "err_mm": 48.91,
+      "fast_mm": 69.63,
+      "fast_zero_mm": 75.04,
+      "pred_med_mm": 23.03,
+      "r2": -0.171
+    }
+  ],
+  "val_by_session": {
+    "traj_20260923_023241": {
+      "n": 339,
+      "zero_mm": 45.1,
+      "err_mm": 48.76,
+      "fast_mm": 73.22,
+      "fast_zero_mm": 81.44,
+      "pred_med_mm": 28.62,
+      "r2": -0.028
+    },
+    "traj_20260924_144019": {
+      "n": 1097,
+      "zero_mm": 41.34,
+      "err_mm": 44.13,
+      "fast_mm": 66.27,
+      "fast_zero_mm": 72.8,
+      "pred_med_mm": 25.7,
+      "r2": -0.016
+    }
+  },
+  "test": {
+    "n": 647,
+    "zero_mm": 49.67,
+    "err_mm": 50.61,
+    "fast_mm": 80.95,
+    "fast_zero_mm": 90.27,
+    "pred_med_mm": 20.22,
+    "r2": 0.069
+  },
+  "test_single_seed": [
+    {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 51.31,
+      "fast_mm": 78.51,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 23.82,
+      "r2": 0.05
+    },
+    {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 56.3,
+      "fast_mm": 85.82,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 19.34,
+      "r2": -0.118
+    }
+  ],
+  "test_by_session": {
+    "traj_20260923_023422": {
+      "n": 647,
+      "zero_mm": 49.67,
+      "err_mm": 50.61,
+      "fast_mm": 80.95,
+      "fast_zero_mm": 90.27,
+      "pred_med_mm": 20.22,
+      "r2": 0.069
+    }
+  },
+  "synthetic_test": {
+    "n": 3520,
+    "zero_mm": 61.64,
+    "err_mm": 24.2,
+    "fast_mm": 48.17,
+    "fast_zero_mm": 116.43,
+    "pred_med_mm": 45.61,
+    "r2": 0.694
+  },
+  "synthetic_test_single_seed": [
+    {
+      "n": 3520,
+      "zero_mm": 61.64,
+      "err_mm": 25.3,
+      "fast_mm": 49.42,
+      "fast_zero_mm": 116.43,
+      "pred_med_mm": 45.98,
+      "r2": 0.675
+    },
+    {
+      "n": 3520,
+      "zero_mm": 61.64,
+      "err_mm": 25.33,
+      "fast_mm": 49.75,
+      "fast_zero_mm": 116.43,
+      "pred_med_mm": 47.05,
+      "r2": 0.678
+    }
+  ],
+  "synthetic_test_by_session": {
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181655_s50075": {
+      "n": 160,
+      "zero_mm": 16.08,
+      "err_mm": 11.11,
+      "fast_mm": 12.7,
+      "fast_zero_mm": 21.67,
+      "pred_med_mm": 10.15,
+      "r2": 0.478
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181655_s50076": {
+      "n": 160,
+      "zero_mm": 47.11,
+      "err_mm": 2.98,
+      "fast_mm": 3.15,
+      "fast_zero_mm": 69.79,
+      "pred_med_mm": 52.99,
+      "r2": 0.996
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181656_s50077": {
+      "n": 160,
+      "zero_mm": 46.71,
+      "err_mm": 4.58,
+      "fast_mm": 4.63,
+      "fast_zero_mm": 69.54,
+      "pred_med_mm": 52.3,
+      "r2": 0.991
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181656_s50078": {
+      "n": 160,
+      "zero_mm": 53.94,
+      "err_mm": 12.95,
+      "fast_mm": 17.45,
+      "fast_zero_mm": 77.7,
+      "pred_med_mm": 47.41,
+      "r2": 0.942
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181656_s50079": {
+      "n": 160,
+      "zero_mm": 30.42,
+      "err_mm": 4.39,
+      "fast_mm": 5.03,
+      "fast_zero_mm": 42.72,
+      "pred_med_mm": 28.8,
+      "r2": 0.979
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181657_s50080": {
+      "n": 160,
+      "zero_mm": 58.99,
+      "err_mm": 6.5,
+      "fast_mm": 9.17,
+      "fast_zero_mm": 88.63,
+      "pred_med_mm": 72.53,
+      "r2": 0.988
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181657_s50081": {
+      "n": 160,
+      "zero_mm": 118.73,
+      "err_mm": 15.51,
+      "fast_mm": 16.41,
+      "fast_zero_mm": 132.02,
+      "pred_med_mm": 105.09,
+      "r2": 0.98
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181658_s50082": {
+      "n": 160,
+      "zero_mm": 82.51,
+      "err_mm": 7.91,
+      "fast_mm": 8.14,
+      "fast_zero_mm": 92.1,
+      "pred_med_mm": 77.23,
+      "r2": 0.99
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181658_s50083": {
+      "n": 160,
+      "zero_mm": 30.17,
+      "err_mm": 6.79,
+      "fast_mm": 7.06,
+      "fast_zero_mm": 33.49,
+      "pred_med_mm": 25.49,
+      "r2": 0.939
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181658_s50084": {
+      "n": 160,
+      "zero_mm": 39.23,
+      "err_mm": 11.07,
+      "fast_mm": 12.09,
+      "fast_zero_mm": 51.54,
+      "pred_med_mm": 48.52,
+      "r2": 0.919
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181659_s50085": {
+      "n": 160,
+      "zero_mm": 65.54,
+      "err_mm": 9.75,
+      "fast_mm": 9.28,
+      "fast_zero_mm": 91.93,
+      "pred_med_mm": 56.05,
+      "r2": 0.978
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181659_s50086": {
+      "n": 160,
+      "zero_mm": 34.33,
+      "err_mm": 11.41,
+      "fast_mm": 12.83,
+      "fast_zero_mm": 45.23,
+      "pred_med_mm": 39.03,
+      "r2": 0.861
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181700_s50087": {
+      "n": 160,
+      "zero_mm": 79.93,
+      "err_mm": 46.19,
+      "fast_mm": 48.42,
+      "fast_zero_mm": 102.85,
+      "pred_med_mm": 56.78,
+      "r2": 0.652
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181700_s50088": {
+      "n": 160,
+      "zero_mm": 50.16,
+      "err_mm": 41.77,
+      "fast_mm": 61.48,
+      "fast_zero_mm": 87.17,
+      "pred_med_mm": 35.8,
+      "r2": 0.264
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181701_s50089": {
+      "n": 160,
+      "zero_mm": 123.1,
+      "err_mm": 47.11,
+      "fast_mm": 58.35,
+      "fast_zero_mm": 183.46,
+      "pred_med_mm": 87.19,
+      "r2": 0.845
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013502_s70130": {
+      "n": 160,
+      "zero_mm": 74.88,
+      "err_mm": 54.56,
+      "fast_mm": 76.49,
+      "fast_zero_mm": 105.8,
+      "pred_med_mm": 28.84,
+      "r2": -0.746
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013503_s70132": {
+      "n": 160,
+      "zero_mm": 206.33,
+      "err_mm": 161.7,
+      "fast_mm": 219.83,
+      "fast_zero_mm": 302.97,
+      "pred_med_mm": 101.67,
+      "r2": 0.356
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013504_s70134": {
+      "n": 160,
+      "zero_mm": 0.26,
+      "err_mm": 14.33,
+      "fast_mm": 10.95,
+      "fast_zero_mm": 0.34,
+      "pred_med_mm": 9.31,
+      "r2": -5398.37
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013505_s70136": {
+      "n": 160,
+      "zero_mm": 75.38,
+      "err_mm": 21.93,
+      "fast_mm": 20.15,
+      "fast_zero_mm": 95.03,
+      "pred_med_mm": 81.93,
+      "r2": 0.904
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013506_s70138": {
+      "n": 160,
+      "zero_mm": 0.88,
+      "err_mm": 6.24,
+      "fast_mm": 7.27,
+      "fast_zero_mm": 1.22,
+      "pred_med_mm": 3.95,
+      "r2": -113.611
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013507_s70140": {
+      "n": 160,
+      "zero_mm": 60.48,
+      "err_mm": 16.02,
+      "fast_mm": 16.2,
+      "fast_zero_mm": 113.4,
+      "pred_med_mm": 35.13,
+      "r2": 0.946
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013508_s70142": {
+      "n": 160,
+      "zero_mm": 60.95,
+      "err_mm": 17.65,
+      "fast_mm": 19.58,
+      "fast_zero_mm": 78.48,
+      "pred_med_mm": 58.43,
+      "r2": 0.907
+    }
+  },
+  "synthetic_ood": {
+    "n": 1920,
+    "zero_mm": 83.82,
+    "err_mm": 48.46,
+    "fast_mm": 92.98,
+    "fast_zero_mm": 164.57,
+    "pred_med_mm": 57.52,
+    "r2": 0.47
+  },
+  "synthetic_ood_single_seed": [
+    {
+      "n": 1920,
+      "zero_mm": 83.82,
+      "err_mm": 48.89,
+      "fast_mm": 93.19,
+      "fast_zero_mm": 164.57,
+      "pred_med_mm": 56.89,
+      "r2": 0.463
+    },
+    {
+      "n": 1920,
+      "zero_mm": 83.82,
+      "err_mm": 49.48,
+      "fast_mm": 94.64,
+      "fast_zero_mm": 164.57,
+      "pred_med_mm": 58.66,
+      "r2": 0.451
+    }
+  ],
+  "synthetic_ood_by_session": {
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181701_s50090": {
+      "n": 160,
+      "zero_mm": 7.21,
+      "err_mm": 10.9,
+      "fast_mm": 13.39,
+      "fast_zero_mm": 10.2,
+      "pred_med_mm": 7.87,
+      "r2": -1.439
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181701_s50091": {
+      "n": 160,
+      "zero_mm": 74.22,
+      "err_mm": 17.12,
+      "fast_mm": 18.23,
+      "fast_zero_mm": 110.7,
+      "pred_med_mm": 75.72,
+      "r2": 0.946
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181702_s50092": {
+      "n": 160,
+      "zero_mm": 103.56,
+      "err_mm": 21.78,
+      "fast_mm": 28.68,
+      "fast_zero_mm": 121.39,
+      "pred_med_mm": 92.43,
+      "r2": 0.946
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181702_s50093": {
+      "n": 160,
+      "zero_mm": 62.05,
+      "err_mm": 26.04,
+      "fast_mm": 22.24,
+      "fast_zero_mm": 84.93,
+      "pred_med_mm": 43.01,
+      "r2": 0.815
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260924_181622\\imu\\sim_20260924_181703_s50094": {
+      "n": 160,
+      "zero_mm": 87.04,
+      "err_mm": 87.35,
+      "fast_mm": 114.06,
+      "fast_zero_mm": 118.54,
+      "pred_med_mm": 20.09,
+      "r2": -0.011
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013511_s70149": {
+      "n": 160,
+      "zero_mm": 51.6,
+      "err_mm": 35.13,
+      "fast_mm": 34.03,
+      "fast_zero_mm": 72.71,
+      "pred_med_mm": 64.06,
+      "r2": -0.13
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013512_s70150": {
+      "n": 160,
+      "zero_mm": 297.9,
+      "err_mm": 252.78,
+      "fast_mm": 353.83,
+      "fast_zero_mm": 431.34,
+      "pred_med_mm": 113.43,
+      "r2": 0.272
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013512_s70151": {
+      "n": 160,
+      "zero_mm": 24.03,
+      "err_mm": 24.16,
+      "fast_mm": 36.73,
+      "fast_zero_mm": 36.51,
+      "pred_med_mm": 1.0,
+      "r2": -0.034
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013513_s70152": {
+      "n": 160,
+      "zero_mm": 62.85,
+      "err_mm": 30.42,
+      "fast_mm": 26.71,
+      "fast_zero_mm": 85.07,
+      "pred_med_mm": 70.97,
+      "r2": 0.74
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013513_s70153": {
+      "n": 160,
+      "zero_mm": 15.51,
+      "err_mm": 15.65,
+      "fast_mm": 21.54,
+      "fast_zero_mm": 21.4,
+      "pred_med_mm": 1.0,
+      "r2": -0.05
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013514_s70154": {
+      "n": 160,
+      "zero_mm": 112.19,
+      "err_mm": 22.75,
+      "fast_mm": 27.57,
+      "fast_zero_mm": 160.14,
+      "pred_med_mm": 117.67,
+      "r2": 0.959
+    },
+    "E:\\EGO_Mo\\datasets\\synthetic_corpus\\corpus_20260925_013355\\imu\\sim_20260925_013514_s70155": {
+      "n": 160,
+      "zero_mm": 107.66,
+      "err_mm": 37.46,
+      "fast_mm": 49.01,
+      "fast_zero_mm": 137.74,
+      "pred_med_mm": 78.02,
+      "r2": 0.864
+    }
+  }
+}

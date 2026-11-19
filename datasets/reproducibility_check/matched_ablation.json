@@ -1,0 +1,90 @@
+{
+  "conv_bigru_body8_endpoint": {
+    "val_s0": 33.4,
+    "val_s1": 33.17,
+    "val_ens": 32.28,
+    "val_r2": 0.402,
+    "test_ens": 45.02,
+    "test_r2": 0.198
+  },
+  "ronin_resnet_body8_endpoint": {
+    "val_s0": 31.9,
+    "val_s1": 31.76,
+    "val_ens": 31.2,
+    "val_r2": 0.442,
+    "test_ens": 43.48,
+    "test_r2": 0.252
+  },
+  "tlio_resnet_body8_endpoint": {
+    "val_s0": 31.74,
+    "val_s1": 31.56,
+    "val_ens": 30.86,
+    "val_r2": 0.46,
+    "test_ens": 42.69,
+    "test_r2": 0.27
+  },
+  "imunet_body8_endpoint": {
+    "val_s0": 31.38,
+    "val_s1": 31.57,
+    "val_ens": 31.05,
+    "val_r2": 0.451,
+    "test_ens": 44.09,
+    "test_r2": 0.214
+  },
+  "ronin_resnet_anchor24_endpoint": {
+    "val_s0": 32.45,
+    "val_s1": 32.12,
+    "val_ens": 30.82,
+    "val_r2": 0.466,
+    "test_ens": 44.09,
+    "test_r2": 0.244
+  },
+  "tlio_resnet_anchor24_endpoint": {
+    "val_s0": 30.91,
+    "val_s1": 31.79,
+    "val_ens": 30.5,
+    "val_r2": 0.459,
+    "test_ens": 43.91,
+    "test_r2": 0.256
+  },
+  "imunet_anchor24_endpoint": {
+    "val_s0": 31.01,
+    "val_s1": 30.53,
+    "val_ens": 29.86,
+    "val_r2": 0.483,
+    "test_ens": 42.06,
+    "test_r2": 0.287
+  },
+  "physnet_anchor24_endpoint": {
+    "val_s0": 30.23,
+    "val_s1": 31.04,
+    "val_ens": 29.95,
+    "val_r2": 0.472,
+    "test_ens": 46.5,
+    "test_r2": 0.184
+  },
+  "physnet_anchor24_dense": {
+    "val_s0": 30.71,
+    "val_s1": 30.65,
+    "val_ens": 30.05,
+    "val_r2": 0.475,
+    "test_ens": 44.81,
+    "test_r2": 0.217
+  },
+  "physnet_anchor24_dense_gate": {
+    "val_s0": 30.32,
+    "val_s1": 30.1,
+    "val_ens": 29.7,
+    "val_r2": 0.481,
+    "test_ens": 45.13,
+    "test_r2": 0.21
+  },
+  "imunet_anchor24_dense": {
+    "val_s0": 34.53,
+    "val_s1": 33.75,
+    "val_ens": 33.16,
+    "val_r2": 0.384,
+    "test_ens": 44.57,
+    "test_r2": 0.206
+  }
+}

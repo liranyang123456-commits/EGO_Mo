@@ -1,0 +1,69 @@
+{
+  "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "runs": [
+    {
+      "physnet_single_ms": 2.6669249997939914,
+      "physnet_ensemble16_ms": 43.987834000145085,
+      "imunet_single_ms": 2.5679279997712,
+      "imunet_ensemble16_ms": 43.40247900050599,
+      "blend32_ms": 90.09463399997912
+    },
+    {
+      "physnet_single_ms": 2.7321180002763867,
+      "physnet_ensemble16_ms": 44.253042999771424,
+      "imunet_single_ms": 2.546760000404902,
+      "imunet_ensemble16_ms": 42.98770399997011,
+      "blend32_ms": 95.39296699978877
+    },
+    {
+      "physnet_single_ms": 2.9488599998876452,
+      "physnet_ensemble16_ms": 46.26781300001312,
+      "imunet_single_ms": 2.7317100000800565,
+      "imunet_ensemble16_ms": 45.40689799992833,
+      "blend32_ms": 98.12685800017789
+    },
+    {
+      "physnet_single_ms": 3.063350999727845,
+      "physnet_ensemble16_ms": 46.850897000404075,
+      "imunet_single_ms": 2.6783170003909618,
+      "imunet_ensemble16_ms": 44.46169600007124,
+      "blend32_ms": 92.02093400002923
+    },
+    {
+      "physnet_single_ms": 2.860590000054799,
+      "physnet_ensemble16_ms": 43.35071599984076,
+      "imunet_single_ms": 2.8441830002702773,
+      "imunet_ensemble16_ms": 44.532719000126235,
+      "blend32_ms": 97.96242700016592
+    }
+  ],
+  "median_ms": {
+    "physnet_single_ms": 2.861,
+    "physnet_ensemble16_ms": 44.253,
+    "imunet_single_ms": 2.678,
+    "imunet_ensemble16_ms": 44.462,
+    "blend32_ms": 95.393
+  },
+  "range_ms": {
+    "physnet_single_ms": [
+      2.667,
+      3.063
+    ],
+    "physnet_ensemble16_ms": [
+      43.351,
+      46.851
+    ],
+    "imunet_single_ms": [
+      2.547,
+      2.844
+    ],
+    "imunet_ensemble16_ms": [
+      42.988,
+      45.407
+    ],
+    "blend32_ms": [
+      90.095,
+      98.127
+    ]
+  }
+}

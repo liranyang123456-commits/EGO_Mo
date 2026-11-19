@@ -1,0 +1,26 @@
+{
+  "session": "traj_20260923_023422",
+  "duration_s": 115.1,
+  "fold_models": 16,
+  "dense_edges": 29885,
+  "calibrated_blend_endpoint_edges": 647,
+  "connected_components_with_at_least_3_nodes": 1,
+  "connected_component_sizes": [
+    710
+  ],
+  "position_anchors": 1,
+  "dense_physnet_1anchor": {
+    "nodes": 710,
+    "ate_rmse_mm": 81.08,
+    "ate_mean_mm": 66.574,
+    "ate_p90_mm": 135.133,
+    "existing_npz_max_difference_mm": 9e-06
+  },
+  "dense_blend_1anchor": {
+    "nodes": 710,
+    "ate_rmse_mm": 80.22,
+    "ate_mean_mm": 65.611,
+    "ate_p90_mm": 134.512,
+    "existing_npz_max_difference_mm": 8e-06
+  }
+}

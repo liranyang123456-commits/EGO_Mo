@@ -1,0 +1,275 @@
+{
+  "train": [
+    "traj_20260923_015507",
+    "traj_20260923_015629",
+    "traj_20260923_015918",
+    "traj_20260923_020132",
+    "traj_20260923_020407",
+    "traj_20260924_143156"
+  ],
+  "val": [
+    "traj_20260923_023241",
+    "traj_20260924_144019"
+  ],
+  "test": [
+    "traj_20260923_023422",
+    "traj_20260926_143837"
+  ],
+  "extra_train": [
+    "rigid_20260924_123958",
+    "rigid_20260924_124243",
+    "rigid_20260924_140510",
+    "rigid_20260924_142902",
+    "rigid_20260926_143218",
+    "rigid_20260926_152337"
+  ],
+  "excluded": [
+    {
+      "name": "rigid_20260924_133412",
+      "reason": "rigidity verdict 'NOT rigid'"
+    },
+    {
+      "name": "rigid_20260924_135318",
+      "reason": "rigidity verdict 'NOT rigid'"
+    },
+    {
+      "name": "rigid_20260926_151937",
+      "reason": "rigidity verdict 'NOT rigid'"
+    },
+    {
+      "name": "rigid_20260926_153342",
+      "reason": "rigidity verdict 'too few moving pairs'"
+    }
+  ],
+  "quality": {
+    "rigid_20260924_123958": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 96.1,
+      "fps": 9.76,
+      "usb_hz": 200.15,
+      "bt_hz": 187.14,
+      "raw_usable": 880,
+      "usable_fraction": 0.938,
+      "reproj_p50_px": 0.259
+    },
+    "rigid_20260924_124243": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 69.8,
+      "fps": 9.74,
+      "usb_hz": 200.13,
+      "bt_hz": 187.2,
+      "raw_usable": 597,
+      "usable_fraction": 0.877,
+      "reproj_p50_px": 0.299
+    },
+    "rigid_20260924_133412": {
+      "split": null,
+      "theme": "R",
+      "seconds": 74.1,
+      "fps": 30.07,
+      "usb_hz": 200.11,
+      "bt_hz": 187.3,
+      "raw_usable": 861,
+      "usable_fraction": 0.386,
+      "reproj_p50_px": 0.92
+    },
+    "rigid_20260924_135318": {
+      "split": null,
+      "theme": "R",
+      "seconds": 86.7,
+      "fps": 30.06,
+      "usb_hz": 200.03,
+      "bt_hz": 187.23,
+      "raw_usable": 1175,
+      "usable_fraction": 0.451,
+      "reproj_p50_px": 1.019
+    },
+    "rigid_20260924_140510": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 92.3,
+      "fps": 9.76,
+      "usb_hz": 200.02,
+      "bt_hz": 187.24,
+      "raw_usable": 806,
+      "usable_fraction": 0.895,
+      "reproj_p50_px": 0.282
+    },
+    "rigid_20260924_142902": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 84.2,
+      "fps": 9.75,
+      "usb_hz": 200.05,
+      "bt_hz": 187.25,
+      "raw_usable": 709,
+      "usable_fraction": 0.864,
+      "reproj_p50_px": 0.26
+    },
+    "rigid_20260926_143218": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 142.4,
+      "fps": 9.75,
+      "usb_hz": 200.07,
+      "bt_hz": 186.98,
+      "raw_usable": 1306,
+      "usable_fraction": 0.94,
+      "reproj_p50_px": 0.241
+    },
+    "rigid_20260926_151937": {
+      "split": null,
+      "theme": "R",
+      "seconds": 111.2,
+      "fps": 29.64,
+      "usb_hz": 200.08,
+      "bt_hz": 186.98,
+      "raw_usable": 3181,
+      "usable_fraction": 0.965,
+      "reproj_p50_px": 0.709
+    },
+    "rigid_20260926_152337": {
+      "split": "extra_train",
+      "theme": "R",
+      "seconds": 99.9,
+      "fps": 30.06,
+      "usb_hz": 200.06,
+      "bt_hz": 186.98,
+      "raw_usable": 2058,
+      "usable_fraction": 0.685,
+      "reproj_p50_px": 1.0
+    },
+    "rigid_20260926_153342": {
+      "split": null,
+      "theme": "R",
+      "seconds": 20.9,
+      "fps": 29.95,
+      "usb_hz": 200.04,
+      "bt_hz": 187.22,
+      "raw_usable": 617,
+      "usable_fraction": 0.986,
+      "reproj_p50_px": 0.992
+    },
+    "traj_20260923_015507": {
+      "split": "train",
+      "theme": null,
+      "seconds": 60.7,
+      "fps": 29.54,
+      "usb_hz": 200.08,
+      "bt_hz": 187.44,
+      "raw_usable": 1478,
+      "usable_fraction": 0.824,
+      "reproj_p50_px": 1.178
+    },
+    "traj_20260923_015629": {
+      "split": "train",
+      "theme": null,
+      "seconds": 59.6,
+      "fps": 29.06,
+      "usb_hz": 200.08,
+      "bt_hz": 187.76,
+      "raw_usable": 1503,
+      "usable_fraction": 0.868,
+      "reproj_p50_px": 0.979
+    },
+    "traj_20260923_015918": {
+      "split": "train",
+      "theme": null,
+      "seconds": 40.8,
+      "fps": 9.78,
+      "usb_hz": 200.06,
+      "bt_hz": 188.0,
+      "raw_usable": 318,
+      "usable_fraction": 0.797,
+      "reproj_p50_px": 0.237
+    },
+    "traj_20260923_020132": {
+      "split": "train",
+      "theme": null,
+      "seconds": 63.7,
+      "fps": 24.49,
+      "usb_hz": 200.02,
+      "bt_hz": 187.47,
+      "raw_usable": 1244,
+      "usable_fraction": 0.797,
+      "reproj_p50_px": 0.24
+    },
+    "traj_20260923_020407": {
+      "split": "train",
+      "theme": null,
+      "seconds": 75.8,
+      "fps": 24.55,
+      "usb_hz": 200.02,
+      "bt_hz": 187.4,
+      "raw_usable": 1728,
+      "usable_fraction": 0.929,
+      "reproj_p50_px": 0.249
+    },
+    "traj_20260923_023241": {
+      "split": "val",
+      "theme": null,
+      "seconds": 86.8,
+      "fps": 9.76,
+      "usb_hz": 200.06,
+      "bt_hz": 187.2,
+      "raw_usable": 403,
+      "usable_fraction": 0.476,
+      "reproj_p50_px": 0.25
+    },
+    "traj_20260923_023422": {
+      "split": "test",
+      "theme": null,
+      "seconds": 115.2,
+      "fps": 9.77,
+      "usb_hz": 200.04,
+      "bt_hz": 187.02,
+      "raw_usable": 713,
+      "usable_fraction": 0.634,
+      "reproj_p50_px": 0.235
+    },
+    "traj_20260924_143156": {
+      "split": "train",
+      "theme": "A",
+      "seconds": 194.9,
+      "fps": 9.75,
+      "usb_hz": 200.07,
+      "bt_hz": 187.12,
+      "raw_usable": 1393,
+      "usable_fraction": 0.733,
+      "reproj_p50_px": 0.208
+    },
+    "traj_20260924_144019": {
+      "split": "val",
+      "theme": "A",
+      "seconds": 174.0,
+      "fps": 9.76,
+      "usb_hz": 200.05,
+      "bt_hz": 187.08,
+      "raw_usable": 1171,
+      "usable_fraction": 0.689,
+      "reproj_p50_px": 0.253
+    },
+    "traj_20260926_143837": {
+      "split": "test",
+      "theme": "T",
+      "seconds": 122.4,
+      "fps": 9.75,
+      "usb_hz": 200.03,
+      "bt_hz": 186.97,
+      "raw_usable": 1120,
+      "usable_fraction": 0.938,
+      "reproj_p50_px": 0.213
+    }
+  },
+  "protocol_id": "85393aba60ecdc40",
+  "prospective_test_status": {
+    "required": 4,
+    "accepted": 1,
+    "sessions": [
+      "traj_20260926_143837"
+    ],
+    "complete": false
+  }
+}

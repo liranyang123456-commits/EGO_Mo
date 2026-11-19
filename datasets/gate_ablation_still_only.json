@@ -1,0 +1,205 @@
+{
+  "folds": [
+    "traj_20260923_015507",
+    "traj_20260923_015629",
+    "traj_20260923_015918",
+    "traj_20260923_020132",
+    "traj_20260923_020407",
+    "traj_20260924_143156",
+    "traj_20260923_023241",
+    "traj_20260924_144019"
+  ],
+  "test_recordings": [
+    "traj_20260923_023422",
+    "traj_20260926_143837"
+  ],
+  "models_per_ensemble": 16,
+  "results": [
+    {
+      "configuration": "no stillness loss, no gate",
+      "training": "first training",
+      "folder": "physnet_cv",
+      "tag": "cvx",
+      "stillness_loss": false,
+      "gate": false,
+      "cv_err_mm": 25.17,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 44.39,
+        "zero_mm": 49.67,
+        "ate_mm": 87.79,
+        "per_axis_rmse_mm_xyz": [
+          24.2,
+          26.2,
+          80.2
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 32.1,
+        "zero_mm": 40.43,
+        "ate_mm": 132.97,
+        "per_axis_rmse_mm_xyz": [
+          19.8,
+          13.9,
+          130.7
+        ]
+      }
+    },
+    {
+      "configuration": "no stillness loss, no gate",
+      "training": "second training",
+      "folder": "reproducibility_check/loso_retrained/physnet_cv",
+      "tag": "cvx",
+      "stillness_loss": false,
+      "gate": false,
+      "cv_err_mm": 25.3,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 44.25,
+        "zero_mm": 49.67,
+        "ate_mm": 89.74,
+        "per_axis_rmse_mm_xyz": [
+          21.5,
+          25.0,
+          83.5
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 31.71,
+        "zero_mm": 40.43,
+        "ate_mm": 132.86,
+        "per_axis_rmse_mm_xyz": [
+          21.4,
+          15.7,
+          130.2
+        ]
+      }
+    },
+    {
+      "configuration": "stillness loss, no gate",
+      "training": "training 1",
+      "folder": "reproducibility_check/loso_still_only/run1/physnet_cv",
+      "tag": "cvs",
+      "stillness_loss": true,
+      "gate": false,
+      "cv_err_mm": 25.28,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 43.59,
+        "zero_mm": 49.67,
+        "ate_mm": 94.82,
+        "per_axis_rmse_mm_xyz": [
+          26.5,
+          25.7,
+          87.3
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 31.43,
+        "zero_mm": 40.43,
+        "ate_mm": 129.62,
+        "per_axis_rmse_mm_xyz": [
+          23.4,
+          17.3,
+          126.3
+        ]
+      }
+    },
+    {
+      "configuration": "stillness loss, no gate",
+      "training": "training 2",
+      "folder": "reproducibility_check/loso_still_only/run2/physnet_cv",
+      "tag": "cvs",
+      "stillness_loss": true,
+      "gate": false,
+      "cv_err_mm": 25.14,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 43.8,
+        "zero_mm": 49.67,
+        "ate_mm": 103.84,
+        "per_axis_rmse_mm_xyz": [
+          24.7,
+          28.6,
+          96.7
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 31.32,
+        "zero_mm": 40.43,
+        "ate_mm": 141.66,
+        "per_axis_rmse_mm_xyz": [
+          20.0,
+          20.9,
+          138.7
+        ]
+      }
+    },
+    {
+      "configuration": "stillness loss and gate",
+      "training": "first training",
+      "folder": "physnet_cv",
+      "tag": "cvg",
+      "stillness_loss": true,
+      "gate": true,
+      "cv_err_mm": 24.95,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 43.55,
+        "zero_mm": 49.67,
+        "ate_mm": 109.82,
+        "per_axis_rmse_mm_xyz": [
+          23.6,
+          23.1,
+          104.7
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 31.02,
+        "zero_mm": 40.43,
+        "ate_mm": 162.73,
+        "per_axis_rmse_mm_xyz": [
+          19.5,
+          15.3,
+          160.8
+        ]
+      }
+    },
+    {
+      "configuration": "stillness loss and gate",
+      "training": "second training",
+      "folder": "reproducibility_check/loso_retrained/physnet_cv",
+      "tag": "cvg",
+      "stillness_loss": true,
+      "gate": true,
+      "cv_err_mm": 25.1,
+      "traj_20260923_023422": {
+        "windows": 647,
+        "err_mm": 43.73,
+        "zero_mm": 49.67,
+        "ate_mm": 103.31,
+        "per_axis_rmse_mm_xyz": [
+          27.2,
+          22.5,
+          97.1
+        ]
+      },
+      "traj_20260926_143837": {
+        "windows": 1054,
+        "err_mm": 30.92,
+        "zero_mm": 40.43,
+        "ate_mm": 156.82,
+        "per_axis_rmse_mm_xyz": [
+          19.1,
+          16.9,
+          154.7
+        ]
+      }
+    }
+  ]
+}

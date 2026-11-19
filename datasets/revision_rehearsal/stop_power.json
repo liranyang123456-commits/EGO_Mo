@@ -1,0 +1,68 @@
+{
+  "kind": "twin_cross_protocol_power",
+  "model": "physnet_proto/physnet_pause_12.5_nb_s0/s1 (trained on the 12.5-s stop protocol, raw gyro)",
+  "endpoint": "reduction relative to zero motion, paused minus continuous, PhysNet + stop-anchored switching (S <= 2 s); 3-s block bootstrap as in eval_stop_protocol_experiment.py",
+  "conditions": {
+    "continuous": {
+      "corpus": "pause_inf",
+      "sequences": 20,
+      "pooled": {
+        "windows": 3200,
+        "switched_pct": 1.5,
+        "zero_mm": 57.36,
+        "physnet_mm": 46.78,
+        "physnet_switch_mm": 46.73,
+        "reduction_switch": 0.185,
+        "reduction_physnet": 0.184
+      }
+    },
+    "paused": {
+      "corpus": "pause_4",
+      "sequences": 20,
+      "pooled": {
+        "windows": 3200,
+        "switched_pct": 43.8,
+        "zero_mm": 56.76,
+        "physnet_mm": 38.76,
+        "physnet_switch_mm": 32.04,
+        "reduction_switch": 0.436,
+        "reduction_physnet": 0.317
+      }
+    }
+  },
+  "pseudo_experiments": 400,
+  "n_boot": 400,
+  "designs": {
+    "2+2": {
+      "recordings_per_condition": 2,
+      "motion_s_per_recording": 160,
+      "gain_mean": 0.25,
+      "gain_sd": 0.037,
+      "ci95_halfwidth_mean": 0.067,
+      "power_ci_excludes_zero": 1.0,
+      "every_paused_above_every_continuous": 1.0
+    },
+    "3+3": {
+      "recordings_per_condition": 3,
+      "motion_s_per_recording": 160,
+      "gain_mean": 0.249,
+      "gain_sd": 0.03,
+      "ci95_halfwidth_mean": 0.055,
+      "power_ci_excludes_zero": 1.0,
+      "every_paused_above_every_continuous": 1.0
+    },
+    "4+4": {
+      "recordings_per_condition": 4,
+      "motion_s_per_recording": 160,
+      "gain_mean": 0.25,
+      "gain_sd": 0.023,
+      "ci95_halfwidth_mean": 0.048,
+      "power_ci_excludes_zero": 1.0,
+      "every_paused_above_every_continuous": 1.0
+    }
+  },
+  "caveats": [
+    "Twin sequences are 40 s; a 160-s pseudo-recording joins four of them, drawn with replacement.",
+    "Real recordings differ more from one another than twin sequences, so the real interval will be wider than the twin's."
+  ]
+}

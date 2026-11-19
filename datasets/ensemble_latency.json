@@ -1,0 +1,8 @@
+{
+  "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "physnet_single_ms": 4.494,
+  "physnet_ensemble16_ms": 44.754,
+  "imunet_single_ms": 2.408,
+  "imunet_ensemble16_ms": 44.589,
+  "blend32_ms": 91.116
+}

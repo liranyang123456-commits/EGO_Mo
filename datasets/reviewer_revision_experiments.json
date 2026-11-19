@@ -1,0 +1,252 @@
+{
+  "exp1_matched_ablation": {
+    "conv_bigru_body8_endpoint": {
+      "val_s0": 33.4,
+      "val_s1": 33.17,
+      "val_ens": 32.28,
+      "val_r2": 0.402,
+      "test_ens": 45.02,
+      "test_r2": 0.198
+    },
+    "ronin_resnet_body8_endpoint": {
+      "val_s0": 31.44,
+      "val_s1": 31.98,
+      "val_ens": 30.98,
+      "val_r2": 0.453,
+      "test_ens": 43.81,
+      "test_r2": 0.246
+    },
+    "tlio_resnet_body8_endpoint": {
+      "val_s0": 31.7,
+      "val_s1": 32.06,
+      "val_ens": 31.15,
+      "val_r2": 0.445,
+      "test_ens": 43.08,
+      "test_r2": 0.274
+    },
+    "imunet_body8_endpoint": {
+      "val_s0": 31.46,
+      "val_s1": 31.52,
+      "val_ens": 30.74,
+      "val_r2": 0.46,
+      "test_ens": 43.82,
+      "test_r2": 0.234
+    },
+    "ronin_resnet_anchor24_endpoint": {
+      "val_s0": 32.96,
+      "val_s1": 33.46,
+      "val_ens": 31.92,
+      "val_r2": 0.429,
+      "test_ens": 43.64,
+      "test_r2": 0.243
+    },
+    "tlio_resnet_anchor24_endpoint": {
+      "val_s0": 31.06,
+      "val_s1": 31.59,
+      "val_ens": 30.19,
+      "val_r2": 0.474,
+      "test_ens": 43.28,
+      "test_r2": 0.286
+    },
+    "imunet_anchor24_endpoint": {
+      "val_s0": 30.96,
+      "val_s1": 31.19,
+      "val_ens": 30.45,
+      "val_r2": 0.452,
+      "test_ens": 42.74,
+      "test_r2": 0.268
+    },
+    "physnet_anchor24_endpoint": {
+      "val_s0": 30.86,
+      "val_s1": 31.04,
+      "val_ens": 30.28,
+      "val_r2": 0.466,
+      "test_ens": 46.48,
+      "test_r2": 0.184
+    },
+    "physnet_anchor24_dense": {
+      "val_s0": 30.62,
+      "val_s1": 31.43,
+      "val_ens": 30.47,
+      "val_r2": 0.467,
+      "test_ens": 44.94,
+      "test_r2": 0.227
+    },
+    "physnet_anchor24_dense_gate": {
+      "val_s0": 30.1,
+      "val_s1": 30.06,
+      "val_ens": 29.58,
+      "val_r2": 0.488,
+      "test_ens": 45.7,
+      "test_r2": 0.202
+    },
+    "imunet_anchor24_dense": {
+      "val_s0": 34.41,
+      "val_s1": 34.78,
+      "val_ens": 33.88,
+      "val_r2": 0.349,
+      "test_ens": 45.38,
+      "test_r2": 0.175
+    },
+    "physnet_body_endpoint": {
+      "val_ens": 30.97,
+      "val_r2": 0.449,
+      "test_ens": 45.82,
+      "test_r2": 0.175
+    },
+    "physnet_body_dense": {
+      "val_ens": 30.15,
+      "val_r2": 0.473,
+      "test_ens": 44.75,
+      "test_r2": 0.199
+    },
+    "resnet_anchor24_dense": {
+      "val_ens": 31.46,
+      "val_r2": 0.444,
+      "test_ens": 45.67,
+      "test_r2": 0.186
+    }
+  },
+  "exp2_oracle_simulation": {
+    "pause_inf": {
+      "zero_mm": 57.357460021972656,
+      "demeaned_no_v0": {
+        "open_loop_mm": 198.86,
+        "learned_ens_mm": 35.95,
+        "learned_r2": 0.613,
+        "pred_med_mm": 39.69,
+        "slopes": [
+          0.566,
+          0.571,
+          0.587
+        ]
+      },
+      "demeaned_with_v0": {
+        "open_loop_mm": 59.98,
+        "learned_ens_mm": 29.66,
+        "learned_r2": 0.739,
+        "pred_med_mm": 43.73,
+        "slopes": [
+          0.683,
+          0.688,
+          0.718
+        ]
+      },
+      "no_demean_no_v0": {
+        "open_loop_mm": 189.15,
+        "learned_ens_mm": 34.05,
+        "learned_r2": 0.654,
+        "pred_med_mm": 40.9,
+        "slopes": [
+          0.573,
+          0.594,
+          0.633
+        ]
+      },
+      "no_demean_with_v0": {
+        "open_loop_mm": 50.64,
+        "learned_ens_mm": 22.65,
+        "learned_r2": 0.844,
+        "pred_med_mm": 45.84,
+        "slopes": [
+          0.792,
+          0.76,
+          0.786
+        ]
+      }
+    },
+    "pause_4": {
+      "zero_mm": 56.763336181640625,
+      "demeaned_no_v0": {
+        "open_loop_mm": 150.82,
+        "learned_ens_mm": 29.99,
+        "learned_r2": 0.701,
+        "pred_med_mm": 37.85,
+        "slopes": [
+          0.632,
+          0.617,
+          0.625
+        ]
+      },
+      "demeaned_with_v0": {
+        "open_loop_mm": 51.89,
+        "learned_ens_mm": 21.4,
+        "learned_r2": 0.833,
+        "pred_med_mm": 43.08,
+        "slopes": [
+          0.755,
+          0.757,
+          0.76
+        ]
+      },
+      "no_demean_no_v0": {
+        "open_loop_mm": 148.23,
+        "learned_ens_mm": 30.4,
+        "learned_r2": 0.695,
+        "pred_med_mm": 37.45,
+        "slopes": [
+          0.615,
+          0.626,
+          0.608
+        ]
+      },
+      "no_demean_with_v0": {
+        "open_loop_mm": 49.65,
+        "learned_ens_mm": 18.61,
+        "learned_r2": 0.88,
+        "pred_med_mm": 45.01,
+        "slopes": [
+          0.833,
+          0.842,
+          0.776
+        ]
+      }
+    }
+  },
+  "exp3_latency_context": {
+    "context_0s": {
+      "future_wait_ms": 0.0,
+      "cpu_gridding_ms": 0.319,
+      "gpu_single_model_b1_ms": 2.701,
+      "gpu_single_model_b16_ms": 0.201,
+      "total_e2e_latency_single_ms": 3.02,
+      "val_err_mm": 30.47,
+      "val_r2": 0.432,
+      "test_err_mm": 43.61,
+      "test_r2": 0.206
+    },
+    "context_0.5s": {
+      "future_wait_ms": 500.0,
+      "cpu_gridding_ms": 0.349,
+      "gpu_single_model_b1_ms": 2.304,
+      "gpu_single_model_b16_ms": 0.151,
+      "total_e2e_latency_single_ms": 502.65,
+      "val_err_mm": 29.71,
+      "val_r2": 0.468,
+      "test_err_mm": 43.24,
+      "test_r2": 0.224
+    },
+    "context_1s": {
+      "future_wait_ms": 1000.0,
+      "cpu_gridding_ms": 0.382,
+      "gpu_single_model_b1_ms": 2.627,
+      "gpu_single_model_b16_ms": 0.182,
+      "total_e2e_latency_single_ms": 1003.01,
+      "val_err_mm": 29.34,
+      "val_r2": 0.483,
+      "test_err_mm": 42.88,
+      "test_r2": 0.233
+    },
+    "context_2s": {
+      "future_wait_ms": 2000.0,
+      "cpu_gridding_ms": 0.765,
+      "gpu_single_model_b1_ms": 2.847,
+      "gpu_single_model_b16_ms": 0.191,
+      "total_e2e_latency_single_ms": 2003.61,
+      "val_err_mm": 29.47,
+      "val_r2": 0.492,
+      "test_err_mm": 45.01,
+      "test_r2": 0.213
+    }
+  }
+}

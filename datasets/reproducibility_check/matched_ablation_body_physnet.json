@@ -1,0 +1,18 @@
+{
+  "physnet_body_endpoint": {
+    "val_s0": 31.71,
+    "val_s1": 31.87,
+    "val_ens": 31.07,
+    "val_r2": 0.451,
+    "test_ens": 45.35,
+    "test_r2": 0.204
+  },
+  "physnet_body_dense": {
+    "val_s0": 30.18,
+    "val_s1": 31.83,
+    "val_ens": 30.26,
+    "val_r2": 0.471,
+    "test_ens": 44.97,
+    "test_r2": 0.2
+  }
+}

@@ -1,0 +1,1490 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Stereo endoscope + dual IMU capture GUI."""
+
+from __future__ import annotations
+
+import json
+import os
+import threading
+import time
+from datetime import datetime
+from typing import Any, Optional
+
+import cv2
+import numpy as np
+
+from . import camera_config, guided
+from .affinity import describe_plan
+from .cameras import Grabber, LiveStats, calibrate_from_corners, open_camera
+from .global_cam import G4K_HEIGHT, G4K_WIDTH, GlobalGrabber
+from .imu import ImuWorker, list_serial_candidates, pick_usb_port, scan_ble
+from .calib import solve_step, summarize
+from .session import (
+    BOARD2_NAME,
+    BOARD_NAME,
+    INNER,
+    INNER2,
+    SQUARE2_MM,
+    SQUARE_MM,
+    SQUARES,
+    LEGACY_THEMES,
+    PHASES,
+    RIGID_SPLIT,
+    STEPS,
+    THEME_PLAN,
+    THEME_SPLITS,
+    TRAJ_THEMES,
+    active_protocol_id,
+    disk_free_gb,
+    now_id,
+    rig_banner,
+    session_prefix,
+    write_checkerboard_yaml,
+    write_checkerboard2_yaml,
+    write_json,
+)
+
+try:
+    from PIL import Image, ImageFont, ImageTk
+except ImportError as exc:  # pragma: no cover
+    raise SystemExit("需要 Pillow: pip install pillow") from exc
+
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_ROOT = os.path.join(ROOT_DIR, "datasets")
+RIG_STATE = os.path.join(DATA_ROOT, "rig_state.json")
+USB_BAUD = 921600
+BT_SPP_BAUD = 115200
+RECORD_STEPS = {"imu_static", "imu_dyn", "intrinsics", "board_bt", "ego",
+                "recon", "rigid", "traj", "stage_ref", "stereo_ext",
+                "g4k_intrinsics", "g4k_rig", "global_traj", "caliper", "stopexp"}
+BOARD_STEPS = {"intrinsics", "board_bt", "rigid", "traj", "stage_ref",
+               "stereo_ext", "g4k_rig", "global_traj", "caliper", "stopexp"}
+# Steps recorded through the guided revision window (ego_capture/revision_ui.py).
+GUIDED_STEPS = {"caliper": "caliper", "stopexp": "stop"}
+GLOBAL_STEPS = {"g4k_intrinsics", "g4k_rig", "global_traj"}
+COLLECTION_LOG = os.path.join(DATA_ROOT, "collection_log.csv")
+LOG_FIELDS = [
+    "session", "time", "resolution", "fps", "theme", "split", "seconds", "frames",
+    "board_still", "usable_frac", "reproj_p50_px", "delay_ms",
+    "corr_tilt_x", "corr_tilt_y", "corr_roll", "rigidity", "verdict",
+]
+
+
+def _theme_label(code: str) -> str:
+    for c, name, _how in TRAJ_THEMES:
+        if c == code:
+            return f"{c} {name}"
+    if code in LEGACY_THEMES:
+        return f"{code} {LEGACY_THEMES[code]}"
+    return code
+
+
+def _theme_target(code: str) -> int:
+    return len(THEME_PLAN.get(code, THEME_SPLITS))
+
+
+def _theme_counts() -> dict[str, int]:
+    counts = {c: 0 for c, _n, _h in TRAJ_THEMES}
+    if not os.path.isdir(DATA_ROOT):
+        return counts
+    for name in os.listdir(DATA_ROOT):
+        if not name.startswith("traj_"):
+            continue
+        meta_path = os.path.join(DATA_ROOT, name, "session_meta.json")
+        try:
+            with open(meta_path, encoding="utf-8") as handle:
+                code = json.load(handle).get("theme")
+        except Exception:
+            continue
+        if code in counts:
+            counts[code] += 1
+    return counts
+
+
+def _next_theme() -> tuple[str, str]:
+    """Round-robin over training themes first; test sessions are proposed once
+    every training theme has at least two recordings, so a test recording is
+    never the first session of a day."""
+    counts = _theme_counts()
+    for c, _n, _h in TRAJ_THEMES:
+        if c != "T" and counts[c] < min(2, _theme_target(c)):
+            return c, _split_for(c, counts[c])
+    for c, _n, _h in TRAJ_THEMES:
+        if counts[c] < _theme_target(c):
+            return c, _split_for(c, counts[c])
+    return TRAJ_THEMES[0][0], "train"
+
+
+def _split_for(code: str, index: int) -> str:
+    """Predeclared split of the index-th recording of a theme (decided before capture)."""
+    if code == "J" or code == "T":
+        return "test"
+    plan = THEME_PLAN.get(code, THEME_SPLITS)
+    return plan[index] if index < len(plan) else "train"
+
+
+def _cam2_board_coverage(session: str) -> Optional[dict[str, Any]]:
+    """Read cam2/boards.csv and report per-board detection coverage."""
+    path = os.path.join(session, "cam2", "boards.csv")
+    if not os.path.isfile(path):
+        return None
+    import csv as _csv
+
+    frames = 0
+    hit_a = 0
+    hit_b = 0
+    try:
+        with open(path, newline="", encoding="utf-8") as handle:
+            for row in _csv.DictReader(handle):
+                frames += 1
+                hit_a += int(row.get("boardA_found") or 0)
+                hit_b += int(row.get("boardB_found") or 0)
+    except Exception:
+        return None
+    if not frames:
+        return None
+    return {"frames": frames, "A": hit_a / frames, "B": hit_b / frames}
+
+
+def _font(size: int, bold: bool = False):
+    return ("Microsoft YaHei UI", size, "bold" if bold else "normal")
+
+
+def _yahei_pil(size: int):
+    for path in (
+        r"C:\Windows\Fonts\msyh.ttc",
+        r"C:\Windows\Fonts\msyhbd.ttc",
+        r"C:\Windows\Fonts\simhei.ttf",
+    ):
+        if os.path.exists(path):
+            return ImageFont.truetype(path, size)
+    return ImageFont.load_default()
+
+
+def draw_coverage(view: np.ndarray, grid: np.ndarray) -> np.ndarray:
+    """Reached cells (rows x cols of 0/1) of the intrinsic calibration green, the others grey."""
+    nh, nw = view.shape[:2]
+    rows, cols = grid.shape
+    tint = view.copy()
+    for r in range(rows):
+        for c in range(cols):
+            p0 = (int(c * nw / cols), int(r * nh / rows))
+            p1 = (int((c + 1) * nw / cols) - 1, int((r + 1) * nh / rows) - 1)
+            cv2.rectangle(tint, p0, p1, (60, 200, 60) if grid[r, c] else (90, 90, 90), -1)
+    view = cv2.addWeighted(tint, 0.3, view, 0.7, 0.0)
+    for c in range(1, cols):
+        cv2.line(view, (int(c * nw / cols), 0), (int(c * nw / cols), nh), (200, 200, 200), 1)
+    for r in range(1, rows):
+        cv2.line(view, (0, int(r * nh / rows)), (nw, int(r * nh / rows)), (200, 200, 200), 1)
+    return view
+
+
+def bgr_to_photo(frame: np.ndarray, max_w: int, max_h: int, corners: np.ndarray | None = None,
+                 pattern: tuple[int, int] | None = None, grid: np.ndarray | None = None) -> ImageTk.PhotoImage:
+    h, w = frame.shape[:2]
+    scale = min(max_w / w, max_h / h)
+    nw, nh = max(1, int(w * scale)), max(1, int(h * scale))
+    view = cv2.resize(frame, (nw, nh))
+    if grid is not None:
+        view = draw_coverage(view, grid)
+    if corners is not None and pattern is not None:
+        pts = np.asarray(corners, dtype=np.float32).reshape(-1, 2) * scale
+        try:
+            cv2.drawChessboardCorners(view, pattern, pts.reshape(-1, 1, 2), True)
+        except cv2.error:
+            pass
+    rgb = cv2.cvtColor(view, cv2.COLOR_BGR2RGB)
+    return ImageTk.PhotoImage(Image.fromarray(rgb))
+
+
+class CaptureApp(tk.Tk):
+    def __init__(self) -> None:
+        super().__init__()
+        self.title("双目内镜 + 双 IMU 三系标定  |  USB / 蓝牙 / 左右目")
+        self.geometry("1540x940")
+        self.configure(bg="#1b2030")
+        self.imu_usb = ImuWorker("usb")
+        self.imu_bt = ImuWorker("bt")
+        self.grabber = Grabber(self.imu_usb, self.imu_bt)
+        self.grabber_4k = GlobalGrabber()
+        self.photo_g = None
+        self.step = "scan"
+        self.done: set[str] = set()
+        self.gate_pass = False
+        self._guide: Any = None
+        self._guide_t0 = 0.0
+        self._guide_phase = -1
+        self.photo_l = None
+        self.photo_r = None
+        self.thumb_photos: list[Any] = []
+        self.scan_thumbs: dict[int, np.ndarray] = {}
+        self.found_cams: list[int] = []
+        self.ble_devices: list[tuple[str, str]] = []
+        self._opening = False
+        self._gating = False
+        self._build()
+        self._hydrate_done_from_disk()
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+        self.after(120, self._tick)
+
+    def _latest_json(self, prefix: str, filename: str) -> Optional[dict[str, Any]]:
+        newest: Optional[dict[str, Any]] = None
+        newest_mtime = -1.0
+        if not os.path.isdir(DATA_ROOT):
+            return None
+        for name in os.listdir(DATA_ROOT):
+            if not name.startswith(prefix):
+                continue
+            path = os.path.join(DATA_ROOT, name, filename)
+            if not os.path.isfile(path):
+                continue
+            mtime = os.path.getmtime(path)
+            if mtime <= newest_mtime:
+                continue
+            try:
+                with open(path, encoding="utf-8") as handle:
+                    newest = json.load(handle)
+                newest_mtime = mtime
+            except Exception:
+                continue
+        return newest
+
+    def _hydrate_done_from_disk(self) -> None:
+        if self._latest_json("align_imu_static_", "calib_result.json"):
+            self.done.add("imu_static")
+        if self._latest_json("align_imu_dyn_", "calib_result.json"):
+            self.done.add("imu_dyn")
+        if self._latest_json("calib_intrinsics_", "camera_calibration_cam0.json"):
+            self.done.add("intrinsics")
+        board = self._latest_json("calib_board_bt_", "calib_result.json")
+        if board and board.get("T_C0_Ibt"):
+            self.done.add("board_bt")
+        if os.path.isfile(RIG_STATE):
+            try:
+                with open(RIG_STATE, encoding="utf-8") as handle:
+                    state = json.load(handle)
+            except Exception:
+                state = {}
+            if state.get("T_C0_Ibt") and state.get("T_C0_Iusb"):
+                self.done.add("compose")
+                self.done.add("gate")
+        ego = self._latest_json("ego_seq_", "capture_summary.json")
+        if ego and float(ego.get("seconds") or 0) >= 50:
+            self.done.add("ego")
+        recon = self._latest_json("recon_seq_", "capture_summary.json")
+        if recon and float(recon.get("seconds") or 0) >= 50:
+            self.done.add("recon")
+        rigid = self._latest_json("rigid_", "qc_result.json")
+        if rigid and rigid.get("rigidity") == "rigid":
+            self.done.add("rigid")
+        traj_n = 0
+        if os.path.isdir(DATA_ROOT):
+            for name in os.listdir(DATA_ROOT):
+                if not name.startswith("traj_"):
+                    continue
+                summary_path = os.path.join(DATA_ROOT, name, "capture_summary.json")
+                if not os.path.isfile(summary_path):
+                    continue
+                try:
+                    with open(summary_path, encoding="utf-8") as handle:
+                        summary = json.load(handle)
+                except Exception:
+                    continue
+                if float(summary.get("seconds") or 0) >= 50:
+                    traj_n += 1
+        if traj_n >= 3:
+            self.done.add("traj")
+        self._refresh_step_styles()
+        if self.done:
+            self._log("磁盘已有结果，侧栏标绿：" + "、".join(sorted(self.done)))
+
+    def _build(self) -> None:
+        style = ttk.Style()
+        try:
+            style.theme_use("clam")
+        except Exception:
+            pass
+        left = tk.Frame(self, bg="#141824", width=288)
+        left.pack(side=tk.LEFT, fill=tk.Y)
+        left.pack_propagate(False)
+        tk.Label(left, text="采集步骤", bg="#141824", fg="#9ecbff", font=_font(16, True)).pack(pady=(16, 4))
+        tk.Label(
+            left, text="先几何 · 再残差 · 后应用",
+            bg="#141824", fg="#7d8aa8", font=_font(9),
+        ).pack(pady=(0, 8))
+        self.step_btns: dict[str, tk.Button] = {}
+        titles = {key: title for key, title, _hint in STEPS}
+        for phase, keys in PHASES:
+            tk.Label(
+                left, text=phase, bg="#141824", fg="#8eb4e8",
+                font=_font(10, True), anchor="w",
+            ).pack(fill=tk.X, padx=14, pady=(8, 2))
+            for key in keys:
+                btn = tk.Button(
+                    left, text=titles[key], font=_font(11),
+                    bg="#2a3148", fg="#e8eefc", bd=0, pady=5, anchor="w",
+                    command=lambda k=key: self._goto(k),
+                )
+                btn.pack(fill=tk.X, padx=12, pady=3)
+                self.step_btns[key] = btn
+
+        right = tk.Frame(self, bg="#1b2030")
+        right.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+        tk.Label(
+            right,
+            text=rig_banner() + f"    数据  {DATA_ROOT}",
+            bg="#1e3a5f", fg="#ffe08a", font=_font(11, True),
+            padx=16, pady=8, anchor="w",
+        ).pack(fill=tk.X, padx=12, pady=(12, 0))
+
+        self.hint = tk.Label(
+            right, text=STEPS[0][2], bg="#243049", fg="#f4f7ff",
+            font=_font(13), wraplength=1180, justify="left", padx=16, pady=12,
+        )
+        self.hint.pack(fill=tk.X, padx=12, pady=12)
+
+        hw = tk.Frame(right, bg="#1b2030")
+        hw.pack(fill=tk.X, padx=12)
+        tk.Label(hw, text="分辨率", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT)
+        self.res_var = tk.StringVar(value="1280x720")
+        ttk.Combobox(hw, textvariable=self.res_var, values=["1920x1080", "1280x720", "640x480"], width=12, state="readonly").pack(side=tk.LEFT, padx=6)
+        tk.Label(hw, text="目标帧率", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT, padx=(12, 0))
+        self.fps_var = tk.StringVar(value="30")
+        ttk.Combobox(hw, textvariable=self.fps_var, values=["30", "25", "20", "15"], width=6, state="readonly").pack(side=tk.LEFT, padx=6)
+        tk.Label(hw, text="USB IMU", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT, padx=(12, 0))
+        self.usb_var = tk.StringVar(value="")
+        self.usb_combo = ttk.Combobox(hw, textvariable=self.usb_var, width=34, state="readonly")
+        self.usb_combo.pack(side=tk.LEFT, padx=6)
+        tk.Label(hw, text="蓝牙 IMU", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT, padx=(12, 0))
+        self.ble_var = tk.StringVar(value="")
+        self.ble_combo = ttk.Combobox(hw, textvariable=self.ble_var, width=28, state="readonly")
+        self.ble_combo.pack(side=tk.LEFT, padx=6)
+        tk.Label(hw, text="预览", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT, padx=(8, 0))
+        self.preview_var = tk.StringVar(value="低")
+        ttk.Combobox(hw, textvariable=self.preview_var, values=["低", "中", "高"], width=5, state="readonly").pack(side=tk.LEFT, padx=6)
+
+        theme_row = tk.Frame(right, bg="#1b2030")
+        theme_row.pack(fill=tk.X, padx=12, pady=(6, 0))
+        tk.Label(theme_row, text="主题", bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(side=tk.LEFT)
+        self.theme_var = tk.StringVar(value=_theme_label(TRAJ_THEMES[0][0]))
+        theme_box = ttk.Combobox(
+            theme_row, textvariable=self.theme_var,
+            values=[_theme_label(c) for c, _n, _h in TRAJ_THEMES], width=16, state="readonly",
+        )
+        theme_box.pack(side=tk.LEFT, padx=6)
+        theme_box.bind("<<ComboboxSelected>>", lambda _e: self._update_theme_info())
+        self.theme_info = tk.Label(theme_row, text="", bg="#1b2030", fg="#ffe08a", font=_font(10), anchor="w")
+        self.theme_info.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=8)
+
+        self.status = tk.Label(right, text="未连接", bg="#1b2030", fg="#7fd99a", font=_font(10), anchor="w")
+        self.status.pack(fill=tk.X, padx=16, pady=(6, 0))
+        imu_row = tk.Frame(right, bg="#1b2030")
+        imu_row.pack(fill=tk.X, padx=12, pady=(4, 0))
+        self.lbl_usb = tk.Label(
+            imu_row, text="USB IMU 未连接", bg="#14261c", fg="#b7f0c8",
+            font=("Consolas", 10), justify="left", anchor="nw",
+        )
+        self.lbl_usb.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 6))
+        self.lbl_ble = tk.Label(
+            imu_row, text="蓝牙 IMU 未连接", bg="#142033", fg="#c5dcff",
+            font=("Consolas", 10), justify="left", anchor="nw",
+        )
+        self.lbl_ble.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(6, 0))
+        self.lbl_delta = tk.Label(
+            right, text="两路静止时加速度都会接近 (0, 0, 1)g，这是重力，不是同一路数据。看磁力计和航向角。",
+            bg="#1b2030", fg="#c9b458", font=_font(10), anchor="w",
+        )
+        self.lbl_delta.pack(fill=tk.X, padx=16, pady=(2, 0))
+
+        prev = tk.Frame(right, bg="#1b2030")
+        prev.pack(fill=tk.BOTH, expand=True, padx=12, pady=8)
+        self.lbl_l = tk.Label(prev, text="左目\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
+        self.lbl_l.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 6))
+        self.lbl_r = tk.Label(prev, text="右目\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
+        self.lbl_r.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=6)
+        self.lbl_g = tk.Label(prev, text="4K 全局\n点「扫描设备」", bg="#0f1320", fg="#8ea0c8", font=_font(14))
+        self.lbl_g.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(6, 0))
+
+        self.thumbs = tk.Frame(right, bg="#1b2030")
+        self.thumbs.pack(fill=tk.X, padx=12)
+
+        btns = tk.Frame(right, bg="#1b2030")
+        btns.pack(fill=tk.X, padx=12, pady=10)
+        self._mk_btn(btns, "扫描设备", self._scan, "#3d5afe").pack(side=tk.LEFT, padx=4)
+        self._mk_btn(btns, "IMU 轨迹", self._open_imu_view, "#0b7285").pack(side=tk.LEFT, padx=4)
+        self._mk_btn(btns, "打开相机+双IMU", self._open_devices, "#2b6cb0").pack(side=tk.LEFT, padx=4)
+        self._mk_btn(btns, "对焦/锁焦", self._open_focus, "#e8590c").pack(side=tk.LEFT, padx=4)
+        self.start_btn = self._mk_btn(btns, "开始本步录制", self._start_step, "#2f9e44")
+        self.start_btn.pack(side=tk.LEFT, padx=4)
+        self.stop_btn = self._mk_btn(btns, "停止并保存", self._stop_step, "#c92a2a")
+        self.stop_btn.pack(side=tk.LEFT, padx=4)
+        self._mk_btn(btns, "下一步", self._next_step, "#7048e8").pack(side=tk.LEFT, padx=4)
+        self._mk_btn(btns, "解算三系外参", self._solve_compose, "#b08800").pack(side=tk.LEFT, padx=4)
+
+        self.log = tk.Text(right, height=7, bg="#101522", fg="#d7e0f2", font=("Consolas", 10), bd=0)
+        self.log.pack(fill=tk.X, padx=12, pady=(0, 12))
+        self._log(f"棋盘 {BOARD_NAME}：{SQUARES[0]}×{SQUARES[1]} 格，边长 {SQUARE_MM:.1f} mm，内角点 {INNER[0]}×{INNER[1]}。")
+        self._log("标定顺序：门禁 → 双IMU贴紧静止 → 双IMU一起动 → 双目内参 → 蓝牙IMU贴棋盘给双目看 → 三系投影。")
+        self._log("参考：手眼 AX=XB（导航文档）以及旧工作 1d0149c5 的 PnP / R_CI。USB=相机刚体，蓝牙先对齐再当棋盘上的移动系。")
+        self._refresh_step_styles()
+
+    def _open_imu_view(self) -> None:
+        view = getattr(self, "_imu_view", None)
+        if view is not None:
+            try:
+                if view.winfo_exists():
+                    view.lift()
+                    return
+            except Exception:
+                pass
+        from .imu_view import ImuTraceWindow
+
+        self._imu_view = ImuTraceWindow(self, self.imu_usb, self.imu_bt)
+
+    def _mk_btn(self, parent, text, cmd, color) -> tk.Button:
+        return tk.Button(
+            parent, text=text, command=cmd, font=_font(12, True),
+            bg=color, fg="white", bd=0, padx=14, pady=8, activebackground=color,
+        )
+
+    def _log(self, msg: str) -> None:
+        self.log.insert("end", f"[{datetime.now().strftime('%H:%M:%S')}] {msg}\n")
+        self.log.see("end")
+
+    def _goto(self, key: str) -> None:
+        self.step = key
+        hint = next(h for k, _t, h in STEPS if k == key)
+        self.hint.config(text=hint)
+        self.grabber.need_board = key in BOARD_STEPS
+        if key == "rigid":
+            self.res_var.set("1280x720")
+            self.fps_var.set("15")
+            if self.grabber.cap_l is not None and (self.grabber.width, self.grabber.height) != (1280, 720):
+                self._log(
+                    f"相机还开在 {self.grabber.width}×{self.grabber.height}。刚性检查推荐 720p；"
+                    "实际 8–10 fps 也可，程序比较约 1 秒的累计转角。"
+                )
+        elif key == "traj":
+            self.res_var.set("1280x720")
+            self.fps_var.set("15")
+            if self.grabber.cap_l is not None and (self.grabber.width, self.grabber.height) != (1280, 720):
+                self._log(
+                    f"相机还开在 {self.grabber.width}×{self.grabber.height}。v2 轨迹统一用 1280×720（实际约 10 fps，"
+                    "重投影 0.2 px），请再点一次「打开相机+双IMU」。"
+                )
+        elif key == "stage_ref":
+            self.res_var.set("1280x720")
+            self.fps_var.set("15")
+            self._log(
+                "已知位移验证：相机静止 8–12 秒；停止后把本段会话名填入 "
+                "datasets/reference_stage_plan.csv 对应的位置。"
+            )
+        elif key == "stereo_ext":
+            self.res_var.set("1280x720")
+            self.fps_var.set("15")
+            self._log(
+                "双目外参：每个棋盘姿态必须静止保持 2 秒；不要边移动边采。"
+            )
+        if key == "traj":
+            code, _split = _next_theme()
+            self.theme_var.set(_theme_label(code))
+            if "rigid" not in self.done:
+                self._log("今天还没通过 IMU 刚性检查（第 9 步）。建议先录一段刚性检查。")
+        if key in GLOBAL_STEPS:
+            self._log(
+                "4K 全局相机：确认变焦/对焦已锁定、机位固定，全程不要触碰；"
+                "两块棋盘（刚体上的 7×5×5mm 与 GP050）都要在 4K 画面里完整可见。"
+            )
+        if key in GUIDED_STEPS:
+            self.res_var.set("1280x720")
+            self.fps_var.set("15")
+            if self.grabber.cap_l is not None and (self.grabber.width, self.grabber.height) != (1280, 720):
+                self._log("修稿实验统一用 1280×720：改好分辨率后再点一次「打开相机+双IMU」。")
+            if key == "stopexp" and "rigid" not in self.done:
+                self._log("今天还没通过第 9 步刚性检查。停顿实验的分析要用当天估计的 IMU→相机旋转，先录刚性检查。")
+            self._log("点「开始本步录制」打开引导窗口；录制由引导窗口控制。")
+        self._update_theme_info()
+        self._refresh_step_styles()
+
+    def _open_revision_panel(self, mode: str) -> None:
+        panel = getattr(self, "_revision_panel", None)
+        if panel is not None:
+            try:
+                if panel.winfo_exists() and panel.mode == mode:
+                    panel.lift()
+                    return
+                if panel.winfo_exists() and panel.recording:
+                    messagebox.showwarning("引导窗口", "另一项修稿实验正在录制，先结束它。")
+                    panel.lift()
+                    return
+                panel.destroy()
+            except Exception:
+                pass
+        from .revision_ui import RevisionPanel
+
+        self.grabber.need_board = True
+        self._revision_panel = RevisionPanel(self, mode)
+
+    def _open_focus(self) -> None:
+        if self.grabber.cap_l is None:
+            messagebox.showerror("相机未打开", "先「扫描设备」并「打开相机+双IMU」。")
+            return
+        if self.grabber.cap_r is not None:
+            messagebox.showinfo("不需要锁焦", "双目内窥镜是固定焦距，使用它原来的内参，不需要锁焦。")
+            return
+        from .focus_ui import FocusDialog
+        FocusDialog(self)
+
+    def _camera_meta(self) -> dict[str, Any]:
+        """Camera, focus and calibration of a new recording."""
+        stereo = self.grabber.cap_r is not None
+        return {"rig": "stereo_endoscope_plus_dual_imu" if stereo else "monocular_camera_plus_dual_imu",
+                "stereo_baseline_mm": 46.5 if stereo else None,
+                "focus_state": dict(self.grabber.focus_state), "focus_locked": camera_config.locked_focus(),
+                "intrinsics_dir": camera_config.calib_dir().name}
+
+    def begin_session(self, step: str, meta_extra: dict[str, Any]) -> str:
+        """Create a session folder and start recording for a guided window."""
+        if self.grabber.cap_l is None:
+            raise RuntimeError("相机还没打开：先「扫描设备」并「打开相机+双IMU」。")
+        if self.grabber.recording:
+            raise RuntimeError("已经有一段录制在进行。")
+        if disk_free_gb(DATA_ROOT) < 2.0:
+            raise RuntimeError("数据盘剩余 < 2 GB，先清出空间再录。")
+        session = os.path.join(DATA_ROOT, f"{session_prefix(step)}_{now_id()}")
+        os.makedirs(session, exist_ok=True)
+        write_checkerboard_yaml(os.path.join(session, "checkerboard.yaml"))
+        ble_kind, ble_id = self._ble_target()
+        meta = {
+            "rig": "stereo_endoscope_plus_dual_imu",
+            "board": BOARD_NAME,
+            "inner_corners": list(INNER),
+            "square_mm": SQUARE_MM,
+            "step": step,
+            "cam_left_id": self.grabber.id_l,
+            "cam_right_id": self.grabber.id_r,
+            "imu_usb_port": self.imu_usb.port,
+            "imu_usb_baud": self.imu_usb.baud,
+            "imu_bt_id": ble_id,
+            "imu_bt_kind": self.imu_bt.kind or ble_kind,
+            "target_imu_hz": 200,
+            "requested": {"width": self.grabber.width, "height": self.grabber.height, "fps": self.grabber.fps_req},
+            "save_jpeg": True,
+            "no_zoom": True,
+            "fixed_extrinsics": True,
+            "stereo_baseline_mm": 46.5,
+            "lens_diameter_mm": 5.5,
+            "created_at": datetime.now().isoformat(timespec="seconds"),
+            "protocol_id": active_protocol_id(),
+            "prospective_sealed": False,
+            **self._camera_meta(),
+            **meta_extra,
+        }
+        write_json(os.path.join(session, "session_meta.json"), meta)
+        self.grabber.need_board = True
+        self.grabber.start_recording(session, float(self.fps_var.get()), save_jpeg=True)
+        self.start_btn.config(state=tk.DISABLED)
+        self._log(f"开始录制 {session}")
+        return session
+
+    def end_session(self, on_done) -> None:
+        """Stop a guided recording, align the time stamps off the GUI thread,
+        write capture_summary.json and call on_done(summary) on the GUI thread."""
+        summary = self.grabber.stop_recording()
+        self.start_btn.config(state=tk.NORMAL)
+        session = summary.get("session_dir") or ""
+        imu = {"usb_hz": self.imu_usb.hz, "bt_hz": self.imu_bt.hz,
+               "usb_samples": self.imu_usb.sample_count, "bt_samples": self.imu_bt.sample_count,
+               "usb_reconnects": self.imu_usb.reconnects, "bt_reconnects": self.imu_bt.reconnects}
+        self._log(f"已停止：{summary['frames']} 帧 / {summary['seconds']:.1f}s，丢帧 {summary.get('drops', 0)}。")
+
+        def _work() -> None:
+            if session:
+                try:
+                    from .sync import align_session
+
+                    summary["sync"] = align_session(session)
+                except Exception as exc:  # noqa: BLE001
+                    summary["sync_error"] = str(exc)
+                write_json(os.path.join(session, "capture_summary.json"), {**summary, **imu})
+            self.after(0, lambda: on_done(summary))
+
+        threading.Thread(target=_work, daemon=True).start()
+
+    def _current_theme(self) -> tuple[str, str]:
+        code = (self.theme_var.get() or "A").split(" ")[0]
+        return code, _split_for(code, _theme_counts().get(code, 0))
+
+    def _update_theme_info(self) -> None:
+        if self.step != "traj":
+            self.theme_info.config(text="（主题只用于第 10 步轨迹）")
+            return
+        code, split = self._current_theme()
+        counts = _theme_counts()
+        how = next((h for c, _n, h in TRAJ_THEMES if c == code), "")
+        done = sum(min(counts.get(c, 0), _theme_target(c)) for c, _n, _h in TRAJ_THEMES)
+        total = sum(_theme_target(c) for c, _n, _h in TRAJ_THEMES)
+        target = _theme_target(code)
+        self.theme_info.config(
+            text=(f"{how}。本主题已录 {counts.get(code, 0)}/{target}，这一段记为 {split}"
+                  f"{'（封存，不可用于训练/选择）' if split == 'test' else ''}。全部进度 {done}/{total}。")
+        )
+
+    def _refresh_step_styles(self) -> None:
+        for key, btn in self.step_btns.items():
+            if key == self.step:
+                btn.config(bg="#3d8bfd", fg="white")
+            elif key in self.done:
+                btn.config(bg="#2b8a3e", fg="white")
+            else:
+                btn.config(bg="#2a3148", fg="#e8eefc")
+
+    def _parse_res(self) -> tuple[int, int, int]:
+        w, h = self.res_var.get().split("x")
+        return int(w), int(h), int(self.fps_var.get())
+
+    def _scan(self) -> None:
+        if getattr(self, "_scanning", False):
+            return
+        self._scanning = True
+        self._log("正在扫描摄像头、串口和蓝牙 IMU…")
+
+        def _work() -> None:
+            cams: list[int] = []
+            thumbs: dict[int, np.ndarray] = {}
+            ble: list[tuple[str, str]] = []
+            ble_err = ""
+
+            def _cams() -> None:
+                try:
+                    for idx in range(6):
+                        cap = open_camera(idx, 640, 480, 15)
+                        try:
+                            if not cap.isOpened():
+                                continue
+                            ok, frame = cap.read()
+                        except Exception:
+                            ok, frame = False, None
+                        finally:
+                            cap.release()
+                        # The laptop IR camera returns a flat frame. It is not
+                        # the capture camera, so do not offer it.
+                        if ok and frame is not None and getattr(frame, "size", 0) and float(frame.std()) >= 2.0:
+                            cams.append(idx)
+                            thumbs[idx] = frame.copy()
+                except Exception as exc:  # noqa: BLE001
+                    self.after(0, lambda: self._log(f"扫描相机中断：{exc}"))
+
+            def _ble() -> None:
+                nonlocal ble, ble_err
+                try:
+                    import asyncio
+                    ble = asyncio.run(scan_ble(4.0))
+                except Exception as exc:
+                    ble_err = str(exc)
+
+            # Camera open and the Bluetooth scan must not share a thread.
+            # DirectShow and the Windows Bluetooth stack disagree about the
+            # thread's COM apartment, and the process exits with 0xC0000409.
+            cam_th = threading.Thread(target=_cams, daemon=True)
+            ble_th = threading.Thread(target=_ble, daemon=True)
+            cam_th.start()
+            ble_th.start()
+            cam_th.join()
+            ble_th.join()
+            ports = list_serial_candidates()
+
+            def _done() -> None:
+                self._scanning = False
+                self.found_cams = cams
+                self.scan_thumbs = thumbs
+                self.ble_devices = ble
+                self._render_thumbs()
+                usb_vals = [lab for _d, lab, kind in ports if kind != "bt_spp"] or [lab for _d, lab, _k in ports]
+                self.usb_combo["values"] = usb_vals or ["(未找到 USB 串口)"]
+                picked = pick_usb_port(ports)
+                if picked:
+                    for item in self.usb_combo["values"]:
+                        if str(item).startswith(picked):
+                            self.usb_var.set(item)
+                            break
+                spp = [lab for _d, lab, kind in ports if kind == "bt_spp"]
+                ble_vals = [f"{addr}  {name}" for addr, name in ble] + spp
+                self.ble_combo["values"] = ble_vals or ["(未找到蓝牙 IMU，确认 WTSDCL 已开机且已配对)"]
+                if ble_vals:
+                    prefer = next((v for v in ble_vals if "wtsdcl" in v.lower() or "901" in v.lower() or "bwt" in v.lower()), ble_vals[0])
+                    self.ble_var.set(prefer)
+                if len(cams) == 1:
+                    self.grabber.id_l = cams[0]
+                    self.grabber.id_r = -1
+                    self.grabber_4k.cam_id = -1
+                    self._log(f"只找到相机 {cams[0]}，已作为单目使用，不用再分左右目。")
+                self._log(f"相机 {cams}；串口 {[p[0] for p in ports]}；BLE {ble or ble_err or '无'}")
+
+            self.after(0, _done)
+
+        threading.Thread(target=_work, daemon=True).start()
+
+    def _render_thumbs(self) -> None:
+        for child in self.thumbs.winfo_children():
+            child.destroy()
+        self.thumb_photos = []
+        if not self.found_cams:
+            self._log("没有找到摄像头。检查 Hub / 是否被占用。")
+            return
+        single = len(self.found_cams) == 1
+        tk.Label(self.thumbs,
+                 text="已选定这一路单目相机。" if single else "点缩略图指定左目 / 右目：",
+                 bg="#1b2030", fg="#9aa7c7", font=_font(10)).pack(anchor="w")
+        row = tk.Frame(self.thumbs, bg="#1b2030")
+        row.pack(fill=tk.X)
+        for idx in self.found_cams:
+            photo = bgr_to_photo(self.scan_thumbs[idx], 180, 120)
+            self.thumb_photos.append(photo)
+            box = tk.Frame(row, bg="#243049")
+            box.pack(side=tk.LEFT, padx=6, pady=4)
+            tk.Label(box, image=photo, bg="#243049").pack()
+            tk.Label(box, text="单目相机" if single else f"相机 {idx}",
+                     bg="#243049", fg="white", font=_font(10)).pack()
+            if single:
+                continue
+            tk.Button(box, text="设为左目", command=lambda i=idx: self._set_cam("l", i), bg="#1c7ed6", fg="white", bd=0).pack(fill=tk.X)
+            tk.Button(box, text="设为右目", command=lambda i=idx: self._set_cam("r", i), bg="#ae3ec9", fg="white", bd=0).pack(fill=tk.X)
+            tk.Button(box, text="设为4K全局", command=lambda i=idx: self._set_cam("g", i), bg="#0b7285", fg="white", bd=0).pack(fill=tk.X)
+
+    def _set_cam(self, side: str, index: int) -> None:
+        if side == "l":
+            self.grabber.id_l = index
+            self._log(f"左目 = 相机 {index}")
+        elif side == "r":
+            self.grabber.id_r = index
+            self._log(f"右目 = 相机 {index}")
+        else:
+            self.grabber_4k.cam_id = index
+            self._log(f"4K 全局 = 相机 {index}（确认变焦/对焦已锁定）")
+        if self.grabber.id_l == self.grabber.id_r and self.grabber.id_l >= 0:
+            messagebox.showwarning("相机冲突", "左右目不能是同一路。")
+        if self.grabber_4k.cam_id >= 0 and self.grabber_4k.cam_id in (self.grabber.id_l, self.grabber.id_r):
+            messagebox.showwarning("相机冲突", "4K 全局相机不能与左/右目同一路。")
+
+    def _usb_port(self) -> str:
+        raw = self.usb_var.get().strip()
+        if not raw or raw.startswith("("):
+            return ""
+        return raw.split()[0]
+
+    def _ble_target(self) -> tuple[str, str]:
+        raw = self.ble_var.get().strip()
+        if not raw or raw.startswith("("):
+            return "", ""
+        token = raw.split()[0]
+        if token.upper().startswith("COM"):
+            return "spp", token
+        return "ble", token
+
+    def _open_devices(self) -> None:
+        if self.grabber.id_l < 0:
+            messagebox.showerror("未指定相机", "请先扫描。找到多路相机时，点缩略图设为左目。")
+            return
+        if self._opening:
+            return
+        self._opening = True
+        w, h, fps = self._parse_res()
+        usb = self._usb_port()
+        ble_kind, ble_id = self._ble_target()
+        if usb and ble_id and usb.upper() == ble_id.upper():
+            messagebox.showerror("IMU 冲突", "USB 和蓝牙不能选同一个 COM 口。")
+            return
+        right_txt = f" 右{self.grabber.id_r}" if self.grabber.id_r >= 0 and self.grabber.id_r != self.grabber.id_l else "（单目）"
+        self._log(f"打开 左{self.grabber.id_l}{right_txt} @ {w}x{h} {fps}fps；USB {usb or '无'}；BLE {ble_id or '无'}…")
+
+        def _work() -> None:
+            err = None
+            try:
+                if usb:
+                    self.imu_usb.start_serial(usb, USB_BAUD, "usb")
+                if ble_id:
+                    if ble_kind == "spp":
+                        self.imu_bt.start_serial(ble_id, BT_SPP_BAUD, "bt_spp")
+                    else:
+                        self.imu_bt.start_ble(ble_id)
+                stereo = self.grabber.id_r >= 0 and self.grabber.id_r != self.grabber.id_l
+                camera_config.set_mode(stereo, self.grabber.id_l)
+                self.grabber.focus_target = camera_config.locked_focus()
+                self.grabber.open(self.grabber.id_l, self.grabber.id_r, w, h, fps)
+                if self.grabber_4k.cam_id >= 0:
+                    self.grabber_4k.open(self.grabber_4k.cam_id, fps)
+            except Exception as exc:  # noqa: BLE001
+                err = exc
+
+            def _done() -> None:
+                self._opening = False
+                if err is not None:
+                    messagebox.showerror("打开失败", str(err))
+                    return
+                self.done.add("scan")
+                self._refresh_step_styles()
+                mode = "双目" if self.grabber.cap_r is not None else "单目"
+                got = self.grabber.cap_l.get(cv2.CAP_PROP_FPS) if self.grabber.cap_l is not None else 0
+                self._log(f"已打开 {mode}。驱动回报 {got:.0f} fps。等 1–2 秒看 IMU 频率。")
+                st = self.grabber.focus_state
+                self._log(f"对焦：自动对焦 {st.get('autofocus')}，焦距读数 {st.get('focus')}，"
+                          f"已保存的实验焦距 {camera_config.locked_focus()}；内参 {camera_config.calib_dir().name}。")
+                if camera_config.locked_focus() is None:
+                    self._log("还没有保存实验焦距：点「对焦/锁焦」，在工作距离对焦后保存，再录第 4 步内参。")
+                self._log(describe_plan())
+                if got and got < 20:
+                    self._log("驱动回报低于 20 fps。1280×720 下实际约 10 fps 属正常；v2 轨迹和 T 段不要改用 640×480。")
+                self.after(1600, self._log_imu_distinct)
+
+            self.after(0, _done)
+
+        threading.Thread(target=_work, daemon=True).start()
+
+    def _start_step(self) -> None:
+        if self.grabber.cap_l is None:
+            self._open_devices()
+            return
+        if self.step == "scan":
+            self._goto("gate")
+            return
+        if self.step == "gate":
+            self._run_gate()
+            return
+        if self.step == "compose":
+            self._solve_compose()
+            return
+        if self.step in GUIDED_STEPS:
+            self._open_revision_panel(GUIDED_STEPS[self.step])
+            return
+        kind = session_prefix(self.step)
+        if self.step not in RECORD_STEPS:
+            return
+        if self.step in GLOBAL_STEPS and self.grabber_4k.cap is None:
+            messagebox.showerror(
+                "缺少 4K 相机",
+                "全局采集需要 4K 全局相机。请先「扫描设备」并点缩略图「设为4K全局」，"
+                "再点「打开相机+双IMU」。",
+            )
+            return
+        if (self.step == "traj" and self._current_theme()[0] == "T"
+                and (self.grabber.width, self.grabber.height) != (1280, 720)):
+            messagebox.showerror(
+                "分辨率不符合冻结协议",
+                f"相机当前是 {self.grabber.width}×{self.grabber.height}。T 段必须用 1280×720"
+                "（实际约 10 fps 属正常）。请在上方分辨率选 1280x720，"
+                "再点「打开相机+双IMU」重新打开后再录。")
+            return
+        need_gb = 15.0 if self.step in GLOBAL_STEPS else 2.0
+        if disk_free_gb(DATA_ROOT) < need_gb:
+            messagebox.showerror("磁盘空间不足", f"数据盘剩余 < {need_gb:.0f} GB，先清出空间再录。")
+            return
+        session = os.path.join(DATA_ROOT, f"{kind}_{now_id()}")
+        os.makedirs(session, exist_ok=True)
+        write_checkerboard_yaml(os.path.join(session, "checkerboard.yaml"))
+        if self.step in GLOBAL_STEPS:
+            write_checkerboard2_yaml(os.path.join(session, "checkerboard_rig.yaml"))
+        ble_kind, ble_id = self._ble_target()
+        meta = {
+            "rig": "stereo_endoscope_plus_dual_imu",
+            "board": BOARD_NAME,
+            "inner_corners": list(INNER),
+            "square_mm": SQUARE_MM,
+            "step": self.step,
+            "cam_left_id": self.grabber.id_l,
+            "cam_right_id": self.grabber.id_r,
+            "imu_usb_port": self.imu_usb.port,
+            "imu_usb_baud": self.imu_usb.baud,
+            "imu_bt_id": ble_id,
+            "imu_bt_kind": self.imu_bt.kind or ble_kind,
+            "target_imu_hz": 200,
+            "requested": {"width": self.grabber.width, "height": self.grabber.height, "fps": self.grabber.fps_req},
+            "save_jpeg": True,
+            "no_zoom": True,
+            "fixed_extrinsics": True,
+            "stereo_baseline_mm": 46.5,
+            "lens_diameter_mm": 5.5,
+            "created_at": datetime.now().isoformat(timespec="seconds"),
+            **self._camera_meta(),
+        }
+        if self.step == "traj":
+            meta["theme"], meta["split"] = self._current_theme()
+            meta["protocol_id"] = active_protocol_id()
+            meta["prospective_sealed"] = bool(
+                meta["theme"] == "T" and meta["protocol_id"]
+            )
+        elif self.step == "rigid":
+            # Rigidity recordings double as rotation/still training data.
+            meta["theme"], meta["split"] = "R", RIGID_SPLIT
+        elif self.step == "stage_ref":
+            meta["theme"], meta["split"] = "S", "reference_validation"
+        elif self.step == "stereo_ext":
+            meta["theme"], meta["split"] = "E", "calibration"
+        if self.step in GLOBAL_STEPS:
+            meta["board2"] = BOARD2_NAME
+            meta["inner2_corners"] = list(INNER2)
+            meta["square2_mm"] = SQUARE2_MM
+            meta["cam_4k_id"] = self.grabber_4k.cam_id
+            meta["cam_4k_resolution"] = [self.grabber_4k.width, self.grabber_4k.height]
+            meta["global_frame"] = "cam2_fixed"
+        write_json(os.path.join(session, "session_meta.json"), meta)
+        self.grabber.need_board = self.step in BOARD_STEPS
+        if self.step == "traj":
+            self._log(f"本段主题 {_theme_label(meta['theme'])}，分组 {meta['split']}。")
+            if (self.grabber.width, self.grabber.height) != (1280, 720):
+                self._log(f"当前相机是 {self.grabber.width}×{self.grabber.height}。v2 轨迹统一 1280×720，当天不要混用分辨率。")
+        self.grabber.start_recording(session, float(self.fps_var.get()), save_jpeg=True)
+        if self.step in GLOBAL_STEPS:
+            self.grabber_4k.start_recording(session, float(self.fps_var.get()), save_jpeg=True)
+            self._log("4K 全局相机同步开始录制（cam2）。")
+        self._log(f"开始录制 {session}")
+        self.start_btn.config(state=tk.DISABLED)
+        self._guide, self._guide_t0, self._guide_phase = None, time.time(), -1
+        if self.step == "intrinsics":
+            with self.grabber._lock:
+                frame = self.grabber.frame_l
+            size = (frame.shape[1], frame.shape[0]) if frame is not None else (self.grabber.width, self.grabber.height)
+            self._guide = guided.CoverageTracker(size)
+        elif self.step == "rigid":
+            self._guide = "rigid"
+
+    def _run_gate(self) -> None:
+        if self._gating:
+            return
+        self._gating = True
+        self._log("门禁 8 秒：不要拔线，看相机帧率和两路 IMU Hz…")
+        t0 = time.time()
+        hist_l: list[float] = []
+        hist_r: list[float] = []
+        hist_usb: list[float] = []
+        hist_bt: list[float] = []
+        shapes = ["", ""]
+
+        def _poll() -> None:
+            with self.grabber._lock:
+                stats = self.grabber.stats
+                f0, f1 = self.grabber.frame_l, self.grabber.frame_r
+            hist_l.append(stats.fps_l)
+            hist_r.append(stats.fps_r)
+            hist_usb.append(self.imu_usb.hz)
+            hist_bt.append(self.imu_bt.hz)
+            if f0 is not None:
+                shapes[0] = f"{f0.shape[1]}x{f0.shape[0]}"
+            if f1 is not None:
+                shapes[1] = f"{f1.shape[1]}x{f1.shape[0]}"
+            if time.time() - t0 < 8.0:
+                self.after(50, _poll)
+                return
+            self._gating = False
+            fps_l = float(np.median(hist_l[-20:])) if hist_l else 0.0
+            fps_r = float(np.median(hist_r[-20:])) if hist_r else 0.0
+            usb_hz = float(np.median(hist_usb[-20:])) if hist_usb else 0.0
+            bt_hz = float(np.median(hist_bt[-20:])) if hist_bt else 0.0
+            fps_need = max(int(self.fps_var.get()) - 5, 18)
+            stereo = self.grabber.cap_r is not None
+            cam_ok = fps_l >= fps_need and ((not stereo) or fps_r >= fps_need)
+            usb_ok = (not self.imu_usb.port) or usb_hz >= 80
+            bt_ok = (not self.imu_bt.port) or bt_hz >= 80
+            imu_ok = (self.imu_usb.port or self.imu_bt.port) and usb_ok and bt_ok
+            size_ok = bool(shapes[0])
+            self.gate_pass = bool(size_ok and cam_ok and imu_ok)
+            msg = (
+                f"门禁：左 {shapes[0]} {fps_l:.1f}fps"
+                + (f"，右 {shapes[1]} {fps_r:.1f}fps" if stereo else "（单目）")
+                + f"，USB {usb_hz:.0f}Hz，BLE {bt_hz:.0f}Hz。"
+            )
+            if self.gate_pass:
+                self.done.add("gate")
+                self._log(msg + " 通过。")
+                messagebox.showinfo("门禁通过", msg + "\n下一步：两枚 IMU 贴紧，整套静止。")
+                self._goto("imu_static")
+            else:
+                self._log(msg + " 未通过。")
+                extra = "1080p 双目共 Hub 容易掉帧，可改 1280x720。蓝牙 IMU 需开机且靠近电脑。"
+                if not imu_ok:
+                    extra += f" USB误差={self.imu_usb.last_error or '-'} BLE误差={self.imu_bt.last_error or '-'}。"
+                if messagebox.askyesno("门禁未过", msg + "\n\n" + extra + "\n\n仍要继续？"):
+                    self.done.add("gate")
+                    self._goto("imu_static")
+            self._refresh_step_styles()
+
+        self.after(50, _poll)
+
+    def _stop_step(self) -> None:
+        if not self.grabber.recording:
+            return
+        panel = getattr(self, "_revision_panel", None)
+        if panel is not None and getattr(panel, "recording", False):
+            panel.lift()
+            panel._abort()
+            return
+        self._guide = None
+        self.hint.config(text=next(h for k, _t, h in STEPS if k == self.step), bg="#243049")
+        summary = self.grabber.stop_recording()
+        if self.step in GLOBAL_STEPS and self.grabber_4k.recording:
+            summary["cam2"] = self.grabber_4k.stop_recording()
+            self._log(
+                f"4K 全局：{summary['cam2']['frames']} 帧 / "
+                f"{summary['cam2']['seconds']:.1f}s，"
+                f"{summary['cam2']['resolution'][0]}×{summary['cam2']['resolution'][1]}，"
+                f"丢帧 {summary['cam2']['drops']}。"
+            )
+        self.start_btn.config(state=tk.NORMAL)
+        session = summary.get("session_dir") or ""
+        if session:
+            self._log("正在按画面运动和陀螺估计各路延迟，并把 IMU 插值到每帧时刻…")
+            self.update_idletasks()
+            try:
+                from .sync import align_session
+
+                summary["sync"] = align_session(session)
+                for name, item in summary["sync"].get("cameras", {}).items():
+                    self._log(
+                        f"{name} 延迟 USB {item['delay_usb_s']*1000:.1f} ms"
+                        f"（相关 {item['delay_usb_corr']:.2f}），"
+                        f"蓝牙 {item['delay_bt_s']*1000:.1f} ms"
+                        f"（相关 {item['delay_bt_corr']:.2f}）。"
+                        f"对齐 {item['usb_ok']}/{item['frames']} 帧。"
+                    )
+            except Exception as exc:
+                self._log(f"时刻对齐失败：{exc}")
+        extra = ""
+        if summary.get("drops"):
+            extra = f" 丢帧 {summary['drops']}"
+        self._log(
+            f"已保存 {summary['frames']} 帧 / {summary['seconds']:.1f}s，"
+            f"棋盘 左{summary['calib_left']} 右{summary['calib_right']}。"
+            f" USB {self.imu_usb.sample_count} 样，BLE {self.imu_bt.sample_count} 样。{extra}"
+        )
+        if session:
+            write_json(os.path.join(session, "capture_summary.json"), {
+                **summary,
+                "usb_hz": self.imu_usb.hz,
+                "bt_hz": self.imu_bt.hz,
+                "usb_samples": self.imu_usb.sample_count,
+                "bt_samples": self.imu_bt.sample_count,
+                "usb_reconnects": self.imu_usb.reconnects,
+                "bt_reconnects": self.imu_bt.reconnects,
+            })
+        if self.step == "intrinsics" and session:
+            self._finish_intrinsics(session, summary)
+        elif self.step == "g4k_intrinsics" and session:
+            self._finish_g4k_intrinsics(session)
+        elif self.step == "g4k_rig" and session:
+            self.done.add("g4k_rig")
+            self._log("双视外参数据已保存。运行 tools/calibrate_global_rig.py 解算「新棋盘→左目」固定外参。")
+            self._refresh_step_styles()
+        elif self.step in {"imu_static", "imu_dyn", "board_bt"} and session:
+            self._solve_after_record(session, self.step, summary)
+        elif self.step in {"ego", "recon"}:
+            self.done.add(self.step)
+        elif self.step in {"rigid", "traj", "stage_ref", "global_traj"} and session:
+            self._qc_after_record(session, self.step, summary)
+        self._refresh_step_styles()
+
+    def _qc_after_record(self, session: str, step: str, summary: dict[str, Any]) -> None:
+        """Solve the chessboard for this session, check IMU rigidity, append to the collection log."""
+        name = os.path.basename(os.path.normpath(session))
+        self._log(f"正在检查 {name}：逐帧解棋盘并比对陀螺，约半分钟到一分钟…")
+        try:
+            with open(os.path.join(session, "session_meta.json"), encoding="utf-8") as handle:
+                meta = json.load(handle)
+        except Exception:
+            meta = {}
+
+        def _work() -> None:
+            err = None
+            pose = rig = None
+            try:
+                import sys as _sys
+
+                if ROOT_DIR not in _sys.path:
+                    _sys.path.insert(0, ROOT_DIR)
+                from pathlib import Path as _Path
+                from tools.build_pose_gt import process_session
+                from tools.check_rigidity import check
+
+                camera_config.use_for_labels(camera_config.session_calibration(_Path(session)))
+                pose = process_session(name)
+                rig = check(name)
+            except Exception as exc:  # noqa: BLE001
+                err = exc
+
+            def _done() -> None:
+                if err is not None or pose is None:
+                    self._log(f"自动检查失败：{err}")
+                    return
+                frames = max(int(pose.get("frames") or 0), 1)
+                still = int(pose.get("pnp_still") or 0)
+                frac = still / frames
+                p50 = pose.get("reproj_p50")
+                seconds = float(summary.get("seconds") or 0.0)
+                fps = frames / seconds if seconds > 0 else 0.0
+                width, height = pose.get("size") or [0, 0]
+                px_limit = 0.4 if width >= 1280 else 1.2
+                problems = []
+                if step == "traj" and meta.get("theme") != "J" and frac < 0.70:
+                    problems.append(f"棋盘可用帧 {frac:.0%} < 70%")
+                if step == "stage_ref" and frac < 0.80:
+                    problems.append(f"棋盘可用帧 {frac:.0%} < 80%")
+                if p50 is not None and p50 > px_limit:
+                    problems.append(f"重投影中位数 {p50:.2f} px > {px_limit}")
+                if summary.get("drops"):
+                    problems.append(f"丢帧 {summary['drops']}")
+                rigid_ok = rig.get("verdict") == "rigid"
+                if step == "rigid" and not rigid_ok:
+                    problems.append("IMU 刚性不合格")
+                    try:
+                        from .revision import rigidity_motion_hint
+                        hint = rigidity_motion_hint(name)
+                    except Exception:  # noqa: BLE001
+                        hint = None
+                    if hint:
+                        problems.append(hint)
+                verdict = "合格" if not problems else "不合格：" + "；".join(problems)
+                row = {
+                    "session": name,
+                    "time": datetime.now().isoformat(timespec="seconds"),
+                    "resolution": f"{width}x{height}",
+                    "fps": round(fps, 1),
+                    "theme": meta.get("theme", ""),
+                    "split": meta.get("split", ""),
+                    "seconds": round(seconds, 1),
+                    "frames": frames,
+                    "board_still": still,
+                    "usable_frac": round(frac, 3),
+                    "reproj_p50_px": None if p50 is None else round(p50, 3),
+                    "delay_ms": pose.get("delay_usb_ms"),
+                    "corr_tilt_x": rig.get("corr_tilt_x", ""),
+                    "corr_tilt_y": rig.get("corr_tilt_y", ""),
+                    "corr_roll": rig.get("corr_roll", ""),
+                    "rigidity": rig.get("verdict", ""),
+                    "verdict": verdict,
+                }
+                write_json(os.path.join(session, "qc_result.json"), row)
+                if step == "rigid":
+                    # Full result incl. the fitted camera <- IMU rotation of the day,
+                    # which the stop-experiment analysis uses for new recordings.
+                    write_json(os.path.join(session, "rigidity.json"), rig)
+                self._append_collection_log(row)
+                rig_zh = {
+                    "rigid": "可用",
+                    "NOT rigid": "不合格",
+                    "NOT rigid on all axes": "不合格",
+                    "too few moving pairs": "转动太少，无法判断",
+                    "insufficient axis excitation": "某个轴转动太少",
+                }.get(rig.get("verdict", ""), rig.get("verdict", "-"))
+                quality_zh = {
+                    "high": "高质量",
+                    "acceptable": "边缘合格",
+                    "failed": "不合格",
+                }.get(rig.get("quality", ""), "")
+                corr = (
+                    f"倾角 x {rig.get('corr_tilt_x', '-')}、倾角 y {rig.get('corr_tilt_y', '-')}、"
+                    f"光轴 {rig.get('corr_roll', '-')}；幅值 {rig.get('corr_magnitude', '-')}、"
+                    f"比例 {rig.get('rotation_scale', '-')}（{rig_zh}{'，' + quality_zh if quality_zh else ''}）"
+                )
+                p50_txt = "-" if p50 is None else f"{p50:.2f}"
+                text = (
+                    f"{name}\n{width}×{height}，{fps:.1f} fps，{seconds:.0f} 秒\n"
+                    f"棋盘可用帧 {still}/{frames}（{frac:.0%}），重投影中位数 {p50_txt} px\n"
+                    f"陀螺与棋盘相关系数：{corr}\n\n{verdict}"
+                )
+                if step in GLOBAL_STEPS:
+                    cov = _cam2_board_coverage(session)
+                    if cov is not None:
+                        text += (
+                            f"\n4K 全局棋盘覆盖：刚体板 {cov['A']:.0%}，GP050 板 {cov['B']:.0%}"
+                            f"（共 {cov['frames']} 帧）"
+                        )
+                self._log(text.replace("\n", " | "))
+                if step == "rigid" and rigid_ok:
+                    self.done.add("rigid")
+                self._refresh_step_styles()
+                self._update_theme_info()
+                if problems:
+                    messagebox.showwarning("本段检查", text + "\n\n建议重录这一段（原文件保留，记录表里已标注）。")
+                else:
+                    messagebox.showinfo("本段检查", text)
+
+            self.after(0, _done)
+
+        threading.Thread(target=_work, daemon=True).start()
+
+    def _append_collection_log(self, row: dict[str, Any]) -> None:
+        import csv
+
+        new = not os.path.isfile(COLLECTION_LOG)
+        with open(COLLECTION_LOG, "a", newline="", encoding="utf-8-sig") as handle:
+            writer = csv.DictWriter(handle, fieldnames=LOG_FIELDS)
+            if new:
+                writer.writeheader()
+            writer.writerow({k: row.get(k, "") for k in LOG_FIELDS})
+
+    def _solve_after_record(self, session: str, step: str, summary: dict[str, Any]) -> None:
+        need = {"imu_static": 25, "imu_dyn": 40, "board_bt": 80}.get(step, 0)
+        if summary.get("seconds", 0) < need:
+            messagebox.showwarning("偏短", f"这一步建议 ≥{need} 秒。可以再录一条，或仍用当前数据解算。")
+        self._log(f"正在解算 {step} …")
+
+        def _work() -> None:
+            err = None
+            result = None
+            try:
+                result = solve_step(session, step, RIG_STATE)
+            except Exception as exc:  # noqa: BLE001
+                err = exc
+
+            def _done() -> None:
+                if err is not None:
+                    self._log(f"解算失败：{err}")
+                    messagebox.showerror("解算失败", str(err))
+                    return
+                text = summarize(result or {})
+                self._log(text.replace("\n", " | "))
+                self.done.add(step)
+                self._refresh_step_styles()
+                nxt = {"imu_static": "imu_dyn", "imu_dyn": "intrinsics", "board_bt": "compose"}.get(step)
+                messagebox.showinfo("本步解算完成", text)
+                if nxt:
+                    self._goto(nxt)
+
+            self.after(0, _done)
+
+        threading.Thread(target=_work, daemon=True).start()
+
+    def _solve_compose(self) -> None:
+        try:
+            result = solve_step(DATA_ROOT, "compose", RIG_STATE)
+        except Exception as exc:  # noqa: BLE001
+            self._log(f"三系投影失败：{exc}")
+            messagebox.showerror("三系投影失败", str(exc))
+            return
+        write_json(os.path.join(DATA_ROOT, "coordinate_frames.json"), result)
+        text = summarize(result)
+        self._log(text.replace("\n", " | "))
+        self.done.add("compose")
+        self._refresh_step_styles()
+        messagebox.showinfo("三系投影", text + f"\n\n已写 {RIG_STATE}")
+
+    def _finish_g4k_intrinsics(self, session: str) -> None:
+        """Calibrate the fixed-focus 4K camera from the GP050 corners it saw."""
+        samples = self.grabber_4k.calib
+        size = (self.grabber_4k.width, self.grabber_4k.height)
+        payload = calibrate_from_corners(samples, size)
+        if payload is None:
+            self._log(f"4K 内参样本不足（{len(samples)}）。把 GP050 放进全局视野多换姿态再录一条。")
+            messagebox.showwarning("4K 内参不够", "样本不足。GP050 要在 4K 画面里多角度、多位置出现。")
+            return
+        payload["camera"] = "global_4k"
+        payload["focus_locked"] = True
+        path = os.path.join(session, "camera_calibration_4k.json")
+        write_json(path, payload)
+        self.done.add("g4k_intrinsics")
+        self._refresh_step_styles()
+        self._log(
+            f"4K 内参 RMS {payload['reprojection_error_pixels']:.3f} px，"
+            f"fx {payload['parameters']['fx']:.0f}，样本 {payload['num_images']} → {path}"
+        )
+        messagebox.showinfo(
+            "4K 内参完成",
+            f"RMS {payload['reprojection_error_pixels']:.3f} px，样本 {payload['num_images']}。\n"
+            "下一步：全局双视外参（第 14 步）。",
+        )
+        self._goto("g4k_rig")
+
+    def _finish_intrinsics(self, session: str, summary: dict[str, Any]) -> None:
+        with self.grabber._lock:
+            frame = self.grabber.frame_l
+        if frame is None:
+            return
+        h, w = frame.shape[:2]
+        for name, samples in (("cam0", self.grabber.calib_l), ("cam1", self.grabber.calib_r)):
+            if len(samples) > 80:
+                self._log(f"{name}：{len(samples)} 个检测中选 80 个（覆盖全部到过的格子，位置和倾斜分散）。")
+            payload = calibrate_from_corners(guided.select_samples(samples, (w, h)), (w, h))
+            if payload is None:
+                self._log(f"{name} 内参样本不足（{len(samples)}）。")
+                continue
+            if name == "cam0":
+                payload["focus_state"] = dict(self.grabber.focus_state)
+                payload["focus_locked"] = camera_config.locked_focus()
+                payload["camera_index"] = self.grabber.id_l
+            path = os.path.join(session, f"camera_calibration_{name}.json")
+            write_json(path, payload)
+            cov = payload["coverage"]["fraction"]
+            self._log(f"{name} 内参 RMS {payload['reprojection_error_pixels']:.3f} px，覆盖画面 {cov:.0%} → {path}")
+            if name == "cam0" and self.grabber.cap_r is None and cov < camera_config.COVERAGE_MIN:
+                messagebox.showwarning(
+                    "内参覆盖不够",
+                    f"标定样本只覆盖了画面的 {cov:.0%}（6×4 格，要求 ≥{camera_config.COVERAGE_MIN:.0%}），"
+                    "没有设为当前内参。棋盘落到没标定过的区域时，解算的姿态会有系统偏差。\n\n"
+                    "焦距不变再录一条：把预览上的灰格子都移过去变绿，四边都朝相机转一下，程序会自动停止。")
+                return
+            if name == "cam0" and self.grabber.cap_r is None:
+                camera_config.ensure_label_files(camera_config.calib_dir(os.path.basename(os.path.normpath(session))))
+                camera_config.save(calib_dir=os.path.basename(os.path.normpath(session)), image_size=[w, h],
+                                   camera_index=self.grabber.id_l)
+                self._log(f"单目相机的当前内参改为 {os.path.basename(os.path.normpath(session))}："
+                          "棋盘解算、标签和刚性检查都用它。")
+        need_right = self.grabber.cap_r is not None
+        left_ok = summary["calib_left"] >= 15
+        right_ok = summary["calib_right"] >= 15 if need_right else True
+        if left_ok and right_ok:
+            self.done.add("intrinsics")
+            messagebox.showinfo("内参完成", "内参已写入。下一步：蓝牙 IMU 贴到棋盘上，给双目看。")
+            self._goto("board_bt")
+        else:
+            messagebox.showwarning("内参不够", "左目要经常看到整块 GP050。再录一条慢扫。")
+
+    def _next_step(self) -> None:
+        keys = [k for k, _t, _h in STEPS]
+        idx = keys.index(self.step)
+        if idx + 1 < len(keys):
+            self._goto(keys[idx + 1])
+
+    def _fmt_imu_card(self, worker: ImuWorker, title: str) -> str:
+        idx, sample = worker.snapshot()
+        port = worker.port or worker.address or "-"
+        if sample is None:
+            err = worker.last_error or "等待数据"
+            return f"{title}  {port}\n无数据  {err}"
+        a, g, ang, m = sample["acc"], sample["gyro"], sample["angle"], sample["mag"]
+        return (
+            f"{title}  {port}   {worker.kind or '-'}   {worker.hz:.1f} Hz   n={idx}\n"
+            f"acc  {a[0]:+8.4f} {a[1]:+8.4f} {a[2]:+8.4f} g\n"
+            f"gyro {g[0]:+8.3f} {g[1]:+8.3f} {g[2]:+8.3f} °/s\n"
+            f"RPY  {ang[0]:+8.3f} {ang[1]:+8.3f} {ang[2]:+8.3f} °\n"
+            f"mag  {m[0]:+8.1f} {m[1]:+8.1f} {m[2]:+8.1f}"
+        )
+
+    def _log_imu_distinct(self) -> None:
+        _, su = self.imu_usb.snapshot()
+        _, sb = self.imu_bt.snapshot()
+        if su is None and sb is None:
+            return
+        if su is None:
+            self._log("USB 尚无数据；蓝牙已出数。")
+            return
+        if sb is None:
+            self._log("蓝牙尚无数据；USB 已出数。")
+            return
+        self._log(
+            f"USB  RPY({su['angle'][0]:+.2f},{su['angle'][1]:+.2f},{su['angle'][2]:+.2f}) "
+            f"mag({su['mag'][0]:+.0f},{su['mag'][1]:+.0f},{su['mag'][2]:+.0f})"
+        )
+        self._log(
+            f"BLE  RPY({sb['angle'][0]:+.2f},{sb['angle'][1]:+.2f},{sb['angle'][2]:+.2f}) "
+            f"mag({sb['mag'][0]:+.0f},{sb['mag'][1]:+.0f},{sb['mag'][2]:+.0f})"
+        )
+
+    def _tick(self) -> None:
+        with self.grabber._lock:
+            f_l, f_r = self.grabber.frame_l, self.grabber.frame_r
+            stats = LiveStats(**self.grabber.stats.__dict__)
+        rec = f"  REC {stats.rec_frames}帧 {stats.rec_seconds:.0f}s  drop={stats.drops}" if self.grabber.recording else ""
+        board = ""
+        if self.grabber.need_board:
+            board = f"  棋盘 左{'✓' if stats.board_l else '✗'} 右{'✓' if stats.board_r else '✗'}"
+        self.status.config(
+            text=(
+                f"左 {stats.size_l} {stats.fps_l:.1f}fps {stats.fourcc_l}   "
+                f"右 {stats.size_r} {stats.fps_r:.1f}fps {stats.fourcc_r}"
+                f"{board}{rec}"
+            )
+        )
+        self.lbl_usb.config(text=self._fmt_imu_card(self.imu_usb, "USB IMU"))
+        self.lbl_ble.config(text=self._fmt_imu_card(self.imu_bt, "蓝牙 IMU"))
+        _, su = self.imu_usb.snapshot()
+        _, sb = self.imu_bt.snapshot()
+        if su is not None and sb is not None:
+            da = [sb["acc"][i] - su["acc"][i] for i in range(3)]
+            dang = [sb["angle"][i] - su["angle"][i] for i in range(3)]
+            self.lbl_delta.config(
+                text=(
+                    f"BLE−USB  Δacc({da[0]:+.3f},{da[1]:+.3f},{da[2]:+.3f})g   "
+                    f"ΔRPY({dang[0]:+.2f},{dang[1]:+.2f},{dang[2]:+.2f})°    "
+                    f"两路独立；静止时 acc 都接近重力，请看 mag / 航向。"
+                )
+            )
+        try:
+            grid = self._update_guidance()
+        except Exception as exc:  # noqa: BLE001
+            grid, self._guide = None, None
+            self._log(f"录制引导出错：{exc}")
+        if f_l is not None:
+            self.photo_l = bgr_to_photo(f_l, 700, 400, *self._overlay_args("l"), grid=grid)
+            self.lbl_l.config(image=self.photo_l, text="")
+        if f_r is not None:
+            self.photo_r = bgr_to_photo(f_r, 700, 400, *self._overlay_args("r"))
+            self.lbl_r.config(image=self.photo_r, text="")
+        f_g = self.grabber_4k.preview_frame()
+        if f_g is not None:
+            self.photo_g = bgr_to_photo(f_g, 700, 400)
+            self.lbl_g.config(image=self.photo_g, text="")
+        delay = {"低": 150, "中": 100, "高": 60}.get(self.preview_var.get(), 120)
+        self.after(delay, self._tick)
+
+    def _update_guidance(self) -> Optional[np.ndarray]:
+        """Cues, tones and the automatic stop of the guided recordings
+        (intrinsics, rigidity check); returns the coverage grid for the left view."""
+        guide = self._guide
+        if guide is None or not self.grabber.recording:
+            return None
+        elapsed = time.time() - self._guide_t0
+        if isinstance(guide, guided.CoverageTracker):
+            guide.update(self.grabber.calib_l)
+            self.hint.config(text=guide.text(camera_config.COVERAGE_MIN), bg="#2b4a2f")
+            right_ok = self.grabber.cap_r is None or len(self.grabber.calib_r) >= guided.MIN_SAMPLES
+            if guide.done(elapsed, camera_config.COVERAGE_MIN) and right_ok:
+                self._guide = None
+                guided.beep(1500, 400)
+                self._log(f"内参：覆盖 {guide.fraction:.0%}，四边倾斜都有，{elapsed:.0f} 秒，自动停止。")
+                self.after(10, self._stop_step)
+            return guide.grid()
+        cue = guided.rigid_cue(elapsed)
+        if cue is None:
+            self._guide = None
+            guided.beep(1000, 300)
+            self._log("刚性检查：动作做完，自动停止。")
+            self.after(10, self._stop_step)
+            return None
+        phase, text, hint, left = cue
+        if phase != self._guide_phase:
+            self._guide_phase = phase
+            guided.beep(700 if text == "静止" else 1200, 250)
+        self.hint.config(text=f"{text}    还有 {left:3.1f} 秒\n{hint}",
+                         bg="#495057" if text == "静止" else "#1c5d99")
+        return None
+
+    def _overlay_args(self, side: str):
+        board, corners, pattern, stamp = self.grabber.overlay(side)
+        if board and corners is not None and time.time() - stamp < 0.8:
+            return corners, pattern
+        return None, None
+
+    def _on_close(self) -> None:
+        try:
+            self.grabber.close()
+            self.grabber_4k.close()
+            self.imu_usb.stop()
+            self.imu_bt.stop()
+        finally:
+            self.destroy()
+
+
+def main(argv: Optional[list[str]] = None) -> None:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--step", choices=[k for k, _t, _h in STEPS], help="step to open on start")
+    args = ap.parse_args(argv)
+    os.makedirs(DATA_ROOT, exist_ok=True)
+    app = CaptureApp()
+    if args.step:
+        app.after(300, lambda: app._goto(args.step))
+    app.mainloop()

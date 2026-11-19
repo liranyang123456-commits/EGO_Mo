@@ -1,0 +1,96 @@
+{
+  "kind": "simulated_caliper_reference_validation",
+  "scope": "reference pipeline (render -> corner detection -> PnP -> no-scale-fit analysis); not a physical, SI-traceable validation",
+  "plan": "E:\\EGO_Mo\\datasets\\reference_caliper_plan.csv",
+  "tilt_deg": 25.0,
+  "timing": {
+    "fps": 10.0,
+    "pause_s": 5.0,
+    "move_s": 1.5
+  },
+  "intrinsic_std_1sigma": {
+    "fx": 10.74,
+    "fy": 10.79,
+    "cx": 8.39,
+    "cy": 7.5,
+    "dist": [
+      0.032,
+      0.493,
+      0.002,
+      0.003,
+      2.699
+    ]
+  },
+  "pitch_std_relative": 0.001,
+  "thresholds": {
+    "heldout_rmse_mm_max": 1.0,
+    "heldout_max_mm_max": 2.0,
+    "axis_scale_error_percent_max_abs": 1.0,
+    "cross_axis_rmse_mm_max": 0.5,
+    "repeatability_p95_mm_max": 0.5
+  },
+  "depths": {
+    "150": {
+      "detection_rate": 0.9575757575757575,
+      "nominal": {
+        "passed": false,
+        "error": "sim_X1_0: found 6 stationary intervals, plan lists 7 readings; re-record with >=3-s pauses and moves faster than 3 mm/s"
+      },
+      "monte_carlo": {
+        "draws": 50,
+        "scored": 0,
+        "pass_rate": 0.0,
+        "error": "sim_X1_0: found 6 stationary intervals, plan lists 7 readings; re-record with >=3-s pauses and moves faster than 3 mm/s"
+      }
+    },
+    "250": {
+      "detection_rate": 0.9732323232323232,
+      "nominal": {
+        "passed": false,
+        "heldout_rmse_mm": 0.555597750767995,
+        "heldout_max_mm": 1.3162320935850316,
+        "repeatability_p95_mm": 0.016528646307190073,
+        "scale_error_percent": {
+          "X": 1.105983694883328,
+          "Y": -1.370621157739349,
+          "Z": -0.45325196039024407
+        },
+        "cross_axis_rmse_mm": {
+          "X": 0.23199178281608995,
+          "Y": 0.409163529231302,
+          "Z": 0.6431129388600582
+        }
+      },
+      "monte_carlo": {
+        "draws": 50,
+        "scored": 50,
+        "pass_rate": 0.0,
+        "heldout_rmse_mm_p50_p95": [
+          0.8600848391277426,
+          2.0214829573375006
+        ],
+        "scale_error_percent_mean": {
+          "X": 0.5400618494475067,
+          "Y": -1.8434724467222976,
+          "Z": -0.54453483454028
+        },
+        "scale_error_percent_std": {
+          "X": 5.340091903139361,
+          "Y": 4.816093364185971,
+          "Z": 0.7796897087297802
+        },
+        "scale_error_percent_p95_abs": {
+          "X": 10.136936752664427,
+          "Y": 10.287124784109194,
+          "Z": 1.6350576556229535
+        },
+        "cross_axis_rmse_mm_p95": {
+          "X": 0.5611535719522951,
+          "Y": 0.5433432708658215,
+          "Z": 0.6946092637365195
+        }
+      }
+    }
+  },
+  "passed_nominal_all_depths": false
+}

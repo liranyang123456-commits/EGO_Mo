@@ -1,0 +1,566 @@
+{
+  "kind": "board_imu_orientation_in_motion",
+  "recordings": [
+    "rigid_20261108_003840",
+    "rigid_20261108_004048",
+    "rigid_20261108_022243",
+    "rigid_20261108_022430",
+    "rigid_20261108_024537",
+    "traj_20261108_022815",
+    "traj_20261108_023619"
+  ],
+  "delay_ms": {
+    "median": 269.0,
+    "min": 256.0,
+    "max": 270.0,
+    "within_2ms_of_median": 6
+  },
+  "rotation_1s": {
+    "axis_corr_min": 0.991,
+    "magnitude_corr_min": 0.9902,
+    "scale_range": [
+      0.987,
+      1.0226
+    ],
+    "test_windows": 2525
+  },
+  "windows": {
+    "1 s": {
+      "n": 5092,
+      "pnp_rotation_median_deg": 2.73,
+      "difference_median_deg": 0.292,
+      "difference_p95_deg": 1.094,
+      "rest_to_rest_n": 2090,
+      "rest_to_rest_median_deg": 0.122
+    },
+    "3 s": {
+      "n": 5010,
+      "pnp_rotation_median_deg": 6.52,
+      "difference_median_deg": 0.446,
+      "difference_p95_deg": 1.342,
+      "rest_to_rest_n": 1894,
+      "rest_to_rest_median_deg": 0.225
+    }
+  },
+  "decomposition": {
+    "endpoint_deg": 0.171,
+    "per_deg_of_path": 0.0143,
+    "per_dps_endpoint_rate": 0.01739,
+    "endpoint_label_mm_at_150mm": 0.45,
+    "budget_relative_deg": 0.297
+  },
+  "per_recording": {
+    "rigid_20261108_003840": {
+      "camera": {
+        "gyro_p95_dps": 0.0,
+        "tilt_max_deg": 0.018575255439130318,
+        "still": true
+      },
+      "frames": 1305,
+      "pnp_ok": 0.949,
+      "delay_ms": 269.0,
+      "delay_vector_corr": 0.9949,
+      "imu_mount_deg": 1.88,
+      "gyro_static_bias_dps": [
+        -0.009,
+        0.022,
+        -0.015
+      ],
+      "static_samples": 4428,
+      "rate": {
+        "n": 660,
+        "vector_corr": 0.9949,
+        "scale_gyro_over_pnp": 0.9934,
+        "residual_rms_dps": 1.451,
+        "rate_rms_dps": 14.35,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 323,
+            "pnp_over_gyro": 1.016
+          },
+          "10-30 dps": {
+            "n": 302,
+            "pnp_over_gyro": 0.997
+          },
+          "30-60 dps": {
+            "n": 24,
+            "pnp_over_gyro": 0.969
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 720,
+        "test_windows": 360,
+        "axis_corr": [
+          0.997,
+          0.9976,
+          0.9992
+        ],
+        "magnitude_corr": 0.997,
+        "scale_pnp_over_gyro": 0.998,
+        "rms_deg_xyz": [
+          0.358,
+          0.435,
+          0.345
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 595,
+          "pnp_rotation_median_deg": 4.57,
+          "difference_median_deg": 0.254,
+          "difference_p95_deg": 1.122,
+          "rest_to_rest_n": 158,
+          "rest_to_rest_median_deg": 0.047
+        },
+        "3 s": {
+          "n": 586,
+          "pnp_rotation_median_deg": 11.15,
+          "difference_median_deg": 0.543,
+          "difference_p95_deg": 1.659,
+          "rest_to_rest_n": 119,
+          "rest_to_rest_median_deg": 0.086
+        }
+      }
+    },
+    "rigid_20261108_004048": {
+      "camera": {
+        "gyro_p95_dps": 0.0,
+        "tilt_max_deg": 0.01658232689022865,
+        "still": true
+      },
+      "frames": 1284,
+      "pnp_ok": 0.974,
+      "delay_ms": 269.0,
+      "delay_vector_corr": 0.9925,
+      "imu_mount_deg": 1.9,
+      "gyro_static_bias_dps": [
+        -0.014,
+        -0.01,
+        -0.006
+      ],
+      "static_samples": 4197,
+      "rate": {
+        "n": 760,
+        "vector_corr": 0.9925,
+        "scale_gyro_over_pnp": 0.9844,
+        "residual_rms_dps": 1.497,
+        "rate_rms_dps": 12.26,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 424,
+            "pnp_over_gyro": 1.001
+          },
+          "10-30 dps": {
+            "n": 311,
+            "pnp_over_gyro": 0.997
+          },
+          "30-60 dps": {
+            "n": 11,
+            "pnp_over_gyro": 0.987
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 796,
+        "test_windows": 398,
+        "axis_corr": [
+          0.9976,
+          0.9986,
+          0.9993
+        ],
+        "magnitude_corr": 0.9966,
+        "scale_pnp_over_gyro": 1.0007,
+        "rms_deg_xyz": [
+          0.403,
+          0.354,
+          0.274
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 607,
+          "pnp_rotation_median_deg": 5.18,
+          "difference_median_deg": 0.243,
+          "difference_p95_deg": 0.774,
+          "rest_to_rest_n": 145,
+          "rest_to_rest_median_deg": 0.027
+        },
+        "3 s": {
+          "n": 598,
+          "pnp_rotation_median_deg": 12.87,
+          "difference_median_deg": 0.444,
+          "difference_p95_deg": 1.198,
+          "rest_to_rest_n": 121,
+          "rest_to_rest_median_deg": 0.051
+        }
+      }
+    },
+    "rigid_20261108_022243": {
+      "camera": {
+        "gyro_p95_dps": 0.0,
+        "tilt_max_deg": 0.016566903352450525,
+        "still": true
+      },
+      "frames": 770,
+      "pnp_ok": 0.997,
+      "delay_ms": 267.0,
+      "delay_vector_corr": 0.9953,
+      "imu_mount_deg": 1.93,
+      "gyro_static_bias_dps": [
+        -0.027,
+        -0.053,
+        0.026
+      ],
+      "static_samples": 1069,
+      "rate": {
+        "n": 637,
+        "vector_corr": 0.9953,
+        "scale_gyro_over_pnp": 0.9967,
+        "residual_rms_dps": 1.657,
+        "rate_rms_dps": 17.14,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 197,
+            "pnp_over_gyro": 1.015
+          },
+          "10-30 dps": {
+            "n": 404,
+            "pnp_over_gyro": 0.991
+          },
+          "30-60 dps": {
+            "n": 33,
+            "pnp_over_gyro": 0.988
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 641,
+        "test_windows": 320,
+        "axis_corr": [
+          0.9986,
+          0.9976,
+          0.9985
+        ],
+        "magnitude_corr": 0.9976,
+        "scale_pnp_over_gyro": 0.9977,
+        "rms_deg_xyz": [
+          0.472,
+          0.435,
+          0.43
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 376,
+          "pnp_rotation_median_deg": 8.76,
+          "difference_median_deg": 0.41,
+          "difference_p95_deg": 1.155,
+          "rest_to_rest_n": 36,
+          "rest_to_rest_median_deg": 0.142
+        },
+        "3 s": {
+          "n": 363,
+          "pnp_rotation_median_deg": 10.83,
+          "difference_median_deg": 0.766,
+          "difference_p95_deg": 1.553,
+          "rest_to_rest_n": 7,
+          "rest_to_rest_median_deg": 0.641
+        }
+      }
+    },
+    "rigid_20261108_022430": {
+      "camera": {
+        "gyro_p95_dps": 0.0,
+        "tilt_max_deg": 0.01795988618450163,
+        "still": true
+      },
+      "frames": 1274,
+      "pnp_ok": 0.956,
+      "delay_ms": 267.0,
+      "delay_vector_corr": 0.9942,
+      "imu_mount_deg": 1.93,
+      "gyro_static_bias_dps": [
+        0.008,
+        -0.035,
+        -0.022
+      ],
+      "static_samples": 1702,
+      "rate": {
+        "n": 966,
+        "vector_corr": 0.9942,
+        "scale_gyro_over_pnp": 0.9879,
+        "residual_rms_dps": 1.638,
+        "rate_rms_dps": 15.2,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 310,
+            "pnp_over_gyro": 1.006
+          },
+          "10-30 dps": {
+            "n": 616,
+            "pnp_over_gyro": 0.998
+          },
+          "30-60 dps": {
+            "n": 19,
+            "pnp_over_gyro": 0.985
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 931,
+        "test_windows": 465,
+        "axis_corr": [
+          0.9976,
+          0.9987,
+          0.999
+        ],
+        "magnitude_corr": 0.9958,
+        "scale_pnp_over_gyro": 1.0019,
+        "rms_deg_xyz": [
+          0.42,
+          0.443,
+          0.383
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 583,
+          "pnp_rotation_median_deg": 10.25,
+          "difference_median_deg": 0.366,
+          "difference_p95_deg": 1.169,
+          "rest_to_rest_n": 68,
+          "rest_to_rest_median_deg": 0.093
+        },
+        "3 s": {
+          "n": 568,
+          "pnp_rotation_median_deg": 20.61,
+          "difference_median_deg": 0.559,
+          "difference_p95_deg": 1.594,
+          "rest_to_rest_n": 39,
+          "rest_to_rest_median_deg": 0.314
+        }
+      }
+    },
+    "rigid_20261108_024537": {
+      "camera": {
+        "gyro_p95_dps": 0.0,
+        "tilt_max_deg": 0.01640793767391854,
+        "still": true
+      },
+      "frames": 1195,
+      "pnp_ok": 1.0,
+      "delay_ms": 269.0,
+      "delay_vector_corr": 0.9951,
+      "imu_mount_deg": 1.64,
+      "gyro_static_bias_dps": [
+        -0.017,
+        0.019,
+        0.001
+      ],
+      "static_samples": 2107,
+      "rate": {
+        "n": 889,
+        "vector_corr": 0.9951,
+        "scale_gyro_over_pnp": 0.9845,
+        "residual_rms_dps": 1.466,
+        "rate_rms_dps": 14.75,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 270,
+            "pnp_over_gyro": 1.01
+          },
+          "10-30 dps": {
+            "n": 596,
+            "pnp_over_gyro": 0.998
+          },
+          "30-60 dps": {
+            "n": 12,
+            "pnp_over_gyro": 1.016
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 943,
+        "test_windows": 471,
+        "axis_corr": [
+          0.999,
+          0.9977,
+          0.9997
+        ],
+        "magnitude_corr": 0.9965,
+        "scale_pnp_over_gyro": 1.002,
+        "rms_deg_xyz": [
+          0.333,
+          0.388,
+          0.224
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 589,
+          "pnp_rotation_median_deg": 10.31,
+          "difference_median_deg": 0.33,
+          "difference_p95_deg": 0.918,
+          "rest_to_rest_n": 76,
+          "rest_to_rest_median_deg": 0.028
+        },
+        "3 s": {
+          "n": 576,
+          "pnp_rotation_median_deg": 22.65,
+          "difference_median_deg": 0.482,
+          "difference_p95_deg": 1.26,
+          "rest_to_rest_n": 56,
+          "rest_to_rest_median_deg": 0.07
+        }
+      }
+    },
+    "traj_20261108_022815": {
+      "camera": {
+        "gyro_p95_dps": 0.2516547220021909,
+        "tilt_max_deg": 0.05269130307325846,
+        "still": true
+      },
+      "frames": 2364,
+      "pnp_ok": 1.0,
+      "delay_ms": 256.0,
+      "delay_vector_corr": 0.9819,
+      "imu_mount_deg": 3.16,
+      "gyro_static_bias_dps": [
+        -0.0,
+        0.001,
+        -0.006
+      ],
+      "static_samples": 22904,
+      "rate": {
+        "n": 360,
+        "vector_corr": 0.9819,
+        "scale_gyro_over_pnp": 0.938,
+        "residual_rms_dps": 2.881,
+        "rate_rms_dps": 15.06,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 134,
+            "pnp_over_gyro": 1.033
+          },
+          "10-30 dps": {
+            "n": 181,
+            "pnp_over_gyro": 1.031
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 319,
+        "test_windows": 159,
+        "axis_corr": [
+          0.9958,
+          0.9917,
+          0.9928
+        ],
+        "magnitude_corr": 0.9902,
+        "scale_pnp_over_gyro": 1.0226,
+        "rms_deg_xyz": [
+          0.789,
+          0.682,
+          0.451
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 1172,
+          "pnp_rotation_median_deg": 0.36,
+          "difference_median_deg": 0.256,
+          "difference_p95_deg": 1.177,
+          "rest_to_rest_n": 888,
+          "rest_to_rest_median_deg": 0.184
+        },
+        "3 s": {
+          "n": 1160,
+          "pnp_rotation_median_deg": 0.48,
+          "difference_median_deg": 0.34,
+          "difference_p95_deg": 1.181,
+          "rest_to_rest_n": 864,
+          "rest_to_rest_median_deg": 0.273
+        }
+      }
+    },
+    "traj_20261108_023619": {
+      "camera": {
+        "gyro_p95_dps": 0.20243019407934182,
+        "tilt_max_deg": 0.027680710952654498,
+        "still": true
+      },
+      "frames": 2365,
+      "pnp_ok": 0.998,
+      "delay_ms": 270.0,
+      "delay_vector_corr": 0.9944,
+      "imu_mount_deg": 0.91,
+      "gyro_static_bias_dps": [
+        -0.003,
+        -0.014,
+        -0.016
+      ],
+      "static_samples": 17087,
+      "rate": {
+        "n": 737,
+        "vector_corr": 0.9944,
+        "scale_gyro_over_pnp": 0.9958,
+        "residual_rms_dps": 1.95,
+        "rate_rms_dps": 18.42,
+        "by_gyro_rate": {
+          "3-10 dps": {
+            "n": 275,
+            "pnp_over_gyro": 1.021
+          },
+          "10-30 dps": {
+            "n": 358,
+            "pnp_over_gyro": 0.981
+          },
+          "30-60 dps": {
+            "n": 74,
+            "pnp_over_gyro": 0.996
+          }
+        }
+      },
+      "rotation_1s": {
+        "windows": 704,
+        "test_windows": 352,
+        "axis_corr": [
+          0.9991,
+          0.9956,
+          0.991
+        ],
+        "magnitude_corr": 0.9964,
+        "scale_pnp_over_gyro": 0.987,
+        "rms_deg_xyz": [
+          0.528,
+          0.573,
+          0.652
+        ]
+      },
+      "windows": {
+        "1 s": {
+          "n": 1170,
+          "pnp_rotation_median_deg": 0.54,
+          "difference_median_deg": 0.274,
+          "difference_p95_deg": 1.086,
+          "rest_to_rest_n": 719,
+          "rest_to_rest_median_deg": 0.181
+        },
+        "3 s": {
+          "n": 1159,
+          "pnp_rotation_median_deg": 0.73,
+          "difference_median_deg": 0.342,
+          "difference_p95_deg": 1.114,
+          "rest_to_rest_n": 688,
+          "rest_to_rest_median_deg": 0.233
+        }
+      }
+    }
+  },
+  "limitations": [
+    "The camera is the monocular camera of the caliper standard (13 fps), not the endoscope.",
+    "The board is moved by hand; the IMU on it is a separate Bluetooth unit (gyro resolution 0.061 deg/s, stamps taken on arrival), so its own scale, misalignment and timing errors enter the comparison.",
+    "Only orientation is tested; the translation of the board in motion has no independent reference here."
+  ]
+}

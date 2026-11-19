@@ -1,0 +1,630 @@
+{
+  "cv_fold_ensemble_mm": {
+    "zero": 30.42,
+    "physnet_cvx": 25.3,
+    "physnet_cvg": 25.1,
+    "imunet": 25.83,
+    "ronin_resnet": 25.37,
+    "tlio_resnet": 25.27
+  },
+  "test_sessions": {
+    "traj_20260923_023422": {
+      "n": 647,
+      "zero_motion": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 49.67,
+        "fast_mm": 90.27,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 0.0,
+        "r2": -0.016
+      },
+      "zero_ate": {
+        "nodes": 678,
+        "ate_rmse_mm": 119.24,
+        "ate_mean_mm": 104.85,
+        "ate_p90_mm": 175.58
+      },
+      "physnet": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 44.25,
+        "fast_mm": 74.27,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 17.34,
+        "r2": 0.227,
+        "ate_single_edge_mm": 89.74,
+        "ate_dense_mm": 84.79,
+        "minus_zero_ci95_mm": [
+          1.38,
+          10.04
+        ],
+        "minus_imunet_ci95_mm": [
+          -3.8,
+          1.23
+        ],
+        "minus_ronin_resnet_ci95_mm": [
+          -3.89,
+          -0.38
+        ],
+        "minus_tlio_resnet_ci95_mm": [
+          -4.02,
+          0.07
+        ]
+      },
+      "equal_blend": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.4,
+        "fast_mm": 73.79,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 13.76,
+        "r2": 0.265,
+        "ate_single_edge_mm": 86.14
+      },
+      "calibrated_blend": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.42,
+        "fast_mm": 73.48,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 13.76,
+        "r2": 0.267,
+        "minus_imunet_ci95_mm": [
+          -1.11,
+          2.24
+        ]
+      },
+      "imunet": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.95,
+        "fast_mm": 74.11,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 16.42,
+        "r2": 0.25,
+        "ate_single_edge_mm": 88.58
+      },
+      "ronin_resnet": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.19,
+        "fast_mm": 72.85,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 11.23,
+        "r2": 0.28,
+        "ate_single_edge_mm": 90.41
+      },
+      "tlio_resnet": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.32,
+        "fast_mm": 72.78,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 13.27,
+        "r2": 0.279,
+        "ate_single_edge_mm": 105.02
+      },
+      "physnet_gate": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 43.73,
+        "fast_mm": 72.46,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 16.08,
+        "r2": 0.251,
+        "ate_single_edge_mm": 103.31,
+        "ate_dense_mm": 98.01,
+        "minus_zero_ci95_mm": [
+          1.79,
+          10.65
+        ],
+        "minus_imunet_ci95_mm": [
+          -3.37,
+          1.66
+        ],
+        "minus_ronin_resnet_ci95_mm": [
+          -3.43,
+          0.18
+        ],
+        "minus_tlio_resnet_ci95_mm": [
+          -3.52,
+          0.49
+        ]
+      },
+      "equal_blend_gate": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.25,
+        "fast_mm": 72.8,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 13.85,
+        "r2": 0.277,
+        "ate_single_edge_mm": 91.18
+      },
+      "calibrated_blend_gate": {
+        "n": 647,
+        "zero_mm": 49.67,
+        "err_mm": 42.32,
+        "fast_mm": 72.31,
+        "fast_zero_mm": 90.27,
+        "pred_med_mm": 13.87,
+        "r2": 0.279,
+        "minus_imunet_ci95_mm": [
+          -1.08,
+          2.32
+        ]
+      }
+    },
+    "traj_20260926_143837": {
+      "n": 1054,
+      "zero_motion": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 40.43,
+        "fast_mm": 75.14,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 0.0,
+        "r2": -0.005
+      },
+      "zero_ate": {
+        "nodes": 1083,
+        "ate_rmse_mm": 127.99,
+        "ate_mean_mm": 114.06,
+        "ate_p90_mm": 187.96
+      },
+      "physnet": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 31.71,
+        "fast_mm": 52.76,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 11.52,
+        "r2": 0.441,
+        "ate_single_edge_mm": 132.86,
+        "ate_dense_mm": 119.14,
+        "minus_zero_ci95_mm": [
+          4.51,
+          13.59
+        ],
+        "minus_imunet_ci95_mm": [
+          -0.65,
+          2.25
+        ],
+        "minus_ronin_resnet_ci95_mm": [
+          -0.24,
+          2.64
+        ],
+        "minus_tlio_resnet_ci95_mm": [
+          0.0,
+          2.72
+        ]
+      },
+      "equal_blend": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 31.51,
+        "fast_mm": 52.34,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.5,
+        "r2": 0.447,
+        "ate_single_edge_mm": 112.03
+      },
+      "calibrated_blend": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 31.36,
+        "fast_mm": 51.85,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.65,
+        "r2": 0.453,
+        "minus_imunet_ci95_mm": [
+          0.25,
+          1.97
+        ]
+      },
+      "imunet": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 32.41,
+        "fast_mm": 53.06,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 17.24,
+        "r2": 0.418,
+        "ate_single_edge_mm": 94.39
+      },
+      "ronin_resnet": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 32.82,
+        "fast_mm": 55.82,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.86,
+        "r2": 0.392,
+        "ate_single_edge_mm": 112.84
+      },
+      "tlio_resnet": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 33.02,
+        "fast_mm": 55.8,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.89,
+        "r2": 0.393,
+        "ate_single_edge_mm": 106.36
+      },
+      "physnet_gate": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 30.92,
+        "fast_mm": 50.83,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 11.51,
+        "r2": 0.461,
+        "ate_single_edge_mm": 156.82,
+        "ate_dense_mm": 148.02,
+        "minus_zero_ci95_mm": [
+          4.94,
+          14.68
+        ],
+        "minus_imunet_ci95_mm": [
+          -0.15,
+          3.25
+        ],
+        "minus_ronin_resnet_ci95_mm": [
+          0.22,
+          3.6
+        ],
+        "minus_tlio_resnet_ci95_mm": [
+          0.36,
+          3.78
+        ]
+      },
+      "equal_blend_gate": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 31.14,
+        "fast_mm": 51.44,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.8,
+        "r2": 0.456,
+        "ate_single_edge_mm": 122.88
+      },
+      "calibrated_blend_gate": {
+        "n": 1054,
+        "zero_mm": 40.43,
+        "err_mm": 30.87,
+        "fast_mm": 50.73,
+        "fast_zero_mm": 75.14,
+        "pred_med_mm": 13.75,
+        "r2": 0.465,
+        "minus_imunet_ci95_mm": [
+          0.49,
+          2.67
+        ]
+      }
+    }
+  },
+  "test_pooled": {
+    "cvx": {
+      "sessions": [
+        "traj_20260923_023422",
+        "traj_20260926_143837"
+      ],
+      "n": 1701,
+      "zero_motion": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 43.95,
+        "fast_mm": 82.16,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 0.0,
+        "r2": -0.004
+      },
+      "physnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.48,
+        "fast_mm": 62.2,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.42,
+        "r2": 0.346
+      },
+      "imunet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.42,
+        "fast_mm": 62.49,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 16.86,
+        "r2": 0.344
+      },
+      "ronin_resnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.38,
+        "fast_mm": 63.56,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 12.77,
+        "r2": 0.344
+      },
+      "tlio_resnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.56,
+        "fast_mm": 63.52,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.66,
+        "r2": 0.345
+      },
+      "equal_blend": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 35.66,
+        "fast_mm": 61.84,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.55,
+        "r2": 0.367
+      },
+      "cv_calibrated_blend": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 35.57,
+        "fast_mm": 61.42,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.67,
+        "r2": 0.371
+      }
+    },
+    "cvg": {
+      "sessions": [
+        "traj_20260923_023422",
+        "traj_20260926_143837"
+      ],
+      "n": 1701,
+      "zero_motion": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 43.95,
+        "fast_mm": 82.16,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 0.0,
+        "r2": -0.004
+      },
+      "physnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 35.79,
+        "fast_mm": 60.53,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.26,
+        "r2": 0.368
+      },
+      "imunet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.42,
+        "fast_mm": 62.49,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 16.86,
+        "r2": 0.344
+      },
+      "ronin_resnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.38,
+        "fast_mm": 63.56,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 12.77,
+        "r2": 0.344
+      },
+      "tlio_resnet": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 36.56,
+        "fast_mm": 63.52,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.66,
+        "r2": 0.345
+      },
+      "equal_blend": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 35.36,
+        "fast_mm": 61.01,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.81,
+        "r2": 0.377
+      },
+      "cv_calibrated_blend": {
+        "n": 1701,
+        "zero_mm": 43.95,
+        "err_mm": 35.23,
+        "fast_mm": 60.4,
+        "fast_zero_mm": 82.16,
+        "pred_med_mm": 13.77,
+        "r2": 0.383
+      }
+    }
+  },
+  "paired_intervals": {
+    "traj_20260923_023422": {
+      "physnet": {
+        "gain_over_zero_ci95_mm": [
+          1.38,
+          10.04
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -3.8,
+          1.23
+        ]
+      },
+      "imunet": {
+        "gain_over_zero_ci95_mm": [
+          2.55,
+          11.43
+        ],
+        "gain_over_imunet_ci95_mm": null
+      },
+      "ronin_resnet": {
+        "gain_over_zero_ci95_mm": [
+          3.65,
+          11.92
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.5,
+          2.04
+        ]
+      },
+      "tlio_resnet": {
+        "gain_over_zero_ci95_mm": [
+          3.34,
+          11.86
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.46,
+          1.75
+        ]
+      },
+      "equal_blend": {
+        "gain_over_zero_ci95_mm": [
+          3.27,
+          11.78
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.97,
+          2.14
+        ]
+      },
+      "calibrated_blend": {
+        "gain_over_zero_ci95_mm": [
+          3.18,
+          11.85
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -1.11,
+          2.24
+        ]
+      },
+      "physnet_gate": {
+        "gain_over_zero_ci95_mm": [
+          1.79,
+          10.65
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -3.37,
+          1.66
+        ]
+      },
+      "equal_blend_gate": {
+        "gain_over_zero_ci95_mm": [
+          3.26,
+          12.08
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.74,
+          2.17
+        ]
+      },
+      "calibrated_blend_gate": {
+        "gain_over_zero_ci95_mm": [
+          3.13,
+          12.14
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -1.08,
+          2.32
+        ]
+      }
+    },
+    "traj_20260926_143837": {
+      "physnet": {
+        "gain_over_zero_ci95_mm": [
+          4.51,
+          13.59
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.65,
+          2.25
+        ]
+      },
+      "imunet": {
+        "gain_over_zero_ci95_mm": [
+          3.87,
+          12.49
+        ],
+        "gain_over_imunet_ci95_mm": null
+      },
+      "ronin_resnet": {
+        "gain_over_zero_ci95_mm": [
+          4.1,
+          11.56
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -1.64,
+          0.74
+        ]
+      },
+      "tlio_resnet": {
+        "gain_over_zero_ci95_mm": [
+          3.82,
+          11.37
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -1.68,
+          0.53
+        ]
+      },
+      "equal_blend": {
+        "gain_over_zero_ci95_mm": [
+          4.76,
+          13.55
+        ],
+        "gain_over_imunet_ci95_mm": [
+          0.2,
+          1.7
+        ]
+      },
+      "calibrated_blend": {
+        "gain_over_zero_ci95_mm": [
+          4.82,
+          13.85
+        ],
+        "gain_over_imunet_ci95_mm": [
+          0.25,
+          1.97
+        ]
+      },
+      "physnet_gate": {
+        "gain_over_zero_ci95_mm": [
+          4.94,
+          14.68
+        ],
+        "gain_over_imunet_ci95_mm": [
+          -0.15,
+          3.25
+        ]
+      },
+      "equal_blend_gate": {
+        "gain_over_zero_ci95_mm": [
+          4.95,
+          13.98
+        ],
+        "gain_over_imunet_ci95_mm": [
+          0.43,
+          2.17
+        ]
+      },
+      "calibrated_blend_gate": {
+        "gain_over_zero_ci95_mm": [
+          5.1,
+          14.37
+        ],
+        "gain_over_imunet_ci95_mm": [
+          0.49,
+          2.67
+        ]
+      }
+    }
+  }
+}

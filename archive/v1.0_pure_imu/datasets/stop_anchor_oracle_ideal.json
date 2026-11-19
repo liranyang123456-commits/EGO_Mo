@@ -1,0 +1,63 @@
+{
+  "still_detector": {
+    "gyro_max_dps": 1.0,
+    "acc_tol_g": 0.01,
+    "min_s": 0.5
+  },
+  "oracle_stop": true,
+  "synthetic": {
+    "ideal_pause_4": {
+      "n": 3200,
+      "max_span_s": 3.0,
+      "physics_share": 0.706,
+      "all": {
+        "zero": 56.76,
+        "learned": 33.88,
+        "hybrid": 15.38,
+        "learned_on_switched": 30.35,
+        "physics_on_switched": 4.16
+      },
+      "free": {
+        "n": 175,
+        "switched": 108,
+        "zero": 71.12,
+        "learned": 47.71,
+        "hybrid": 21.44,
+        "detected": 137,
+        "physics_on_detected": 6.34,
+        "learned_on_detected": 46.17
+      },
+      "context": {
+        "n": 717,
+        "switched": 70,
+        "zero": 59.27,
+        "learned": 45.12,
+        "hybrid": 41.38,
+        "detected": 652,
+        "physics_on_detected": 10.74,
+        "learned_on_detected": 45.26
+      },
+      "window": {
+        "n": 2308,
+        "switched": 2082,
+        "zero": 54.9,
+        "learned": 29.34,
+        "hybrid": 6.85,
+        "detected": 2192,
+        "physics_on_detected": 4.36,
+        "learned_on_detected": 29.0
+      }
+    }
+  },
+  "val_pooled_err_by_max_span": {
+    "0.0": 28.45,
+    "0.25": 28.41,
+    "0.5": 28.41,
+    "0.75": 28.41,
+    "1.0": 28.15,
+    "1.5": 25.07,
+    "2.0": 21.31,
+    "3.0": 14.63
+  },
+  "chosen_max_span_s": 3.0
+}

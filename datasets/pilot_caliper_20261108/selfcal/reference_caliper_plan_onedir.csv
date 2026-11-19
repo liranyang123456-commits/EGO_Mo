@@ -1,0 +1,9 @@
+﻿axis,trial,readings_mm,session,operator,caliper_id,caliper_resolution_mm,temperature_c,notes
+X,1,40 30 20 10 5 3 2 1 0,caliper_20261108_011220,1,1,0.02,,
+X,2,0 1 2 3 5 10 20 30 40,caliper_20261108_012410,1,1,0.02,,fast moves
+X,3,0 1 2 3 5 10 20 30 40,caliper_20261108_013758,1,1,0.02,,
+X,4,40 30 20 10 5 3 2 1 0,caliper_20261108_014734,1,1,0.02,,
+X,5,0 1 2 3 5 10 20 30 40,caliper_20261108_015359,1,1,0.02,,fast moves
+X,6,0 1 2 3 5 10 20 30 40,caliper_20261108_020118,1,1,0.02,,
+X,7,40 30 20 10 5 3 2 1 0,caliper_20261108_020730,1,1,0.02,,
+X,8,0 1 2 3 5 10 20 30 40,caliper_20261108_021349,1,1,0.02,,fast moves

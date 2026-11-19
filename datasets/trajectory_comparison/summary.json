@@ -1,0 +1,158 @@
+{
+  "real_test": {
+    "session": "traj_20260923_023422",
+    "edge_count": 647,
+    "metrics": {
+      "zero": {
+        "nodes": 678,
+        "ate_rmse_mm": 119.24,
+        "ate_mean_mm": 104.85,
+        "ate_p90_mm": 175.58
+      },
+      "strapdown": {
+        "nodes": 678,
+        "ate_rmse_mm": 19571.21,
+        "ate_mean_mm": 13894.45,
+        "ate_p90_mm": 34260.05
+      },
+      "ridge": {
+        "nodes": 678,
+        "ate_rmse_mm": 99.2,
+        "ate_mean_mm": 83.79,
+        "ate_p90_mm": 156.3
+      },
+      "zero_shot": {
+        "nodes": 678,
+        "ate_rmse_mm": 505.86,
+        "ate_mean_mm": 404.51,
+        "ate_p90_mm": 851.98
+      },
+      "real_only": {
+        "nodes": 678,
+        "ate_rmse_mm": 116.22,
+        "ate_mean_mm": 101.38,
+        "ate_p90_mm": 165.54
+      },
+      "fine_tuned": {
+        "nodes": 678,
+        "ate_rmse_mm": 102.44,
+        "ate_mean_mm": 87.56,
+        "ate_p90_mm": 156.23
+      },
+      "blend": {
+        "nodes": 678,
+        "ate_rmse_mm": 103.27,
+        "ate_mean_mm": 88.62,
+        "ate_p90_mm": 160.59
+      },
+      "ronin_fine": {
+        "nodes": 678,
+        "ate_rmse_mm": 108.67,
+        "ate_mean_mm": 92.57,
+        "ate_p90_mm": 175.16
+      },
+      "imunet_real": {
+        "nodes": 678,
+        "ate_rmse_mm": 95.22,
+        "ate_mean_mm": 80.4,
+        "ate_p90_mm": 155.22
+      },
+      "architecture_blend": {
+        "nodes": 678,
+        "ate_rmse_mm": 100.17,
+        "ate_mean_mm": 85.68,
+        "ate_p90_mm": 157.89
+      },
+      "cv_physnet": {
+        "nodes": 678,
+        "ate_rmse_mm": 87.79,
+        "ate_mean_mm": 72.77,
+        "ate_p90_mm": 144.57
+      },
+      "cv_imunet": {
+        "nodes": 678,
+        "ate_rmse_mm": 82.21,
+        "ate_mean_mm": 68.74,
+        "ate_p90_mm": 134.34
+      },
+      "cv_equal_blend": {
+        "nodes": 678,
+        "ate_rmse_mm": 81.06,
+        "ate_mean_mm": 66.7,
+        "ate_p90_mm": 138.42
+      },
+      "cv_cv_calibrated_blend": {
+        "nodes": 678,
+        "ate_rmse_mm": 80.7,
+        "ate_mean_mm": 65.98,
+        "ate_p90_mm": 138.33
+      }
+    }
+  },
+  "synthetic_test": {
+    "session": "sim_20260924_181658_s50084",
+    "edge_count": 194,
+    "metrics": {
+      "zero": {
+        "nodes": 239,
+        "ate_rmse_mm": 37.6,
+        "ate_mean_mm": 31.23,
+        "ate_p90_mm": 58.61
+      },
+      "strapdown": {
+        "nodes": 239,
+        "ate_rmse_mm": 1479.52,
+        "ate_mean_mm": 1171.16,
+        "ate_p90_mm": 2371.79
+      },
+      "ridge": {
+        "nodes": 239,
+        "ate_rmse_mm": 36.72,
+        "ate_mean_mm": 30.55,
+        "ate_p90_mm": 57.04
+      },
+      "zero_shot": {
+        "nodes": 239,
+        "ate_rmse_mm": 26.72,
+        "ate_mean_mm": 20.72,
+        "ate_p90_mm": 45.42
+      },
+      "real_only": {
+        "nodes": 239,
+        "ate_rmse_mm": 40.37,
+        "ate_mean_mm": 34.61,
+        "ate_p90_mm": 58.42
+      },
+      "fine_tuned": {
+        "nodes": 239,
+        "ate_rmse_mm": 42.89,
+        "ate_mean_mm": 36.14,
+        "ate_p90_mm": 62.82
+      },
+      "blend": {
+        "nodes": 239,
+        "ate_rmse_mm": 40.74,
+        "ate_mean_mm": 33.96,
+        "ate_p90_mm": 61.01
+      },
+      "ronin_fine": {
+        "nodes": 239,
+        "ate_rmse_mm": 44.87,
+        "ate_mean_mm": 38.42,
+        "ate_p90_mm": 67.15
+      },
+      "imunet_real": {
+        "nodes": 239,
+        "ate_rmse_mm": 36.84,
+        "ate_mean_mm": 30.67,
+        "ate_p90_mm": 58.43
+      },
+      "architecture_blend": {
+        "nodes": 239,
+        "ate_rmse_mm": 39.66,
+        "ate_mean_mm": 32.94,
+        "ate_p90_mm": 60.54
+      }
+    }
+  }
+}

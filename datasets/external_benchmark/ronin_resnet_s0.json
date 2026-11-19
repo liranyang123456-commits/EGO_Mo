@@ -1,0 +1,34 @@
+{
+  "architecture": "ronin_resnet",
+  "seed": 0,
+  "protocol": "adapted 6-axis to 3-D 3-s displacement",
+  "synthetic_zero_shot_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 92.08,
+    "fast_mm": 104.29,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 85.0,
+    "r2": -3.466
+  },
+  "fine_tuned_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 33.43,
+    "fast_mm": 50.75,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 23.11,
+    "r2": 0.392
+  },
+  "real_only_real_val": {
+    "n": 1436,
+    "zero_mm": 42.23,
+    "err_mm": 34.83,
+    "fast_mm": 55.71,
+    "fast_zero_mm": 75.04,
+    "pred_med_mm": 20.1,
+    "r2": 0.332
+  },
+  "parameters": 3847683,
+  "inference_ms_per_window": 1.0683334375016784
+}
